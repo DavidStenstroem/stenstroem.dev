@@ -1,0 +1,37 @@
+{
+  "name": "@stenstroem-dev/app",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "keywords": [
+    "react",
+    "typescript",
+    "graphql",
+    "apollo",
+    "bulma"
+  ],
+  "author": "David Hvejsel Stenstrøm <david@stenstroem.dk>",
+  "homepage": "https://github.com/DavidStenstroem/stenstroem-dev#readme",
+  "license": "ISC",
+  "main": "lib/app.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidStenstroem/stenstroem-dev.git"
+  },
+  "scripts": {
+    "prettify": "prettier",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/DavidStenstroem/stenstroem-dev/issues"
+  }
+}
