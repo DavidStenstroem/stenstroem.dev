@@ -1,0 +1,47 @@
+{
+  "name": "@stenstroem-dev/server",
+  "version": "0.0.1",
+  "description": "graphql server node.js mongodb",
+  "author": "David Hvejsel Stenstrøm <david@stenstroem.dk>",
+  "homepage": "https://github.com/DavidStenstroem/stenstroem-dev#readme",
+  "license": "ISC",
+  "main": "lib/server.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidStenstroem/stenstroem-dev.git"
+  },
+  "scripts": {
+    "prettify": "prettier",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/DavidStenstroem/stenstroem-dev/issues"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "graphql-scalars": "^1.0.0",
+    "graphql-yoga": "^1.18.1",
+    "merge-graphql-schemas": "^1.7.0",
+    "mongoose": "^5.6.9",
+    "morgan": "^1.9.1",
+    "reflect-metadata": "^0.1.13",
+    "typegoose": "^5.9.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.1",
+    "@types/cors": "^2.8.5",
+    "@types/mongoose": "^5.5.12",
+    "@types/morgan": "^1.7.36"
+  }
+}
