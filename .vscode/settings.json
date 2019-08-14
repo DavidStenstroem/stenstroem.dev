@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "prettier.eslintIntegration": false,
+  "eslint.validate": [
+    {
+      "language": "typescript",
+      "autoFix": true
+    },
+    {
+      "language": "typescriptreact",
+      "autoFix": true
+    }
+  ]
+}

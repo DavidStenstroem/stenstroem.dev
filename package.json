@@ -1,7 +1,43 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "codegen": "graphql-codegen"
+  },
+  "lint-staged": {
+    "packages/{app,server,shared}/src/**/*.{ts,tsx}": [
+      "npm run --silent prettify",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
-    "lerna": "^3.13.1"
+    "@graphql-codegen/add": "^1.5.0",
+    "@graphql-codegen/cli": "^1.5.0",
+    "@graphql-codegen/fragment-matcher": "^1.5.0",
+    "@graphql-codegen/typescript": "^1.5.0",
+    "@graphql-codegen/typescript-operations": "^1.5.0",
+    "@graphql-codegen/typescript-react-apollo": "^1.5.0",
+    "@graphql-codegen/typescript-resolvers": "^1.5.0",
+    "@types/graphql": "^14.2.3",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-standard": "^4.0.0",
+    "graphql": "^14.4.2",
+    "lerna": "^3.13.1",
+    "lint-staged": "^9.2.1",
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.3"
   }
 }
