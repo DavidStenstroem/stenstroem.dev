@@ -1,0 +1,14 @@
+overwrite: true
+schema: ./packages/server/src/**/*.graphql
+config:
+  scalars:
+    DateTime: Date
+    EmailAddress: string
+generates:
+  ./packages/server/src/types/graphql.ts:
+    config:
+      contextType: ./Context#Context
+    plugins:
+      - add: /* eslint-disable */
+      - typescript
+      - typescript-resolvers
