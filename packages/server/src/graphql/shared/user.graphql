@@ -1,0 +1,6 @@
+type User {
+  id: ID!
+  email: EmailAddress!
+  name: String!
+  active: Boolean!
+}

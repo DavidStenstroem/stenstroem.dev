@@ -1,0 +1,9 @@
+input RegisterInput {
+  email: EmailAddress!
+  name: String!
+  password: String!
+}
+
+type Mutation {
+  register(input: RegisterInput!): [FormError!]
+}
