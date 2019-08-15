@@ -33,6 +33,7 @@
     "cors": "^2.8.5",
     "graphql-scalars": "^1.0.0",
     "graphql-yoga": "^1.18.1",
+    "jsonwebtoken": "^8.5.1",
     "merge-graphql-schemas": "^1.7.0",
     "mongoose": "^5.6.9",
     "morgan": "^1.9.1",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@types/cookie-parser": "^1.4.1",
     "@types/cors": "^2.8.5",
+    "@types/jsonwebtoken": "^8.3.3",
     "@types/mongoose": "^5.5.12",
     "@types/morgan": "^1.7.36"
   }
