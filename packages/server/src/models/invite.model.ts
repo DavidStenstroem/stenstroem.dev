@@ -16,6 +16,9 @@ export class Invite extends Typegoose {
 
   @prop({ required: true, unique: true, lowercase: true })
   email: string
+
+  @prop({ default: true })
+  isValid: boolean
 }
 
 export const InviteModel = new Invite().getModelForClass(Invite)

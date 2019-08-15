@@ -24,7 +24,7 @@ export type FormError = {
 }
 
 export type InviteInput = {
-  email?: Maybe<Scalars['EmailAddress']>
+  email: Scalars['EmailAddress']
 }
 
 export type LoginInput = {
@@ -49,6 +49,15 @@ export type MutationInviteArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput
+}
+
+export type Query = {
+  __typename?: 'Query'
+  getInvite: Scalars['EmailAddress']
+}
+
+export type QueryGetInviteArgs = {
+  id: Scalars['String']
 }
 
 export type RegisterInput = {
@@ -137,10 +146,11 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Query: ResolverTypeWrapper<{}>
+  String: ResolverTypeWrapper<Scalars['String']>
+  EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>
   Mutation: ResolverTypeWrapper<{}>
   RegisterInput: RegisterInput
-  EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>
-  String: ResolverTypeWrapper<Scalars['String']>
   FormError: ResolverTypeWrapper<FormError>
   InviteInput: InviteInput
   LoginInput: LoginInput
@@ -152,10 +162,11 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Query: {}
+  String: Scalars['String']
+  EmailAddress: Scalars['EmailAddress']
   Mutation: {}
   RegisterInput: RegisterInput
-  EmailAddress: Scalars['EmailAddress']
-  String: Scalars['String']
   FormError: FormError
   InviteInput: InviteInput
   LoginInput: LoginInput
@@ -207,6 +218,18 @@ export type MutationResolvers<
   >
 }
 
+export type QueryResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
+> = {
+  getInvite?: Resolver<
+    ResolversTypes['EmailAddress'],
+    ParentType,
+    ContextType,
+    QueryGetInviteArgs
+  >
+}
+
 export type UserResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']
@@ -222,6 +245,7 @@ export type Resolvers<ContextType = Context> = {
   EmailAddress?: GraphQLScalarType
   FormError?: FormErrorResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
+  Query?: QueryResolvers<ContextType>
   User?: UserResolvers<ContextType>
 }
 

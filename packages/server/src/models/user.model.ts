@@ -37,9 +37,6 @@ export class User extends Typegoose {
   @prop()
   salt: string
 
-  @prop({ default: false })
-  active: boolean
-
   @prop({ default: 0 })
   count: number
 
