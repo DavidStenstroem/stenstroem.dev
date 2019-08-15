@@ -1,6 +1,6 @@
 import { RequestWithUser } from 'src/types/RequestWithUser'
 import { InstanceType } from 'typegoose'
-import { User, UserModel } from 'src/models/user.model'
+import { User, UserModel } from './models/user.model'
 import { AuthenticationError } from 'apollo-server-errors'
 import { sign, verify } from 'jsonwebtoken'
 import { config } from './config'
@@ -45,7 +45,7 @@ interface UserInput {
   count: number
 }
 
-const tokens = (user: UserInput): string[] => {
+export const tokens = (user: UserInput): string[] => {
   const { id, name, email, count } = user
   const accessToken = sign({ id, name, email }, accessTokenSecret, {
     expiresIn: '2h',
