@@ -23,19 +23,39 @@ export type FormError = {
   message: Scalars['String']
 }
 
+export type InviteInput = {
+  email?: Maybe<Scalars['EmailAddress']>
+}
+
+export type LoginInput = {
+  email: Scalars['EmailAddress']
+  password?: Maybe<Scalars['String']>
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   register?: Maybe<Array<FormError>>
+  invite?: Maybe<Array<FormError>>
+  login?: Maybe<Array<FormError>>
 }
 
 export type MutationRegisterArgs = {
   input: RegisterInput
 }
 
+export type MutationInviteArgs = {
+  input: InviteInput
+}
+
+export type MutationLoginArgs = {
+  input: LoginInput
+}
+
 export type RegisterInput = {
   email: Scalars['EmailAddress']
   name: Scalars['String']
   password: Scalars['String']
+  inviteId: Scalars['String']
 }
 
 export type User = {
@@ -122,6 +142,8 @@ export type ResolversTypes = {
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>
   String: ResolverTypeWrapper<Scalars['String']>
   FormError: ResolverTypeWrapper<FormError>
+  InviteInput: InviteInput
+  LoginInput: LoginInput
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>
   User: ResolverTypeWrapper<User>
@@ -135,6 +157,8 @@ export type ResolversParentTypes = {
   EmailAddress: Scalars['EmailAddress']
   String: Scalars['String']
   FormError: FormError
+  InviteInput: InviteInput
+  LoginInput: LoginInput
   Boolean: Scalars['Boolean']
   DateTime: Scalars['DateTime']
   User: User
@@ -168,6 +192,18 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     MutationRegisterArgs
+  >
+  invite?: Resolver<
+    Maybe<Array<ResolversTypes['FormError']>>,
+    ParentType,
+    ContextType,
+    MutationInviteArgs
+  >
+  login?: Resolver<
+    Maybe<Array<ResolversTypes['FormError']>>,
+    ParentType,
+    ContextType,
+    MutationLoginArgs
   >
 }
 
