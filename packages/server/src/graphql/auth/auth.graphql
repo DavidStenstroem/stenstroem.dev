@@ -2,8 +2,20 @@ input RegisterInput {
   email: EmailAddress!
   name: String!
   password: String!
+  inviteId: String!
+}
+
+input InviteInput {
+  email: EmailAddress
+}
+
+input LoginInput {
+  email: EmailAddress!
+  password: String
 }
 
 type Mutation {
   register(input: RegisterInput!): [FormError!]
+  invite(input: InviteInput!): [FormError!]
+  login(input: LoginInput!): [FormError!]
 }
