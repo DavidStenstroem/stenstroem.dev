@@ -6,6 +6,7 @@ import { config } from './config'
 import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
+import { refreshTokens } from './authentication'
 
 const { dbConnectionString, dbName } = config
 
@@ -20,6 +21,7 @@ const start = async (): Promise<void> => {
 
   const server = new GraphQLServer({
     schema: schema(),
+
     context: ({ request, response }): Context => ({
       req: request,
       res: response,
@@ -35,8 +37,9 @@ const start = async (): Promise<void> => {
   )
   server.express.use(morgan('dev'))
   server.express.use(cookieParser())
+  server.express.use(refreshTokens)
 
-  await server.start()
+  await server.start({ cors: { credentials: true, origin: whiteList } })
 }
 
 start()
