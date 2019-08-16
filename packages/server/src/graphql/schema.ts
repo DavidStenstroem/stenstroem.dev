@@ -1,18 +1,17 @@
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import { makeExecutableSchema } from 'graphql-tools'
-import { join } from 'path'
 import * as glob from 'glob'
-import { readFileSync } from 'fs'
+import { join } from 'path'
 import { GraphQLSchema } from 'graphql'
+import { readFileSync } from 'fs'
 
-const schema = (): GraphQLSchema => {
-  const pathToModules = join(__dirname, '.')
+const genSchema = (): GraphQLSchema => {
+  const pathToGraphQL = join(__dirname, '.')
   const graphqlTypes = glob
-    .sync(`${pathToModules}/**/*.graphql`)
+    .sync(`${pathToGraphQL}/**/*.graphql`)
     .map((x: string): string => readFileSync(x, { encoding: 'utf8' }))
-
   const resolvers = glob
-    .sync(`${pathToModules}/**/*.resolvers.ts`)
+    .sync(`${pathToGraphQL}/**/*.ts`)
     .map((resolver: string): any => require(resolver).resolvers)
 
   return makeExecutableSchema({
@@ -21,4 +20,4 @@ const schema = (): GraphQLSchema => {
   })
 }
 
-export default schema
+export default genSchema
