@@ -1,0 +1,36 @@
+{
+  "name": "@stenstroem-dev/shared",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "David Hvejsel Stenstrøm <david@stenstroem.dk>",
+  "homepage": "https://github.com/DavidStenstroem/stenstroem-dev#readme",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidStenstroem/stenstroem-dev.git"
+  },
+  "scripts": {
+    "build": "rimraf ./dist && tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/DavidStenstroem/stenstroem-dev/issues"
+  },
+  "dependencies": {
+    "yup": "^0.27.0"
+  },
+  "devDependencies": {
+    "@types/yup": "^0.26.22",
+    "rimraf": "^3.0.0"
+  }
+}
