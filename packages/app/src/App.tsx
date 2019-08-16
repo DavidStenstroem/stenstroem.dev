@@ -7,6 +7,7 @@ import { Nav } from './components/Nav'
 import { Dashboard } from './pages/Dashboard'
 import { Register } from './pages/Register'
 import { Login } from './pages/Login'
+import './styles/master.scss'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
   const [account, setAccount] = React.useState<Account>(
