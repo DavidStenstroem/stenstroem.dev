@@ -5,9 +5,7 @@
     "module": "esnext",
     "lib": ["dom", "es2015", "es6", "esnext.asynciterable"],
     "jsx": "react",
-    "baseUrl": ".",
     "esModuleInterop": true
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["./src/**/*"]
+  "include": ["src/**/*"]
 }
