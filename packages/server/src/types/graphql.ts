@@ -18,6 +18,15 @@ export type Scalars = {
   DateTime: Date
 }
 
+export type Account = {
+  __typename?: 'Account'
+  id: Scalars['ID']
+  name: Scalars['String']
+  email: Scalars['EmailAddress']
+  createdAt: Scalars['DateTime']
+  updatedAt: Scalars['DateTime']
+}
+
 export type FormError = {
   __typename?: 'FormError'
   path: Scalars['String']
@@ -54,6 +63,7 @@ export type MutationLoginArgs = {
 
 export type Query = {
   __typename?: 'Query'
+  me: Account
   getInvite: Scalars['EmailAddress']
 }
 
@@ -147,33 +157,46 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>
+  Account: ResolverTypeWrapper<Account>
+  ID: ResolverTypeWrapper<Scalars['ID']>
   String: ResolverTypeWrapper<Scalars['String']>
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>
   Mutation: ResolverTypeWrapper<{}>
   RegisterInput: RegisterInput
   FormError: ResolverTypeWrapper<FormError>
   InviteInput: InviteInput
   LoginInput: LoginInput
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>
   User: ResolverTypeWrapper<User>
-  ID: ResolverTypeWrapper<Scalars['ID']>
 }
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {}
+  Account: Account
+  ID: Scalars['ID']
   String: Scalars['String']
   EmailAddress: Scalars['EmailAddress']
+  DateTime: Scalars['DateTime']
   Mutation: {}
   RegisterInput: RegisterInput
   FormError: FormError
   InviteInput: InviteInput
   LoginInput: LoginInput
   Boolean: Scalars['Boolean']
-  DateTime: Scalars['DateTime']
   User: User
-  ID: Scalars['ID']
+}
+
+export type AccountResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
 }
 
 export interface DateTimeScalarConfig
@@ -222,6 +245,7 @@ export type QueryResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
+  me?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
   getInvite?: Resolver<
     ResolversTypes['EmailAddress'],
     ParentType,
@@ -241,6 +265,7 @@ export type UserResolvers<
 }
 
 export type Resolvers<ContextType = Context> = {
+  Account?: AccountResolvers<ContextType>
   DateTime?: GraphQLScalarType
   EmailAddress?: GraphQLScalarType
   FormError?: FormErrorResolvers<ContextType>

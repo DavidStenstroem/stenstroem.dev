@@ -18,6 +18,15 @@ export type Scalars = {
   DateTime: Date
 }
 
+export type Account = {
+  __typename?: 'Account'
+  id: Scalars['ID']
+  name: Scalars['String']
+  email: Scalars['EmailAddress']
+  createdAt: Scalars['DateTime']
+  updatedAt: Scalars['DateTime']
+}
+
 export type FormError = {
   __typename?: 'FormError'
   path: Scalars['String']
@@ -54,6 +63,7 @@ export type MutationLoginArgs = {
 
 export type Query = {
   __typename?: 'Query'
+  me: Account
   getInvite: Scalars['EmailAddress']
 }
 
