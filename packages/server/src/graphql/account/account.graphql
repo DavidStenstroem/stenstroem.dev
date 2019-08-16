@@ -1,0 +1,11 @@
+type Account {
+  id: ID!
+  name: String!
+  email: EmailAddress!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  me: Account!
+}
