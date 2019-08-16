@@ -2,6 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "bootstrap": "lerna run bootstrap",
+    "start": "lerna run start --stream",
     "codegen": "graphql-codegen"
   },
   "lint-staged": {
