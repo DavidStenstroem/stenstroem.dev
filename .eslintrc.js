@@ -8,7 +8,12 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 6,
-    project: join(__dirname, 'tsconfig.json'),
+    project: [
+      join(__dirname, './tsconfig.json'),
+      join(__dirname, './packages/app/tsconfig.json'),
+      join(__dirname, './packages/server/tsconfig.json'),
+      join(__dirname, './packages/shared/tsconfig.json'),
+    ],
     sourceType: 'module',
   },
   extends: [
