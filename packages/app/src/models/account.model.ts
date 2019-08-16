@@ -1,4 +1,13 @@
 import Cookies from 'universal-cookie'
+import jwtDecode from 'jwt-decode'
+
+interface TokenDto {
+  name: string
+  id: string
+  email: string
+  iat: number
+  exp: number
+}
 
 export class Account {
   id: string
@@ -13,7 +22,13 @@ export class Account {
 
   static accountFromCookie(): Account {
     const cookies = new Cookies()
-    cookies.get('access-token')
-    // TODO
+    const token = cookies.get('access-token') as string
+    try {
+      const decoded = jwtDecode<TokenDto>(token)
+      return new Account({ ...decoded })
+    } catch (err) {
+      console.warn(err)
+      return undefined
+    }
   }
 }
