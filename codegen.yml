@@ -10,5 +10,17 @@ generates:
       contextType: ./Context#Context
     plugins:
       - add: /* eslint-disable */
+      - add: /* This is an automatically generated file. Do not edit directly. */
       - typescript
       - typescript-resolvers
+  ./packages/app/src/generated/graphql.tsx:
+    documents: ./packages/app/src/apollo/*.graphql
+    config:
+      withHOC: false
+      withHooks: true
+    plugins:
+      - add: /* eslint-disable */
+      - add: /* This is an automatically generated file. Do not edit directly. */
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
