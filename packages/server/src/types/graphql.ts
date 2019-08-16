@@ -1,4 +1,5 @@
 /* eslint-disable */
+/* This is an automatically generated file. Do not edit directly. */
 import {
   GraphQLResolveInfo,
   GraphQLScalarType,
@@ -64,7 +65,6 @@ export type RegisterInput = {
   email: Scalars['EmailAddress']
   name: Scalars['String']
   password: Scalars['String']
-  inviteId: Scalars['String']
 }
 
 export type User = {

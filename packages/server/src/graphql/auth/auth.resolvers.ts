@@ -5,6 +5,9 @@ import { UserModel, User } from '../../models/user.model'
 import { InviteModel } from '../../models/invite.model'
 import { ApolloError } from 'apollo-server-errors'
 import { randomBytes, pbkdf2Sync } from 'crypto'
+import { loginSchema } from '@stenstroem-dev/shared'
+import { formatError } from '../../utils/formatError'
+import { ValidationError } from 'yup'
 
 export const resolvers: Resolvers = {
   Mutation: {
@@ -81,8 +84,55 @@ export const resolvers: Resolvers = {
       return null
     },
 
-    login: async (parent, { input }, context, info): Promise<FormError[]> => {
-      return []
+    login: async (
+      parent,
+      { input: { email, password } },
+      { res },
+      info
+    ): Promise<FormError[]> => {
+      try {
+        await loginSchema.validate({ email, password }, { abortEarly: false })
+      } catch (err) {
+        return formatError(err as ValidationError)
+      }
+
+      const user = await UserModel.findOne({ email })
+      if (!user) {
+        return [
+          { message: 'Forkert mail eller kode', path: 'email' },
+          { message: 'Forkert mail eller kode', path: 'password' },
+        ]
+      }
+
+      const hash = pbkdf2Sync(
+        password,
+        user.salt,
+        10000,
+        512,
+        'sha512'
+      ).toString('hex')
+      if (hash !== user.hash) {
+        return [
+          { message: 'Forkert mail eller kode', path: 'email' },
+          { message: 'Forkert mail eller kode', path: 'password' },
+        ]
+      }
+
+      const [accessToken, refreshToken] = tokens({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        count: user.count,
+      })
+
+      res.cookie('access-token', accessToken, {
+        expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+      })
+      res.cookie('refresh-token', refreshToken, {
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      })
+
+      return null
     },
   },
 
