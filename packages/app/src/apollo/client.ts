@@ -11,10 +11,10 @@ const cache = new InMemoryCache()
 const isProduction = (process.env.NODE_ENV as string) === 'production'
 const httpServer = isProduction
   ? 'https://dev.stenstroem.dk'
-  : 'http://localhost:4000'
+  : 'http://localhost:4000/graphql'
 const wsServer = isProduction
   ? 'wss://dev.stenstroem.dk'
-  : 'ws://localhost:4000'
+  : 'ws://localhost:4000/graphql'
 
 const httpLink = createUploadLink({
   uri: httpServer,
