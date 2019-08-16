@@ -7,6 +7,7 @@ import { Nav } from './components/Nav'
 import { Dashboard } from './pages/Dashboard'
 import { Register } from './pages/Register'
 import { Login } from './pages/Login'
+import { Account as AccountPage } from './pages/Account'
 import './styles/master.scss'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
@@ -23,6 +24,7 @@ export const App: React.FunctionComponent = (): JSX.Element => {
               return (
                 <Router id="main" primary={false}>
                   <Dashboard path="/" />
+                  <AccountPage path="/account" />
                 </Router>
               )
             }
