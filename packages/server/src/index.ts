@@ -1,5 +1,5 @@
-import { GraphQLServer } from 'graphql-yoga'
-import { default as schema } from './graphql/schema'
+import { ApolloServer } from 'apollo-server-express'
+import { default as genSchema } from './graphql/schema'
 import { Context } from './types/Context'
 import mongoose from 'mongoose'
 import { config } from './config'
@@ -7,6 +7,8 @@ import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import { refreshTokens } from './authentication'
+import { createServer } from 'http'
+import express from 'express'
 
 const { dbConnectionString, dbName } = config
 
@@ -19,27 +21,44 @@ const start = async (): Promise<void> => {
 
   const whiteList: string[] = ['http://localhost:8080']
 
-  const server = new GraphQLServer({
-    schema: schema(),
+  const schema = genSchema()
 
-    context: ({ request, response }): Context => ({
-      req: request,
-      res: response,
+  const server = new ApolloServer({
+    schema,
+    playground: true,
+    introspection: true,
+    context: ({ req, res }): Context => ({
+      req,
+      res,
     }),
   })
 
-  server.express.disable('x-powered-by')
-  server.express.use(
+  const app = express()
+
+  app.disable('x-powered-by')
+  app.use(
     cors({
       credentials: true,
       origin: whiteList,
     })
   )
-  server.express.use(morgan('dev'))
-  server.express.use(cookieParser())
-  server.express.use(refreshTokens)
+  app.use(morgan('dev'))
+  app.use(cookieParser())
+  app.use(refreshTokens)
 
-  await server.start({ cors: { credentials: true, origin: whiteList } })
+  server.applyMiddleware({
+    app,
+    cors: { credentials: true, origin: whiteList },
+  })
+
+  const httpServer = createServer(app)
+  server.installSubscriptionHandlers(httpServer)
+
+  await httpServer.listen({ port: 4000 }, (): void => {
+    console.log(`Server running at http://localhost:4000${server.graphqlPath}`)
+  })
 }
 
-start()
+start().catch((err): void => {
+  console.log('Error!\n', err)
+})
