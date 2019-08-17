@@ -20,7 +20,7 @@ export const resolvers: Resolvers = {
   Mutation: {
     changeName: async (
       parent,
-      { newName },
+      { input: { newName } },
       { req },
       info
     ): Promise<FormError[]> => {

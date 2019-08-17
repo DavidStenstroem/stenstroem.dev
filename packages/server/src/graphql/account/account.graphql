@@ -15,7 +15,11 @@ input ChangePasswordInput {
   newPassword: String!
 }
 
+input ChangeNameInput {
+  newName: String!
+}
+
 type Mutation {
   changePassword(input: ChangePasswordInput!): [FormError!]
-  changeName(newName: String!): [FormError!]
+  changeName(input: ChangeNameInput!): [FormError!]
 }

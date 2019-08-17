@@ -6,6 +6,7 @@ import { faKey } from '@fortawesome/pro-light-svg-icons/faKey'
 import { faExclamationCircle } from '@fortawesome/pro-light-svg-icons/faExclamationCircle'
 import { faUpload } from '@fortawesome/pro-light-svg-icons/faUpload'
 import { faUser } from '@fortawesome/pro-light-svg-icons/faUser'
+import { faSignature } from '@fortawesome/pro-light-svg-icons/faSignature'
 
 // Solid
 import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon'
@@ -27,4 +28,5 @@ export {
   faExclamationCircle,
   faUpload,
   faUser,
+  faSignature,
 }

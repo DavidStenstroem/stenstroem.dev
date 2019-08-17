@@ -27,6 +27,10 @@ export type Account = {
   updatedAt: Scalars['DateTime']
 }
 
+export type ChangeNameInput = {
+  newName: Scalars['String']
+}
+
 export type ChangePasswordInput = {
   currentPassword: Scalars['String']
   newPassword: Scalars['String']
@@ -62,7 +66,7 @@ export type MutationChangePasswordArgs = {
 }
 
 export type MutationChangeNameArgs = {
-  newName: Scalars['String']
+  input: ChangeNameInput
 }
 
 export type MutationRegisterArgs = {
@@ -181,6 +185,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>
   ChangePasswordInput: ChangePasswordInput
   FormError: ResolverTypeWrapper<FormError>
+  ChangeNameInput: ChangeNameInput
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
@@ -199,6 +204,7 @@ export type ResolversParentTypes = {
   Mutation: {}
   ChangePasswordInput: ChangePasswordInput
   FormError: FormError
+  ChangeNameInput: ChangeNameInput
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput

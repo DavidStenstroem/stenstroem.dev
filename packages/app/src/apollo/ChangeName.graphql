@@ -1,5 +1,5 @@
-mutation ChangeName($newName: String!) {
-  changeName(newName: $newName) {
+mutation ChangeName($input: ChangeNameInput!) {
+  changeName(input: $input) {
     path
     message
   }

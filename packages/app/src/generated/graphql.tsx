@@ -27,6 +27,10 @@ export type Account = {
   updatedAt: Scalars['DateTime']
 }
 
+export type ChangeNameInput = {
+  newName: Scalars['String']
+}
+
 export type ChangePasswordInput = {
   currentPassword: Scalars['String']
   newPassword: Scalars['String']
@@ -62,7 +66,7 @@ export type MutationChangePasswordArgs = {
 }
 
 export type MutationChangeNameArgs = {
-  newName: Scalars['String']
+  input: ChangeNameInput
 }
 
 export type MutationRegisterArgs = {
@@ -101,7 +105,7 @@ export type User = {
   active: Scalars['Boolean']
 }
 export type ChangeNameMutationVariables = {
-  newName: Scalars['String']
+  input: ChangeNameInput
 }
 
 export type ChangeNameMutation = { __typename?: 'Mutation' } & {
@@ -131,8 +135,8 @@ export type RegisterMutation = { __typename?: 'Mutation' } & {
 }
 
 export const ChangeNameDocument = gql`
-  mutation ChangeName($newName: String!) {
-    changeName(newName: $newName) {
+  mutation ChangeName($input: ChangeNameInput!) {
+    changeName(input: $input) {
       path
       message
     }
