@@ -27,6 +27,7 @@
     "url": "git+https://github.com/DavidStenstroem/stenstroem-dev.git"
   },
   "scripts": {
+    "build": "rimraf ./dist && webpack -p",
     "prettify": "prettier",
     "start": "webpack-dev-server -d",
     "test": "echo \"Error: run tests from root\" && exit 1"

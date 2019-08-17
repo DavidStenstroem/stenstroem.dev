@@ -59,7 +59,8 @@ module.exports = (env, options) => {
         {
           test: /\.scss$/,
           use: [
-            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'style-loader',
+            MiniCssExtractPlugin.loader,
             'css-loader',
             'postcss-loader',
             'sass-loader',
@@ -68,7 +69,8 @@ module.exports = (env, options) => {
         {
           test: /\.css$/,
           use: [
-            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'style-loader',
+            MiniCssExtractPlugin.loader,
             'css-loader',
             'postcss-loader',
           ],
@@ -83,6 +85,9 @@ module.exports = (env, options) => {
         hash: isProduction,
         inject: true,
         favicon: './src/images/favicon.ico',
+      }),
+      new MiniCssExtractPlugin({
+        filename: '[name].css',
       }),
       new webpack.DefinePlugin({
         NODE_ENV: JSON.stringify(options.mode),
@@ -116,13 +121,7 @@ module.exports = (env, options) => {
       },
     }
   } else {
-    setup.plugins.push(
-      new webpack.HotModuleReplacementPlugin(),
-      new MiniCssExtractPlugin({
-        filename: '[name].[chunkhash].css',
-        chunkFilename: '[name].[chunkhash].css',
-      })
-    )
+    setup.plugins.push(new webpack.HotModuleReplacementPlugin())
   }
 
   return setup
