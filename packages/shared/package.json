@@ -20,6 +20,7 @@
     "url": "git+https://github.com/DavidStenstroem/stenstroem-dev.git"
   },
   "scripts": {
+    "prebuild": "npm install",
     "build": "rimraf ./dist && tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
