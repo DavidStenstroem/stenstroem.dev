@@ -27,6 +27,11 @@ export type Account = {
   updatedAt: Scalars['DateTime']
 }
 
+export type ChangePasswordInput = {
+  currentPassword: Scalars['String']
+  newPassword: Scalars['String']
+}
+
 export type FormError = {
   __typename?: 'FormError'
   path: Scalars['String']
@@ -44,9 +49,20 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  changePassword?: Maybe<Array<FormError>>
+  changeName?: Maybe<Array<FormError>>
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
+  logout: Scalars['Boolean']
+}
+
+export type MutationChangePasswordArgs = {
+  input?: Maybe<ChangePasswordInput>
+}
+
+export type MutationChangeNameArgs = {
+  newName: Scalars['String']
 }
 
 export type MutationRegisterArgs = {
@@ -163,8 +179,9 @@ export type ResolversTypes = {
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>
   Mutation: ResolverTypeWrapper<{}>
-  RegisterInput: RegisterInput
+  ChangePasswordInput: ChangePasswordInput
   FormError: ResolverTypeWrapper<FormError>
+  RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
@@ -180,8 +197,9 @@ export type ResolversParentTypes = {
   EmailAddress: Scalars['EmailAddress']
   DateTime: Scalars['DateTime']
   Mutation: {}
-  RegisterInput: RegisterInput
+  ChangePasswordInput: ChangePasswordInput
   FormError: FormError
+  RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
   Boolean: Scalars['Boolean']
@@ -221,6 +239,18 @@ export type MutationResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  changePassword?: Resolver<
+    Maybe<Array<ResolversTypes['FormError']>>,
+    ParentType,
+    ContextType,
+    MutationChangePasswordArgs
+  >
+  changeName?: Resolver<
+    Maybe<Array<ResolversTypes['FormError']>>,
+    ParentType,
+    ContextType,
+    MutationChangeNameArgs
+  >
   register?: Resolver<
     Maybe<Array<ResolversTypes['FormError']>>,
     ParentType,
@@ -239,6 +269,7 @@ export type MutationResolvers<
     ContextType,
     MutationLoginArgs
   >
+  logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
 }
 
 export type QueryResolvers<

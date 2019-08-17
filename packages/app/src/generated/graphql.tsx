@@ -27,6 +27,11 @@ export type Account = {
   updatedAt: Scalars['DateTime']
 }
 
+export type ChangePasswordInput = {
+  currentPassword: Scalars['String']
+  newPassword: Scalars['String']
+}
+
 export type FormError = {
   __typename?: 'FormError'
   path: Scalars['String']
@@ -44,9 +49,20 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  changePassword?: Maybe<Array<FormError>>
+  changeName?: Maybe<Array<FormError>>
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
+  logout: Scalars['Boolean']
+}
+
+export type MutationChangePasswordArgs = {
+  input?: Maybe<ChangePasswordInput>
+}
+
+export type MutationChangeNameArgs = {
+  newName: Scalars['String']
 }
 
 export type MutationRegisterArgs = {
