@@ -100,6 +100,16 @@ export type User = {
   name: Scalars['String']
   active: Scalars['Boolean']
 }
+export type ChangeNameMutationVariables = {
+  newName: Scalars['String']
+}
+
+export type ChangeNameMutation = { __typename?: 'Mutation' } & {
+  changeName: Maybe<
+    Array<{ __typename?: 'FormError' } & Pick<FormError, 'path' | 'message'>>
+  >
+}
+
 export type LoginMutationVariables = {
   input: LoginInput
 }
@@ -120,6 +130,57 @@ export type RegisterMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export const ChangeNameDocument = gql`
+  mutation ChangeName($newName: String!) {
+    changeName(newName: $newName) {
+      path
+      message
+    }
+  }
+`
+export type ChangeNameMutationFn = ApolloReactCommon.MutationFunction<
+  ChangeNameMutation,
+  ChangeNameMutationVariables
+>
+export type ChangeNameComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    ChangeNameMutation,
+    ChangeNameMutationVariables
+  >,
+  'mutation'
+>
+
+export const ChangeNameComponent = (props: ChangeNameComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    ChangeNameMutation,
+    ChangeNameMutationVariables
+  >
+    mutation={ChangeNameDocument}
+    {...props}
+  />
+)
+
+export function useChangeNameMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    ChangeNameMutation,
+    ChangeNameMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    ChangeNameMutation,
+    ChangeNameMutationVariables
+  >(ChangeNameDocument, baseOptions)
+}
+export type ChangeNameMutationHookResult = ReturnType<
+  typeof useChangeNameMutation
+>
+export type ChangeNameMutationResult = ApolloReactCommon.MutationResult<
+  ChangeNameMutation
+>
+export type ChangeNameMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  ChangeNameMutation,
+  ChangeNameMutationVariables
+>
 export const LoginDocument = gql`
   mutation Login($input: LoginInput!) {
     login(input: $input) {
