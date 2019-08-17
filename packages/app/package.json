@@ -27,6 +27,7 @@
     "url": "git+https://github.com/DavidStenstroem/stenstroem-dev.git"
   },
   "scripts": {
+    "prebuild": "npm install",
     "build": "rimraf ./dist && webpack -p",
     "prettify": "prettier",
     "start": "webpack-dev-server -d",
