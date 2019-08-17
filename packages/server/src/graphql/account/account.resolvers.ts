@@ -1,4 +1,4 @@
-import { Resolvers, Account } from '../../types/graphql'
+import { Resolvers, Account, FormError } from '../../types/graphql'
 import { authenticate } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
 
@@ -11,5 +11,15 @@ export const resolvers: Resolvers = {
         ...user,
       }
     },
+  },
+
+  Mutation: {
+    changeName: async (parent, args, context, info): Promise<FormError[]> => [],
+    changePassword: async (
+      parent,
+      args,
+      context,
+      info
+    ): Promise<FormError[]> => [],
   },
 }

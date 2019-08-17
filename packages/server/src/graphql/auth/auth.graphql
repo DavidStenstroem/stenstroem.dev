@@ -17,6 +17,7 @@ type Mutation {
   register(input: RegisterInput!): [FormError!]
   invite(input: InviteInput!): [FormError!]
   login(input: LoginInput!): [FormError!]
+  logout: Boolean!
 }
 
 type Query {

@@ -9,3 +9,13 @@ type Account {
 type Query {
   me: Account!
 }
+
+input ChangePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+}
+
+type Mutation {
+  changePassword(input: ChangePasswordInput): [FormError!]
+  changeName(newName: String!): [FormError!]
+}
