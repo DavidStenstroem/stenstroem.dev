@@ -58,7 +58,7 @@ export type Mutation = {
 }
 
 export type MutationChangePasswordArgs = {
-  input?: Maybe<ChangePasswordInput>
+  input: ChangePasswordInput
 }
 
 export type MutationChangeNameArgs = {
