@@ -1,11 +1,11 @@
-import { Resolvers, FormError } from 'src/types/graphql'
+import { Resolvers, FormError } from '../../types/graphql'
 import { authenticate, tokens } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
 import { UserModel, User } from '../../models/user.model'
 import { InviteModel } from '../../models/invite.model'
 import { ApolloError } from 'apollo-server-errors'
 import { randomBytes, pbkdf2Sync } from 'crypto'
-import { loginSchema } from '@stenstroem-dev/shared'
+import { loginSchema, registerSchema } from '@stenstroem-dev/shared'
 import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
 
@@ -17,6 +17,14 @@ export const resolvers: Resolvers = {
       { res },
       info
     ): Promise<FormError[]> => {
+      try {
+        await registerSchema.validate(
+          { name, email, password },
+          { abortEarly: false }
+        )
+      } catch (err) {
+        return formatError(err as ValidationError)
+      }
       const existingUser = await UserModel.findOne({ email })
       if (existingUser) {
         return [
