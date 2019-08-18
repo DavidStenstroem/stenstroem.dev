@@ -19,7 +19,7 @@ const start = async (): Promise<void> => {
     useNewUrlParser: true,
   })
 
-  const whiteList: string[] = ['http://localhost:8080']
+  const whiteList: string[] = ['http://localhost:8000']
 
   const schema = genSchema()
 

@@ -32,6 +32,7 @@ module.exports = (env, options) => {
       },
       publicPath: '/',
       historyApiFallback: true,
+      port: 8000,
     },
     module: {
       rules: [
