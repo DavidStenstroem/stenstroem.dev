@@ -9,7 +9,13 @@ import { faSignature } from '../icons'
 import { InputField } from './InputField'
 import classnames from 'classnames'
 
-export const ChangeName: React.FunctionComponent = (): JSX.Element => (
+interface Props {
+  name: string
+}
+
+export const ChangeName: React.FunctionComponent<Props> = ({
+  name,
+}): JSX.Element => (
   <ChangeNameComponent>
     {(onMutate): JSX.Element => (
       <Section>
@@ -17,7 +23,7 @@ export const ChangeName: React.FunctionComponent = (): JSX.Element => (
           <Column mobileWidth={10} tabletWidth={6} desktopWidth={4}>
             <Formik<ChangeNameInput>
               validationSchema={changeNameSchema}
-              initialValues={{ newName: '' }}
+              initialValues={{ newName: name }}
               onSubmit={(values, actions): void => {
                 actions.setSubmitting(true)
                 onMutate({ variables: { input: values } })
@@ -47,7 +53,6 @@ export const ChangeName: React.FunctionComponent = (): JSX.Element => (
                     placeholder="John Doe"
                     component={InputField}
                   />
-                  <p>&nbsp;</p>
                   <button
                     className={classnames(
                       'button',

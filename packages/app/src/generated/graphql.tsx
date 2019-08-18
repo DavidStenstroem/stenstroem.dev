@@ -114,6 +114,15 @@ export type ChangeNameMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export type GetMeQueryVariables = {}
+
+export type GetMeQuery = { __typename?: 'Query' } & {
+  me: { __typename?: 'Account' } & Pick<
+    Account,
+    'id' | 'name' | 'email' | 'createdAt' | 'updatedAt'
+  >
+}
+
 export type LoginMutationVariables = {
   input: LoginInput
 }
@@ -184,6 +193,45 @@ export type ChangeNameMutationResult = ApolloReactCommon.MutationResult<
 export type ChangeNameMutationOptions = ApolloReactCommon.BaseMutationOptions<
   ChangeNameMutation,
   ChangeNameMutationVariables
+>
+export const GetMeDocument = gql`
+  query GetMe {
+    me {
+      id
+      name
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`
+export type GetMeComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<GetMeQuery, GetMeQueryVariables>,
+  'query'
+>
+
+export const GetMeComponent = (props: GetMeComponentProps) => (
+  <ApolloReactComponents.Query<GetMeQuery, GetMeQueryVariables>
+    query={GetMeDocument}
+    {...props}
+  />
+)
+
+export function useGetMeQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetMeQuery,
+    GetMeQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<GetMeQuery, GetMeQueryVariables>(
+    GetMeDocument,
+    baseOptions
+  )
+}
+export type GetMeQueryHookResult = ReturnType<typeof useGetMeQuery>
+export type GetMeQueryResult = ApolloReactCommon.QueryResult<
+  GetMeQuery,
+  GetMeQueryVariables
 >
 export const LoginDocument = gql`
   mutation Login($input: LoginInput!) {

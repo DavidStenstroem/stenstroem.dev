@@ -1,20 +1,25 @@
 import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
-import { Section } from '../components/Section'
 import { ChangeName } from '../components/ChangeName'
+import { useGetMeQuery } from '../generated/graphql'
 
 export const Account: React.FunctionComponent<
   RouteComponentProps
-> = (): JSX.Element => (
-  <>
-    <section className="hero">
-      <div className="hero-body">
-        <div className="container">
-          <h1 className="title">{}</h1>
-          <h2 className="subtitle">{}</h2>
+> = (): JSX.Element => {
+  const { data, loading, error } = useGetMeQuery()
+  if (loading) return <p>Loading ...</p>
+  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
+  return (
+    <>
+      <section className="hero">
+        <div className="hero-body">
+          <div className="container">
+            <h1 className="title">{data.me.name}</h1>
+            <h2 className="subtitle">{data.me.email}</h2>
+          </div>
         </div>
-      </div>
-    </section>
-    <ChangeName />
-  </>
-)
+      </section>
+      <ChangeName name={data.me.name} />
+    </>
+  )
+}

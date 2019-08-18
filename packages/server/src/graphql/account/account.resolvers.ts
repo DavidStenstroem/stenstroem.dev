@@ -12,7 +12,10 @@ export const resolvers: Resolvers = {
       const user = await authenticate(req as RequestWithUser)
       return {
         id: user.id,
-        ...user,
+        createdAt: user.createdAt,
+        email: user.email,
+        name: user.name,
+        updatedAt: user.updatedAt,
       }
     },
   },
