@@ -114,6 +114,16 @@ export type ChangeNameMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export type ChangePasswordMutationVariables = {
+  input: ChangePasswordInput
+}
+
+export type ChangePasswordMutation = { __typename?: 'Mutation' } & {
+  changePassword: Maybe<
+    Array<{ __typename?: 'FormError' } & Pick<FormError, 'path' | 'message'>>
+  >
+}
+
 export type GetMeQueryVariables = {}
 
 export type GetMeQuery = { __typename?: 'Query' } & {
@@ -193,6 +203,59 @@ export type ChangeNameMutationResult = ApolloReactCommon.MutationResult<
 export type ChangeNameMutationOptions = ApolloReactCommon.BaseMutationOptions<
   ChangeNameMutation,
   ChangeNameMutationVariables
+>
+export const ChangePasswordDocument = gql`
+  mutation ChangePassword($input: ChangePasswordInput!) {
+    changePassword(input: $input) {
+      path
+      message
+    }
+  }
+`
+export type ChangePasswordMutationFn = ApolloReactCommon.MutationFunction<
+  ChangePasswordMutation,
+  ChangePasswordMutationVariables
+>
+export type ChangePasswordComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables
+  >,
+  'mutation'
+>
+
+export const ChangePasswordComponent = (
+  props: ChangePasswordComponentProps
+) => (
+  <ApolloReactComponents.Mutation<
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables
+  >
+    mutation={ChangePasswordDocument}
+    {...props}
+  />
+)
+
+export function useChangePasswordMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables
+  >(ChangePasswordDocument, baseOptions)
+}
+export type ChangePasswordMutationHookResult = ReturnType<
+  typeof useChangePasswordMutation
+>
+export type ChangePasswordMutationResult = ApolloReactCommon.MutationResult<
+  ChangePasswordMutation
+>
+export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  ChangePasswordMutation,
+  ChangePasswordMutationVariables
 >
 export const GetMeDocument = gql`
   query GetMe {
