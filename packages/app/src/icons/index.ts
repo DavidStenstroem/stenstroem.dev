@@ -10,6 +10,7 @@ import { faUser } from '@fortawesome/pro-light-svg-icons/faUser'
 import { faSignature } from '@fortawesome/pro-light-svg-icons/faSignature'
 import { faAngleDown } from '@fortawesome/pro-light-svg-icons/faAngleDown'
 import { faSignOut } from '@fortawesome/pro-light-svg-icons/faSignOut'
+import { faPaperPlane } from '@fortawesome/pro-light-svg-icons/faPaperPlane'
 
 // Solid
 import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon'
@@ -35,4 +36,5 @@ export {
   IconDefinition,
   faAngleDown,
   faSignOut,
+  faPaperPlane,
 }

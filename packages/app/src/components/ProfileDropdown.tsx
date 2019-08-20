@@ -1,7 +1,13 @@
 import * as React from 'react'
 import Avatar from 'react-avatar'
 import { MainContextState, MainContext } from '../context/MainContext'
-import { FontAwesomeIcon, faAngleDown, faUser, faSignOut } from '../icons'
+import {
+  FontAwesomeIcon,
+  faAngleDown,
+  faUser,
+  faSignOut,
+  faPaperPlane,
+} from '../icons'
 import { navigate } from '@reach/router'
 
 export const ProfileDropdown: React.FunctionComponent = (): JSX.Element => {
@@ -30,6 +36,17 @@ export const ProfileDropdown: React.FunctionComponent = (): JSX.Element => {
                 <FontAwesomeIcon icon={faUser} />
               </span>
               <span>Min konto</span>
+            </div>
+
+            {/* Invite new user */}
+            <div
+              className="dropdown-item profile-item"
+              onClick={(): void => navigate('/invite')}
+            >
+              <span className="profile-icon">
+                <FontAwesomeIcon icon={faPaperPlane} />
+              </span>
+              <span>Invitér</span>
             </div>
 
             <hr className="dropdown-divider" />
