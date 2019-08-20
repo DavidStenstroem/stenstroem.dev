@@ -2,6 +2,7 @@ import * as React from 'react'
 import Avatar from 'react-avatar'
 import { MainContextState, MainContext } from '../context/MainContext'
 import { FontAwesomeIcon, faAngleDown, faUser, faSignOut } from '../icons'
+import { navigate } from '@reach/router'
 
 export const ProfileDropdown: React.FunctionComponent = (): JSX.Element => {
   const { account } = React.useContext<MainContextState>(MainContext)
@@ -21,7 +22,10 @@ export const ProfileDropdown: React.FunctionComponent = (): JSX.Element => {
         >
           <div id="dropdown" className="dropdown-content">
             {/* account */}
-            <div className="dropdown-item profile-item">
+            <div
+              className="dropdown-item profile-item"
+              onClick={(): void => navigate('/account')}
+            >
               <span className="profile-icon">
                 <FontAwesomeIcon icon={faUser} />
               </span>
