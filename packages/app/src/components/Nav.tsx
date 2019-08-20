@@ -3,6 +3,9 @@ import { Link } from '@reach/router'
 import { Logo } from './Logo'
 import { MainContext } from '../context/MainContext'
 import classnames from 'classnames'
+import { navbarStart } from '../config/navigation'
+import { NavbarItem } from './NavbarItem'
+import { ProfileDropdown } from './ProfileDropdown'
 
 export const Nav: React.FunctionComponent = (): JSX.Element => {
   const [open, setOpen] = React.useState<boolean>(false)
@@ -29,7 +32,19 @@ export const Nav: React.FunctionComponent = (): JSX.Element => {
 
           {account && (
             <div className={classnames('navbar-menu', open && 'is-active')}>
-              <div className="navbar-start"></div>
+              <div className="navbar-start">
+                {navbarStart.map(
+                  (item, index): JSX.Element => (
+                    <NavbarItem key={index} {...item} />
+                  )
+                )}
+              </div>
+
+              <div className="navbar-end">
+                <div className="user-profile-nav">
+                  <ProfileDropdown />
+                </div>
+              </div>
             </div>
           )}
         </nav>

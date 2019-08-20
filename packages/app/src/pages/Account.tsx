@@ -2,6 +2,7 @@ import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
 import { ChangeName } from '../components/ChangeName'
 import { useGetMeQuery } from '../generated/graphql'
+import { ChangePassword } from '../components/ChangePassword'
 
 export const Account: React.FunctionComponent<
   RouteComponentProps
@@ -20,6 +21,7 @@ export const Account: React.FunctionComponent<
         </div>
       </section>
       <ChangeName name={data.me.name} />
+      <ChangePassword />
     </>
   )
 }

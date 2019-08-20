@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 // Light
 import { faEnvelope } from '@fortawesome/pro-light-svg-icons/faEnvelope'
@@ -7,6 +8,8 @@ import { faExclamationCircle } from '@fortawesome/pro-light-svg-icons/faExclamat
 import { faUpload } from '@fortawesome/pro-light-svg-icons/faUpload'
 import { faUser } from '@fortawesome/pro-light-svg-icons/faUser'
 import { faSignature } from '@fortawesome/pro-light-svg-icons/faSignature'
+import { faAngleDown } from '@fortawesome/pro-light-svg-icons/faAngleDown'
+import { faSignOut } from '@fortawesome/pro-light-svg-icons/faSignOut'
 
 // Solid
 import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon'
@@ -29,4 +32,7 @@ export {
   faUpload,
   faUser,
   faSignature,
+  IconDefinition,
+  faAngleDown,
+  faSignOut,
 }
