@@ -1,0 +1,6 @@
+mutation Invite($input: InviteInput!) {
+  invite(input: $input) {
+    message
+    path
+  }
+}

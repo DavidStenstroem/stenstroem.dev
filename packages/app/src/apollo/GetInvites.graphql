@@ -1,0 +1,9 @@
+query GetInvites($from: String!) {
+  getInvites(from: $from) {
+    id
+    email
+    accepted
+    createdAt
+    name
+  }
+}
