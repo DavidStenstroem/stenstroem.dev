@@ -7,6 +7,7 @@ import { Nav } from './components/Nav'
 import { Dashboard } from './pages/Dashboard'
 import { Register } from './pages/Register'
 import { Login } from './pages/Login'
+import { Invite } from './pages/Invite'
 import { Account as AccountPage } from './pages/Account'
 import './styles/master.scss'
 
@@ -25,6 +26,7 @@ export const App: React.FunctionComponent = (): JSX.Element => {
                 <Router id="main" primary={false}>
                   <Dashboard path="/" />
                   <AccountPage path="/account" />
+                  <Invite path="/invite" />
                 </Router>
               )
             }
