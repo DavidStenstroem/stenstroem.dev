@@ -19,7 +19,7 @@ export class User extends Typegoose {
   @prop({ default: Date.now })
   updatedAt: Date
 
-  @prop({ required: true, default: '' })
+  @prop({ default: '' })
   name: string
 
   @prop({ required: true, unique: true, lowercase: true, index: true })

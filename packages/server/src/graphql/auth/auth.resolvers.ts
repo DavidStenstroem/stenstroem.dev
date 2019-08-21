@@ -85,7 +85,11 @@ export const resolvers: Resolvers = {
         ]
       }
 
-      const invite = new UserModel({ email, invitedBy: currentUser._id })
+      const invite = new UserModel({
+        email,
+        invitedBy: currentUser._id,
+        name: '',
+      })
       await invite.save()
 
       // send email
@@ -146,8 +150,19 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
-    getInvites: async (parent, args, context, info): Promise<Invitation[]> => {
-      return []
+    getInvites: async (parent, args, { req }, info): Promise<Invitation[]> => {
+      const currentUser = await authenticate(req as RequestWithUser)
+      const invites = await UserModel.find({ invitedBy: currentUser._id })
+      return invites.map(
+        (user): Invitation => ({
+          __typename: 'Invitation',
+          accepted: user.isActive,
+          createdAt: user.createdAt,
+          email: user.email,
+          id: user._id,
+          name: user.name === '' ? undefined : user.name,
+        })
+      )
     },
 
     getInvite: async (parent, { id }, context, info): Promise<string> => {
