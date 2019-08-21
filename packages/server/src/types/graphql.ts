@@ -42,6 +42,15 @@ export type FormError = {
   message: Scalars['String']
 }
 
+export type Invitation = {
+  __typename?: 'Invitation'
+  id: Scalars['ID']
+  email: Scalars['EmailAddress']
+  accepted: Scalars['Boolean']
+  createdAt: Scalars['DateTime']
+  name?: Maybe<Scalars['String']>
+}
+
 export type InviteInput = {
   email: Scalars['EmailAddress']
 }
@@ -85,10 +94,15 @@ export type Query = {
   __typename?: 'Query'
   me: Account
   getInvite: Scalars['EmailAddress']
+  getInvites?: Maybe<Array<Invitation>>
 }
 
 export type QueryGetInviteArgs = {
   id: Scalars['String']
+}
+
+export type QueryGetInvitesArgs = {
+  from: Scalars['String']
 }
 
 export type RegisterInput = {
@@ -182,6 +196,8 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>
+  Invitation: ResolverTypeWrapper<Invitation>
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   Mutation: ResolverTypeWrapper<{}>
   ChangePasswordInput: ChangePasswordInput
   FormError: ResolverTypeWrapper<FormError>
@@ -189,7 +205,6 @@ export type ResolversTypes = {
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   User: ResolverTypeWrapper<User>
 }
 
@@ -201,6 +216,8 @@ export type ResolversParentTypes = {
   String: Scalars['String']
   EmailAddress: Scalars['EmailAddress']
   DateTime: Scalars['DateTime']
+  Invitation: Invitation
+  Boolean: Scalars['Boolean']
   Mutation: {}
   ChangePasswordInput: ChangePasswordInput
   FormError: FormError
@@ -208,7 +225,6 @@ export type ResolversParentTypes = {
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
-  Boolean: Scalars['Boolean']
   User: User
 }
 
@@ -239,6 +255,17 @@ export type FormErrorResolvers<
 > = {
   path?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+}
+
+export type InvitationResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Invitation'] = ResolversParentTypes['Invitation']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>
+  accepted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
 }
 
 export type MutationResolvers<
@@ -289,6 +316,12 @@ export type QueryResolvers<
     ContextType,
     QueryGetInviteArgs
   >
+  getInvites?: Resolver<
+    Maybe<Array<ResolversTypes['Invitation']>>,
+    ParentType,
+    ContextType,
+    QueryGetInvitesArgs
+  >
 }
 
 export type UserResolvers<
@@ -306,6 +339,7 @@ export type Resolvers<ContextType = Context> = {
   DateTime?: GraphQLScalarType
   EmailAddress?: GraphQLScalarType
   FormError?: FormErrorResolvers<ContextType>
+  Invitation?: InvitationResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   User?: UserResolvers<ContextType>

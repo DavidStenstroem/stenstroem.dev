@@ -42,6 +42,15 @@ export type FormError = {
   message: Scalars['String']
 }
 
+export type Invitation = {
+  __typename?: 'Invitation'
+  id: Scalars['ID']
+  email: Scalars['EmailAddress']
+  accepted: Scalars['Boolean']
+  createdAt: Scalars['DateTime']
+  name?: Maybe<Scalars['String']>
+}
+
 export type InviteInput = {
   email: Scalars['EmailAddress']
 }
@@ -85,10 +94,15 @@ export type Query = {
   __typename?: 'Query'
   me: Account
   getInvite: Scalars['EmailAddress']
+  getInvites?: Maybe<Array<Invitation>>
 }
 
 export type QueryGetInviteArgs = {
   id: Scalars['String']
+}
+
+export type QueryGetInvitesArgs = {
+  from: Scalars['String']
 }
 
 export type RegisterInput = {
@@ -124,12 +138,37 @@ export type ChangePasswordMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export type GetInvitesQueryVariables = {
+  from: Scalars['String']
+}
+
+export type GetInvitesQuery = { __typename?: 'Query' } & {
+  getInvites: Maybe<
+    Array<
+      { __typename?: 'Invitation' } & Pick<
+        Invitation,
+        'id' | 'email' | 'accepted' | 'createdAt' | 'name'
+      >
+    >
+  >
+}
+
 export type GetMeQueryVariables = {}
 
 export type GetMeQuery = { __typename?: 'Query' } & {
   me: { __typename?: 'Account' } & Pick<
     Account,
     'id' | 'name' | 'email' | 'createdAt' | 'updatedAt'
+  >
+}
+
+export type InviteMutationVariables = {
+  input: InviteInput
+}
+
+export type InviteMutation = { __typename?: 'Mutation' } & {
+  invite: Maybe<
+    Array<{ __typename?: 'FormError' } & Pick<FormError, 'message' | 'path'>>
   >
 }
 
@@ -257,6 +296,49 @@ export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOption
   ChangePasswordMutation,
   ChangePasswordMutationVariables
 >
+export const GetInvitesDocument = gql`
+  query GetInvites($from: String!) {
+    getInvites(from: $from) {
+      id
+      email
+      accepted
+      createdAt
+      name
+    }
+  }
+`
+export type GetInvitesComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    GetInvitesQuery,
+    GetInvitesQueryVariables
+  >,
+  'query'
+> &
+  ({ variables: GetInvitesQueryVariables; skip?: boolean } | { skip: boolean })
+
+export const GetInvitesComponent = (props: GetInvitesComponentProps) => (
+  <ApolloReactComponents.Query<GetInvitesQuery, GetInvitesQueryVariables>
+    query={GetInvitesDocument}
+    {...props}
+  />
+)
+
+export function useGetInvitesQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetInvitesQuery,
+    GetInvitesQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<GetInvitesQuery, GetInvitesQueryVariables>(
+    GetInvitesDocument,
+    baseOptions
+  )
+}
+export type GetInvitesQueryHookResult = ReturnType<typeof useGetInvitesQuery>
+export type GetInvitesQueryResult = ApolloReactCommon.QueryResult<
+  GetInvitesQuery,
+  GetInvitesQueryVariables
+>
 export const GetMeDocument = gql`
   query GetMe {
     me {
@@ -295,6 +377,52 @@ export type GetMeQueryHookResult = ReturnType<typeof useGetMeQuery>
 export type GetMeQueryResult = ApolloReactCommon.QueryResult<
   GetMeQuery,
   GetMeQueryVariables
+>
+export const InviteDocument = gql`
+  mutation Invite($input: InviteInput!) {
+    invite(input: $input) {
+      message
+      path
+    }
+  }
+`
+export type InviteMutationFn = ApolloReactCommon.MutationFunction<
+  InviteMutation,
+  InviteMutationVariables
+>
+export type InviteComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    InviteMutation,
+    InviteMutationVariables
+  >,
+  'mutation'
+>
+
+export const InviteComponent = (props: InviteComponentProps) => (
+  <ApolloReactComponents.Mutation<InviteMutation, InviteMutationVariables>
+    mutation={InviteDocument}
+    {...props}
+  />
+)
+
+export function useInviteMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    InviteMutation,
+    InviteMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<InviteMutation, InviteMutationVariables>(
+    InviteDocument,
+    baseOptions
+  )
+}
+export type InviteMutationHookResult = ReturnType<typeof useInviteMutation>
+export type InviteMutationResult = ApolloReactCommon.MutationResult<
+  InviteMutation
+>
+export type InviteMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  InviteMutation,
+  InviteMutationVariables
 >
 export const LoginDocument = gql`
   mutation Login($input: LoginInput!) {
