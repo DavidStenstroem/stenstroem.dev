@@ -1,13 +1,18 @@
-import { Resolvers, FormError } from '../../types/graphql'
+import { Resolvers, FormError, Invitation } from '../../types/graphql'
 import { authenticate, tokens } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
 import { UserModel, User } from '../../models/user.model'
 import { InviteModel } from '../../models/invite.model'
 import { ApolloError } from 'apollo-server-errors'
 import { randomBytes, pbkdf2Sync } from 'crypto'
-import { loginSchema, registerSchema } from '@stenstroem-dev/shared'
+import {
+  loginSchema,
+  registerSchema,
+  inviteSchema,
+} from '@stenstroem-dev/shared'
 import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
+import { userInfo } from 'os'
 
 export const resolvers: Resolvers = {
   Mutation: {
@@ -62,7 +67,13 @@ export const resolvers: Resolvers = {
       { req },
       info
     ): Promise<FormError[]> => {
-      // const currentUser = await authenticate(req as RequestWithUser)
+      const currentUser = await authenticate(req as RequestWithUser)
+
+      try {
+        await inviteSchema.validate({ email }, { abortEarly: false })
+      } catch (err) {
+        return formatError(err as ValidationError)
+      }
 
       const existingUser = await UserModel.findOne({ email })
       if (existingUser) {
@@ -74,17 +85,7 @@ export const resolvers: Resolvers = {
         ]
       }
 
-      const existingInvite = await InviteModel.findOne({ email, isValid: true })
-      if (existingInvite) {
-        return [
-          {
-            path: 'email',
-            message: 'En invitation er allerede sendt til denne mailadresse',
-          },
-        ]
-      }
-
-      const invite = new InviteModel({ email })
+      const invite = new UserModel({ email, invitedBy: currentUser._id })
       await invite.save()
 
       // send email
@@ -145,6 +146,10 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
+    getInvites: async (parent, args, context, info): Promise<Invitation[]> => {
+      return []
+    },
+
     getInvite: async (parent, { id }, context, info): Promise<string> => {
       const invite = await InviteModel.findOne({ id, isValid: true })
       if (!invite) {

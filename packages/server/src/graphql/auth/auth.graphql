@@ -13,6 +13,14 @@ input LoginInput {
   password: String
 }
 
+type Invitation {
+  id: ID!
+  email: EmailAddress!
+  accepted: Boolean!
+  createdAt: DateTime!
+  name: String
+}
+
 type Mutation {
   register(input: RegisterInput!): [FormError!]
   invite(input: InviteInput!): [FormError!]
@@ -22,4 +30,5 @@ type Mutation {
 
 type Query {
   getInvite(id: String!): EmailAddress!
+  getInvites(from: String!): [Invitation!]
 }
