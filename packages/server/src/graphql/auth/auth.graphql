@@ -29,6 +29,6 @@ type Mutation {
 }
 
 type Query {
-  getInvite(id: String!): EmailAddress!
+  getInvite(id: String!): EmailAddress
   getInvites(from: String!): [Invitation!]
 }
