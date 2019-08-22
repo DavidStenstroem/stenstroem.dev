@@ -33,7 +33,7 @@ export const App: React.FunctionComponent = (): JSX.Element => {
             return (
               <Router id="main" primary={false}>
                 <Login path="/login" default />
-                <Register path="/register" />
+                <Register path="/register/:id" />
               </Router>
             )
           }}
