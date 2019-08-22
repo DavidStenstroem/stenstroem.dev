@@ -30,8 +30,10 @@ export const resolvers: Resolvers = {
       } catch (err) {
         return formatError(err as ValidationError)
       }
-      const existingUser = await UserModel.findOne({ email })
-      if (existingUser) {
+      const user = await UserModel.findOne({ email, isActive: false })
+      if (!user) {
+        return [{ path: 'email', message: 'Ingen gyldig invitation' }]
+      } else if (user && user.isActive) {
         return [
           { path: 'email', message: 'Denne mailadresse er allerede i brug' },
         ]
@@ -41,7 +43,11 @@ export const resolvers: Resolvers = {
       const hash = pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString(
         'hex'
       )
-      const user = new UserModel({ name, email, salt, hash })
+      user.name = name
+      user.email = email
+      user.salt = salt
+      user.hash = hash
+      user.isActive = true
       await user.save()
 
       const [accessToken, refreshToken] = tokens({
@@ -166,11 +172,8 @@ export const resolvers: Resolvers = {
     },
 
     getInvite: async (parent, { id }, context, info): Promise<string> => {
-      const invite = await InviteModel.findOne({ id, isValid: true })
-      if (!invite) {
-        throw new ApolloError('Invitation findes ikke')
-      }
-      return invite.email
+      const invite = await UserModel.findOne({ _id: id, isActive: false })
+      return invite ? invite.email : null
     },
   },
 }
