@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps } from '@reach/router'
+import { RouteComponentProps, navigate } from '@reach/router'
 import {
   useGetInviteQuery,
   RegisterComponent,
@@ -12,8 +12,9 @@ import { Formik, Field } from 'formik'
 import { registerSchema } from '@stenstroem-dev/shared'
 import { MainContextState, MainContext } from '../context/MainContext'
 import { Account } from '../models/account.model'
-import { faEnvelope } from '../icons'
+import { faEnvelope, faSignature, faKey } from '../icons'
 import { InputField } from '../components/InputField'
+import classnames from 'classnames'
 
 interface Props extends RouteComponentProps {
   id?: string
@@ -21,6 +22,7 @@ interface Props extends RouteComponentProps {
 
 export const Register: React.FunctionComponent<Props> = ({
   id,
+  navigate,
 }): JSX.Element => {
   let formRef: Formik<RegisterInput>
   const handleReturnKey = (e: React.KeyboardEvent<any>): void => {
@@ -68,6 +70,7 @@ export const Register: React.FunctionComponent<Props> = ({
                         )
                       } else {
                         setAccount(Account.accountFromCookie())
+                        navigate('/', { state: { new: true } })
                       }
                     })
                     .catch((err): void => {
@@ -92,6 +95,33 @@ export const Register: React.FunctionComponent<Props> = ({
                       component={InputField}
                       readOnly
                     />
+                    <Field
+                      type="text"
+                      name="name"
+                      icon={faSignature}
+                      label="Navn"
+                      placeholder="dit navn"
+                      component={InputField}
+                    />
+                    <Field
+                      type="password"
+                      name="password"
+                      icon={faKey}
+                      label="Kode"
+                      placeholder="din adgangskode"
+                      component={InputField}
+                    />
+                    <button
+                      className={classnames(
+                        'button is-link',
+                        isSubmitting && 'is-loading'
+                      )}
+                      disabled={isSubmitting}
+                      type="submit"
+                      onClick={submitForm}
+                    >
+                      Opret bruger
+                    </button>
                   </div>
                 )}
               </Formik>
