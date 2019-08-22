@@ -93,7 +93,7 @@ export type MutationLoginArgs = {
 export type Query = {
   __typename?: 'Query'
   me: Account
-  getInvite: Scalars['EmailAddress']
+  getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
 }
 
@@ -311,7 +311,7 @@ export type QueryResolvers<
 > = {
   me?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
   getInvite?: Resolver<
-    ResolversTypes['EmailAddress'],
+    Maybe<ResolversTypes['EmailAddress']>,
     ParentType,
     ContextType,
     QueryGetInviteArgs
