@@ -27,6 +27,7 @@ const start = async (): Promise<void> => {
     schema,
     playground: true,
     introspection: true,
+    uploads: { maxFileSize: 25000000, maxFiles: 4 },
     context: ({ req, res }): Context => ({
       req,
       res,
