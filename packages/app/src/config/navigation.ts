@@ -8,4 +8,10 @@ export interface NavButton {
   button?: boolean
 }
 
-export const navbarStart: NavButton[] = []
+export const navbarStart: NavButton[] = [
+  {
+    path: '/create',
+    text: 'Nyt album',
+    to: '/create',
+  },
+]
