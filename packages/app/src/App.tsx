@@ -10,6 +10,7 @@ import { Login } from './pages/Login'
 import { Invite } from './pages/Invite'
 import { Account as AccountPage } from './pages/Account'
 import './styles/master.scss'
+import { CreateAlbum } from './pages/CreateAlbum'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
   const [account, setAccount] = React.useState<Account>(
@@ -27,6 +28,7 @@ export const App: React.FunctionComponent = (): JSX.Element => {
                   <Dashboard path="/" />
                   <AccountPage path="/account" />
                   <Invite path="/invite" />
+                  <CreateAlbum path="/create" />
                 </Router>
               )
             }
