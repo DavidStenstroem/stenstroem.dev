@@ -21,7 +21,7 @@ export const Nav: React.FunctionComponent = (): JSX.Element => {
                 aria-expanded="false"
                 className="navbar-burger burger"
                 role="button"
-                onClick={() => setOpen(!open)}
+                onClick={(): void => setOpen(!open)}
               >
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
