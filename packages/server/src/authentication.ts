@@ -98,9 +98,13 @@ export const refreshTokens = async (
   })
 
   res.cookie('refresh-token', refreshToken, {
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     maxAge: 30 * 24 * 60 * 60 * 1000,
   })
-  res.cookie('access-token', accessToken, { maxAge: 2 * 60 * 60 * 1000 })
+  res.cookie('access-token', accessToken, {
+    maxAge: 2 * 60 * 60 * 1000,
+    expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+  })
   req.userId = user.id
 
   return next()

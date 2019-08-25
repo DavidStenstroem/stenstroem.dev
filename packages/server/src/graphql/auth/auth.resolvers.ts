@@ -146,9 +146,11 @@ export const resolvers: Resolvers = {
 
       res.cookie('access-token', accessToken, {
         expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+        maxAge: 2 * 60 * 60 * 1000,
       })
       res.cookie('refresh-token', refreshToken, {
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        maxAge: 30 * 24 * 60 * 60 * 1000,
       })
 
       return null
