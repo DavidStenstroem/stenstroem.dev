@@ -11,6 +11,7 @@ import { Invite } from './pages/Invite'
 import { Account as AccountPage } from './pages/Account'
 import './styles/master.scss'
 import { CreateAlbum } from './pages/CreateAlbum'
+import { ToastContainer } from 'react-toastify'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
   const [account, setAccount] = React.useState<Account>(
@@ -19,6 +20,7 @@ export const App: React.FunctionComponent = (): JSX.Element => {
   return (
     <div className="app">
       <MainContext.Provider value={{ account, setAccount }}>
+        <ToastContainer />
         <Nav />
         <MainContext.Consumer>
           {({ account }): JSX.Element => {
