@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser'
 import { refreshTokens } from './authentication'
 import { createServer } from 'http'
 import express from 'express'
+import { uploadApi } from './upload'
 
 const { dbConnectionString, dbName } = config
 
@@ -46,6 +47,8 @@ const start = async (): Promise<void> => {
   app.use(morgan('dev'))
   app.use(cookieParser())
   app.use(refreshTokens)
+
+  app.use('/upload', uploadApi)
 
   server.applyMiddleware({
     app,
