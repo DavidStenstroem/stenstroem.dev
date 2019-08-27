@@ -101,7 +101,8 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: (error: Error | null, acceptFile: boolean) => void
 ): void => {
-  if (!file.originalname.match(/\.(jpe?g|heic|m4v|mp4)$/i)) {
+  const allowedExtensions = videoExtensions.concat(imageExtensions)
+  if (!allowedExtensions.includes(extname(file.path))) {
     cb(new Error('Filformatet understøttes ikke'), false)
   }
   cb(null, true)
