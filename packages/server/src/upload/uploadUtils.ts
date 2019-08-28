@@ -4,10 +4,14 @@ import { v4 } from 'uuid'
 import { join, extname } from 'path'
 import fetch from 'node-fetch'
 import FormData from 'form-data'
-import { createHash } from 'crypto'
 import { config } from '../config'
 import { createReadStream } from 'fs'
 import * as exiftoolVendored from 'exiftool-vendored'
+import { User } from '../models/user.model'
+import { InstanceType } from 'typegoose'
+import { ResourceType, MediaModel } from '../models/media.model'
+import { OriginalCreateDate } from '../models/original-create-date.model'
+import { Face } from '../models/face.model'
 
 const videoExtensions: string[] = [
   'avi',
@@ -66,7 +70,65 @@ export const createUploadUrl = (filePath: string): string | null => {
 
 const exiftool = exiftoolVendored.exiftool
 
-export const upload = async (file: Express.Multer.File): Promise<any> => {
+export interface CloudinaryData {
+  public_id: string
+  version: string | number
+  signature: string
+  width: number
+  height: number
+  format: string
+  resource_type: 'image' | 'video'
+  created_at: string
+  bytes: number
+  type: string
+  etag: string
+  placeholder: boolean
+  url: string
+  secure_url: string
+  access_mode: string
+  original_filename: string
+  pages?: number | string
+  is_audio?: boolean
+  frame_rate?: number
+  bit_rate?: number
+  duration?: number | string
+  nb_frames?: string | number
+  faces?: Array<Array<number>>
+  coordinates?: {
+    faces?: Array<Array<number>>
+  }
+  audio?: CloudinaryAudio
+  video?: CloudinaryVideo
+}
+
+export interface CloudinaryAudio {
+  codec?: string
+  bit_rate?: number
+  frequency?: number
+  channels?: number
+  channel_layout?: string
+}
+
+export interface CloudinaryVideo {
+  pix_format?: string
+  codec?: string
+  level?: number
+  profile?: string
+  bit_rate?: number
+  dar?: string
+}
+
+export interface UploadResponse {
+  data: CloudinaryData
+  tags?: exiftoolVendored.Tags
+  user: InstanceType<User>
+}
+
+export const upload = async (
+  file: Express.Multer.File,
+  user: InstanceType<User>
+): Promise<UploadResponse> => {
+  const tags = await exiftool.read(file.path)
   const stream = createReadStream(file.path)
   const formData = new FormData()
   formData.append('file', stream)
@@ -76,7 +138,12 @@ export const upload = async (file: Express.Multer.File): Promise<any> => {
     method: 'POST',
     body: formData,
   })
-  return await response.json()
+
+  return {
+    data: (await response.json()) as CloudinaryData,
+    tags,
+    user,
+  }
 }
 
 const storage = multer.diskStorage({
@@ -102,7 +169,13 @@ const fileFilter = (
   cb: (error: Error | null, acceptFile: boolean) => void
 ): void => {
   const allowedExtensions = videoExtensions.concat(imageExtensions)
-  if (!allowedExtensions.includes(extname(file.path))) {
+  if (
+    !allowedExtensions.includes(
+      extname(file.originalname)
+        .substr(1)
+        .toLowerCase()
+    )
+  ) {
     cb(new Error('Filformatet understøttes ikke'), false)
   }
   cb(null, true)
