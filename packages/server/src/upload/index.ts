@@ -3,7 +3,6 @@ import { uploadMiddleware, upload } from './uploadUtils'
 import { RequestWithUser } from '../types/RequestWithUser'
 import { UserModel } from '../models/user.model'
 import { MediaModel, ResourceType } from '../models/media.model'
-import { version } from 'mongoose'
 import { OriginalCreateDate } from '../models/original-create-date.model'
 import { Face } from '../models/face.model'
 
