@@ -1,0 +1,9 @@
+mutation CreateAlbum($input: CreateAlbumInput!) {
+  createAlbum(input: $input) {
+    errors {
+      path
+      message
+    }
+    link
+  }
+}

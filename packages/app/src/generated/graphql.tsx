@@ -223,6 +223,23 @@ export type ChangePasswordMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export type CreateAlbumMutationVariables = {
+  input: CreateAlbumInput
+}
+
+export type CreateAlbumMutation = { __typename?: 'Mutation' } & {
+  createAlbum: { __typename?: 'CreateAlbumResponse' } & Pick<
+    CreateAlbumResponse,
+    'link'
+  > & {
+      errors: Maybe<
+        Array<
+          { __typename?: 'FormError' } & Pick<FormError, 'path' | 'message'>
+        >
+      >
+    }
+}
+
 export type GetInviteQueryVariables = {
   id: Scalars['String']
 }
@@ -386,6 +403,60 @@ export type ChangePasswordMutationResult = ApolloReactCommon.MutationResult<
 export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<
   ChangePasswordMutation,
   ChangePasswordMutationVariables
+>
+export const CreateAlbumDocument = gql`
+  mutation CreateAlbum($input: CreateAlbumInput!) {
+    createAlbum(input: $input) {
+      errors {
+        path
+        message
+      }
+      link
+    }
+  }
+`
+export type CreateAlbumMutationFn = ApolloReactCommon.MutationFunction<
+  CreateAlbumMutation,
+  CreateAlbumMutationVariables
+>
+export type CreateAlbumComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    CreateAlbumMutation,
+    CreateAlbumMutationVariables
+  >,
+  'mutation'
+>
+
+export const CreateAlbumComponent = (props: CreateAlbumComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    CreateAlbumMutation,
+    CreateAlbumMutationVariables
+  >
+    mutation={CreateAlbumDocument}
+    {...props}
+  />
+)
+
+export function useCreateAlbumMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateAlbumMutation,
+    CreateAlbumMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    CreateAlbumMutation,
+    CreateAlbumMutationVariables
+  >(CreateAlbumDocument, baseOptions)
+}
+export type CreateAlbumMutationHookResult = ReturnType<
+  typeof useCreateAlbumMutation
+>
+export type CreateAlbumMutationResult = ApolloReactCommon.MutationResult<
+  CreateAlbumMutation
+>
+export type CreateAlbumMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateAlbumMutation,
+  CreateAlbumMutationVariables
 >
 export const GetInviteDocument = gql`
   query GetInvite($id: String!) {
