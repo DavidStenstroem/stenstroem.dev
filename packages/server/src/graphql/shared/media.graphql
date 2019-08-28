@@ -1,0 +1,54 @@
+enum ResourceType {
+  IMAGE
+  VIDEO
+}
+
+type Media {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  publicId: String!
+  version: String!
+  signature: String!
+  width: Int!
+  height: Int!
+  format: String!
+  resourceType: ResourceType!
+  bytes: Int!
+  type: String!
+  etag: String!
+  placeholder: Boolean!
+  url: String!
+  secureUrl: String!
+  accessMode: String!
+  originalFilename: String!
+  isAudio: Boolean
+  frameRate: Int
+  bitRate: Int
+  duration: Float
+  uploadedBy: User!
+  faces: [Face!]
+  loc: Location!
+  originalCreateDate: OriginalCreateDate
+}
+
+type Location {
+  type: String!
+  coordinates: [Float!]!
+}
+
+type OriginalCreateDate {
+  year: Int
+  month: Int
+  day: Int
+  hour: Int
+  minute: Int
+  second: Int
+  millisecond: Int
+  tzoffsetMinutes: Int
+  rawValue: String
+}
+
+type Face {
+  uuid: String!
+  coordinates: [Int!]!
+}

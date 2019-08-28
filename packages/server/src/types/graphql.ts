@@ -27,6 +27,15 @@ export type Account = {
   updatedAt: Scalars['DateTime']
 }
 
+export type Album = {
+  __typename?: 'Album'
+  title: Scalars['String']
+  slug: Scalars['String']
+  description?: Maybe<Scalars['String']>
+  createdBy: User
+  media: Array<Media>
+}
+
 export type ChangeNameInput = {
   newName: Scalars['String']
 }
@@ -34,6 +43,24 @@ export type ChangeNameInput = {
 export type ChangePasswordInput = {
   currentPassword: Scalars['String']
   newPassword: Scalars['String']
+}
+
+export type CreateAlbumInput = {
+  title: Scalars['String']
+  description?: Maybe<Scalars['String']>
+  media: Array<Scalars['String']>
+}
+
+export type CreateAlbumResponse = {
+  __typename?: 'CreateAlbumResponse'
+  errors?: Maybe<Array<FormError>>
+  link?: Maybe<Scalars['String']>
+}
+
+export type Face = {
+  __typename?: 'Face'
+  uuid: Scalars['String']
+  coordinates: Array<Scalars['Int']>
 }
 
 export type FormError = {
@@ -55,15 +82,51 @@ export type InviteInput = {
   email: Scalars['EmailAddress']
 }
 
+export type Location = {
+  __typename?: 'Location'
+  type: Scalars['String']
+  coordinates: Array<Scalars['Float']>
+}
+
 export type LoginInput = {
   email: Scalars['EmailAddress']
   password?: Maybe<Scalars['String']>
+}
+
+export type Media = {
+  __typename?: 'Media'
+  createdAt: Scalars['DateTime']
+  updatedAt: Scalars['DateTime']
+  publicId: Scalars['String']
+  version: Scalars['String']
+  signature: Scalars['String']
+  width: Scalars['Int']
+  height: Scalars['Int']
+  format: Scalars['String']
+  resourceType: ResourceType
+  bytes: Scalars['Int']
+  type: Scalars['String']
+  etag: Scalars['String']
+  placeholder: Scalars['Boolean']
+  url: Scalars['String']
+  secureUrl: Scalars['String']
+  accessMode: Scalars['String']
+  originalFilename: Scalars['String']
+  isAudio?: Maybe<Scalars['Boolean']>
+  frameRate?: Maybe<Scalars['Int']>
+  bitRate?: Maybe<Scalars['Int']>
+  duration?: Maybe<Scalars['Float']>
+  uploadedBy: User
+  faces?: Maybe<Array<Face>>
+  loc: Location
+  originalCreateDate?: Maybe<OriginalCreateDate>
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
   changePassword?: Maybe<Array<FormError>>
   changeName?: Maybe<Array<FormError>>
+  createAlbum: CreateAlbumResponse
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
@@ -78,6 +141,10 @@ export type MutationChangeNameArgs = {
   input: ChangeNameInput
 }
 
+export type MutationCreateAlbumArgs = {
+  input: CreateAlbumInput
+}
+
 export type MutationRegisterArgs = {
   input: RegisterInput
 }
@@ -88,6 +155,19 @@ export type MutationInviteArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput
+}
+
+export type OriginalCreateDate = {
+  __typename?: 'OriginalCreateDate'
+  year?: Maybe<Scalars['Int']>
+  month?: Maybe<Scalars['Int']>
+  day?: Maybe<Scalars['Int']>
+  hour?: Maybe<Scalars['Int']>
+  minute?: Maybe<Scalars['Int']>
+  second?: Maybe<Scalars['Int']>
+  millisecond?: Maybe<Scalars['Int']>
+  tzoffsetMinutes?: Maybe<Scalars['Int']>
+  rawValue?: Maybe<Scalars['String']>
 }
 
 export type Query = {
@@ -109,6 +189,11 @@ export type RegisterInput = {
   email: Scalars['EmailAddress']
   name: Scalars['String']
   password: Scalars['String']
+}
+
+export enum ResourceType {
+  Image = 'IMAGE',
+  Video = 'VIDEO',
 }
 
 export type User = {
@@ -202,10 +287,20 @@ export type ResolversTypes = {
   ChangePasswordInput: ChangePasswordInput
   FormError: ResolverTypeWrapper<FormError>
   ChangeNameInput: ChangeNameInput
+  CreateAlbumInput: CreateAlbumInput
+  CreateAlbumResponse: ResolverTypeWrapper<CreateAlbumResponse>
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
+  Album: ResolverTypeWrapper<Album>
   User: ResolverTypeWrapper<User>
+  Media: ResolverTypeWrapper<Media>
+  Int: ResolverTypeWrapper<Scalars['Int']>
+  ResourceType: ResourceType
+  Float: ResolverTypeWrapper<Scalars['Float']>
+  Face: ResolverTypeWrapper<Face>
+  Location: ResolverTypeWrapper<Location>
+  OriginalCreateDate: ResolverTypeWrapper<OriginalCreateDate>
 }
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -222,10 +317,20 @@ export type ResolversParentTypes = {
   ChangePasswordInput: ChangePasswordInput
   FormError: FormError
   ChangeNameInput: ChangeNameInput
+  CreateAlbumInput: CreateAlbumInput
+  CreateAlbumResponse: CreateAlbumResponse
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
+  Album: Album
   User: User
+  Media: Media
+  Int: Scalars['Int']
+  ResourceType: ResourceType
+  Float: Scalars['Float']
+  Face: Face
+  Location: Location
+  OriginalCreateDate: OriginalCreateDate
 }
 
 export type AccountResolvers<
@@ -239,6 +344,33 @@ export type AccountResolvers<
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
 }
 
+export type AlbumResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Album'] = ResolversParentTypes['Album']
+> = {
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  description?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >
+  createdBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  media?: Resolver<Array<ResolversTypes['Media']>, ParentType, ContextType>
+}
+
+export type CreateAlbumResponseResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['CreateAlbumResponse'] = ResolversParentTypes['CreateAlbumResponse']
+> = {
+  errors?: Resolver<
+    Maybe<Array<ResolversTypes['FormError']>>,
+    ParentType,
+    ContextType
+  >
+  link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+}
+
 export interface DateTimeScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime'
@@ -247,6 +379,14 @@ export interface DateTimeScalarConfig
 export interface EmailAddressScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['EmailAddress'], any> {
   name: 'EmailAddress'
+}
+
+export type FaceResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Face'] = ResolversParentTypes['Face']
+> = {
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  coordinates?: Resolver<Array<ResolversTypes['Int']>, ParentType, ContextType>
 }
 
 export type FormErrorResolvers<
@@ -268,6 +408,61 @@ export type InvitationResolvers<
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
 }
 
+export type LocationResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']
+> = {
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  coordinates?: Resolver<
+    Array<ResolversTypes['Float']>,
+    ParentType,
+    ContextType
+  >
+}
+
+export type MediaResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Media'] = ResolversParentTypes['Media']
+> = {
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  publicId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  signature?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  width?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  height?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  format?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  resourceType?: Resolver<
+    ResolversTypes['ResourceType'],
+    ParentType,
+    ContextType
+  >
+  bytes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  etag?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  placeholder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  secureUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  accessMode?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  originalFilename?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  isAudio?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
+  frameRate?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  bitRate?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  duration?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>
+  uploadedBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  faces?: Resolver<
+    Maybe<Array<ResolversTypes['Face']>>,
+    ParentType,
+    ContextType
+  >
+  loc?: Resolver<ResolversTypes['Location'], ParentType, ContextType>
+  originalCreateDate?: Resolver<
+    Maybe<ResolversTypes['OriginalCreateDate']>,
+    ParentType,
+    ContextType
+  >
+}
+
 export type MutationResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
@@ -283,6 +478,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     MutationChangeNameArgs
+  >
+  createAlbum?: Resolver<
+    ResolversTypes['CreateAlbumResponse'],
+    ParentType,
+    ContextType,
+    MutationCreateAlbumArgs
   >
   register?: Resolver<
     Maybe<Array<ResolversTypes['FormError']>>,
@@ -303,6 +504,25 @@ export type MutationResolvers<
     MutationLoginArgs
   >
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+}
+
+export type OriginalCreateDateResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['OriginalCreateDate'] = ResolversParentTypes['OriginalCreateDate']
+> = {
+  year?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  month?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  day?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  hour?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  minute?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  second?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  millisecond?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  tzoffsetMinutes?: Resolver<
+    Maybe<ResolversTypes['Int']>,
+    ParentType,
+    ContextType
+  >
+  rawValue?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
 }
 
 export type QueryResolvers<
@@ -336,11 +556,17 @@ export type UserResolvers<
 
 export type Resolvers<ContextType = Context> = {
   Account?: AccountResolvers<ContextType>
+  Album?: AlbumResolvers<ContextType>
+  CreateAlbumResponse?: CreateAlbumResponseResolvers<ContextType>
   DateTime?: GraphQLScalarType
   EmailAddress?: GraphQLScalarType
+  Face?: FaceResolvers<ContextType>
   FormError?: FormErrorResolvers<ContextType>
   Invitation?: InvitationResolvers<ContextType>
+  Location?: LocationResolvers<ContextType>
+  Media?: MediaResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
+  OriginalCreateDate?: OriginalCreateDateResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   User?: UserResolvers<ContextType>
 }

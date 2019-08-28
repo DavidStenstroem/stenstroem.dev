@@ -1,0 +1,22 @@
+type Album {
+  title: String!
+  slug: String!
+  description: String
+  createdBy: User!
+  media: [Media!]!
+}
+
+input CreateAlbumInput {
+  title: String!
+  description: String
+  media: [String!]!
+}
+
+type CreateAlbumResponse {
+  errors: [FormError!]
+  link: String
+}
+
+type Mutation {
+  createAlbum(input: CreateAlbumInput!): CreateAlbumResponse!
+}
