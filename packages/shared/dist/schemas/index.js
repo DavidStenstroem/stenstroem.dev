@@ -8,4 +8,5 @@ __export(require("./login"));
 __export(require("./changeName"));
 __export(require("./changePassword"));
 __export(require("./invite"));
+__export(require("./createAlbum"));
 //# sourceMappingURL=index.js.map
