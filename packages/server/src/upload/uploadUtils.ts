@@ -5,7 +5,7 @@ import { join, extname } from 'path'
 import fetch from 'node-fetch'
 import FormData from 'form-data'
 import { config } from '../config'
-import { createReadStream } from 'fs'
+import { createReadStream, unlinkSync } from 'fs'
 import * as exiftoolVendored from 'exiftool-vendored'
 import { User } from '../models/user.model'
 import { InstanceType } from 'typegoose'
@@ -138,6 +138,8 @@ export const upload = async (
     method: 'POST',
     body: formData,
   })
+
+  unlinkSync(file.path)
 
   return {
     data: (await response.json()) as CloudinaryData,
