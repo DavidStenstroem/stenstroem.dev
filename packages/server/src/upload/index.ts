@@ -9,9 +9,7 @@ import { Face } from '../models/face.model'
 export const uploadApi = Router()
 
 uploadApi.post('/', uploadMiddleware, (req, res, next): void => {
-  UserModel.findById(
-    /*(req as RequestWithUser).userId*/ '5d559bfae894c9a2e1828059'
-  )
+  UserModel.findById((req as RequestWithUser).userId)
     .then((user) => {
       return Promise.all(
         (req.files as Express.Multer.File[]).map((file) => upload(file, user))
