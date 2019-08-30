@@ -69,7 +69,7 @@ export const Login: React.FunctionComponent<RouteComponentProps> = (
                       label="Email"
                       placeholder="din@email.com"
                       component={InputField}
-                    />{' '}
+                    />
                     <Field
                       type="password"
                       name="password"
