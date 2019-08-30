@@ -2,7 +2,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
 import { RetryLink } from 'apollo-link-retry'
 import { WebSocketLink } from 'apollo-link-ws'
-import { split, from } from 'apollo-link'
+import { split, from, NextLink, ApolloLink, Operation } from 'apollo-link'
 import { getMainDefinition } from 'apollo-utilities'
 import { OperationDefinitionNode } from 'graphql'
 import { ApolloClient } from 'apollo-client'
@@ -29,6 +29,18 @@ const wsLink = new WebSocketLink({
   },
 })
 
+const infoLink = new ApolloLink((operation: Operation, forward: NextLink) => {
+  operation.setContext((context: Record<string, any>) => ({
+    ...context,
+    headers: {
+      ...context.headers,
+      'apollo-client-name': 'StenstroemDev Apollo Client',
+      'apollo-client-version': '1',
+    },
+  }))
+  return forward(operation)
+})
+
 const link = split(
   ({ query }): boolean => {
     const { kind, operation } = getMainDefinition(
@@ -37,7 +49,7 @@ const link = split(
     return kind === 'OperationDefinition' && operation === 'subscription'
   },
   wsLink,
-  from([retryLink, httpLink])
+  from([infoLink, retryLink, httpLink])
 )
 
 export const client = new ApolloClient({

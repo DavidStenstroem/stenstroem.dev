@@ -4,6 +4,7 @@ interface Config {
   accessTokenSecret: string
   refreshTokenSecret: string
   cloudinary: CloudinaryConfig
+  engineApiKey: string
 }
 
 interface CloudinaryConfig {
@@ -15,6 +16,7 @@ interface CloudinaryConfig {
 }
 
 export const config: Config = {
+  engineApiKey: '***REMOVED***',
   dbConnectionString:
     '***REMOVED***',
   dbName: '***REMOVED***',
