@@ -14,8 +14,9 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
-  EmailAddress: string
-  DateTime: Date
+  EmailAddress: any
+  DateTime: any
+  Upload: File
 }
 
 export type Account = {
@@ -48,7 +49,8 @@ export type ChangePasswordInput = {
 export type CreateAlbumInput = {
   title: Scalars['String']
   description?: Maybe<Scalars['String']>
-  media: Array<Scalars['String']>
+  media?: Maybe<Array<Scalars['String']>>
+  files?: Maybe<Array<Scalars['Upload']>>
 }
 
 export type CreateAlbumResponse = {
@@ -124,13 +126,21 @@ export type Media = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  changePassword?: Maybe<Array<FormError>>
+  changeName?: Maybe<Array<FormError>>
   createAlbum: CreateAlbumResponse
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
   logout: Scalars['Boolean']
-  changePassword?: Maybe<Array<FormError>>
-  changeName?: Maybe<Array<FormError>>
+}
+
+export type MutationChangePasswordArgs = {
+  input: ChangePasswordInput
+}
+
+export type MutationChangeNameArgs = {
+  input: ChangeNameInput
 }
 
 export type MutationCreateAlbumArgs = {
@@ -149,14 +159,6 @@ export type MutationLoginArgs = {
   input: LoginInput
 }
 
-export type MutationChangePasswordArgs = {
-  input: ChangePasswordInput
-}
-
-export type MutationChangeNameArgs = {
-  input: ChangeNameInput
-}
-
 export type OriginalCreateDate = {
   __typename?: 'OriginalCreateDate'
   year?: Maybe<Scalars['Int']>
@@ -172,9 +174,9 @@ export type OriginalCreateDate = {
 
 export type Query = {
   __typename?: 'Query'
+  me: Account
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
-  me: Account
 }
 
 export type QueryGetInviteArgs = {

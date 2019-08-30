@@ -9,7 +9,8 @@ type Album {
 input CreateAlbumInput {
   title: String!
   description: String
-  media: [String!]!
+  media: [String!]
+  files: [Upload!]
 }
 
 type CreateAlbumResponse {

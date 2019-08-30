@@ -7,37 +7,40 @@ import { ValidationError } from 'yup'
 import { AlbumModel } from '../../models/album.model'
 import slugify from 'slugify'
 import { randomBytes } from 'crypto'
+import { processUpload, insertFiles } from '../../utils/uploads'
+import { MediaModel } from '../../models/media.model'
 
 export const resolvers: Resolvers = {
   Mutation: {
     createAlbum: async (
       parent,
-      { input: { title, media, description } },
+      { input: { title, media = [], description, files = [] } },
       { req },
       info
     ): Promise<CreateAlbumResponse> => {
       const user = await authenticate(req as RequestWithUser)
 
-      try {
-        await createAlbumSchema.validate(
-          { title, media, description },
-          { abortEarly: false }
-        )
-      } catch (err) {
-        return {
-          errors: formatError(err as ValidationError),
-        }
-      }
+      // try catch validation scheme here
 
-      const slug = `${slugify(title)}-${randomBytes(6).toString('hex')}`
+      const existingMedia = await MediaModel.find({ _id: { $in: media } })
 
-      await AlbumModel.create({
+      const fileInfo = await Promise.all(
+        files.map((file) => processUpload(file))
+      )
+      const mediaInfo = await insertFiles(fileInfo, user)
+      const slug = `${slugify(title, { lower: true })}-${randomBytes(
+        6
+      ).toString('hex')}`
+
+      const album = new AlbumModel({
         title,
-        description: description ? description : undefined,
         slug,
-        media,
-        createdBy: user._id,
+        createdBy: user,
+        description,
+        media: [...mediaInfo, ...existingMedia],
       })
+
+      await album.save()
 
       return {
         link: `/albums/${slug}`,
