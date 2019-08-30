@@ -30,6 +30,7 @@
     "yup": "^0.27.0"
   },
   "devDependencies": {
+    "@types/node": "^12.7.3",
     "@types/yup": "^0.26.22",
     "rimraf": "^3.0.0"
   }

@@ -19,10 +19,30 @@ exports.createAlbumSchema = yup.object().shape({
         .string()
         .nullable()
         .notRequired(),
-    media: yup
-        .array()
-        .of(yup.string())
-        .required(utils_1.isRequired)
-        .max(5, 'Du kan højst uploade 5 emner ad gangen'),
-});
+    media: yup.array().when('files', {
+        is: (files) => !files,
+        then: yup
+            .array()
+            .of(yup.string())
+            .required('Du skal vælge eller uploade mindst én fil'),
+    }),
+    files: yup.array().when('media', {
+        is: (media) => !media,
+        then: yup
+            .array()
+            .required('Du skal vælge eller uploade mindst én fil')
+            .test('is-too-big', 'Denne fil er for stor. Maks. størrelsen er 25MB', (files) => {
+            let valid = true;
+            if (files) {
+                files.map((file) => {
+                    const size = file.size / 1024 / 1024;
+                    if (size > 25) {
+                        valid = false;
+                    }
+                });
+            }
+            return valid;
+        }),
+    }),
+}, [['media', 'files']]);
 //# sourceMappingURL=createAlbum.js.map
