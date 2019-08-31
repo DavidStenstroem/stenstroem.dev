@@ -33,6 +33,9 @@ export class Album extends Typegoose {
 
   @arrayProp({ itemsRef: User })
   sharedWith?: Ref<User>[]
+
+  @prop({ default: false })
+  private: boolean
 }
 
 export const AlbumModel = new Album().getModelForClass(Album)
