@@ -52,6 +52,7 @@ export type CreateAlbumInput = {
   description?: Maybe<Scalars['String']>
   media?: Maybe<Array<Scalars['String']>>
   files?: Maybe<Array<Scalars['Upload']>>
+  sharedWith?: Maybe<Array<Scalars['String']>>
 }
 
 export type CreateAlbumResponse = {
