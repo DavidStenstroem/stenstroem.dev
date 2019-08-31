@@ -12,6 +12,7 @@ import { Account as AccountPage } from './pages/Account'
 import './styles/master.scss'
 import { CreateAlbum } from './pages/CreateAlbum'
 import { ToastContainer } from 'react-toastify'
+import { AlbumRouter } from './sections/album'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
   const [account, setAccount] = React.useState<Account>(
@@ -30,7 +31,7 @@ export const App: React.FunctionComponent = (): JSX.Element => {
                   <Dashboard path="/" />
                   <AccountPage path="/account" />
                   <Invite path="/invite" />
-                  <CreateAlbum path="/create" />
+                  <AlbumRouter path="album/*" />
                 </Router>
               )
             }
