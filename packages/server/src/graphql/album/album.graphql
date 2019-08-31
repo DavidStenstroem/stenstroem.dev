@@ -11,6 +11,7 @@ input CreateAlbumInput {
   description: String
   media: [String!]
   files: [Upload!]
+  sharedWith: [String!]
 }
 
 type CreateAlbumResponse {

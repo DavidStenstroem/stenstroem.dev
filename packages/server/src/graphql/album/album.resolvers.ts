@@ -9,18 +9,23 @@ import slugify from 'slugify'
 import { randomBytes } from 'crypto'
 import { processUpload, insertFiles } from '../../utils/uploads'
 import { MediaModel } from '../../models/media.model'
+import { UserModel } from '../../models/user.model'
 
 export const resolvers: Resolvers = {
   Mutation: {
     createAlbum: async (
       parent,
-      { input: { title, media = [], description, files = [] } },
+      {
+        input: { title, media = [], description, files = [], sharedWith = [] },
+      },
       { req },
       info
     ): Promise<CreateAlbumResponse> => {
       const user = await authenticate(req as RequestWithUser)
 
       // try catch validation scheme here
+
+      const users = await UserModel.find({ _id: { $in: sharedWith } })
 
       const existingMedia = await MediaModel.find({ _id: { $in: media } })
 

@@ -30,6 +30,9 @@ export class Album extends Typegoose {
 
   @arrayProp({ itemsRef: Media })
   media: Ref<Media>[]
+
+  @arrayProp({ itemsRef: User })
+  sharedWith?: Ref<User>[]
 }
 
 export const AlbumModel = new Album().getModelForClass(Album)
