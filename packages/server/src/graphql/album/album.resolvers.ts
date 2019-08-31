@@ -23,7 +23,16 @@ export const resolvers: Resolvers = {
     ): Promise<CreateAlbumResponse> => {
       const user = await authenticate(req as RequestWithUser)
 
-      // try catch validation scheme here
+      try {
+        await createAlbumSchema.validate(
+          { title, media, description, files, sharedWith },
+          { abortEarly: false }
+        )
+      } catch (err) {
+        return {
+          errors: formatError(err as ValidationError),
+        }
+      }
 
       const users = await UserModel.find({ _id: { $in: sharedWith } })
 
@@ -43,6 +52,8 @@ export const resolvers: Resolvers = {
         createdBy: user,
         description,
         media: [...mediaInfo, ...existingMedia],
+        sharedWith: users,
+        private: sharedWith.length > 0,
       })
 
       await album.save()
