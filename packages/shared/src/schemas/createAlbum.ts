@@ -13,6 +13,11 @@ export const createAlbumSchema = yup.object().shape(
       .nullable()
       .notRequired(),
 
+    sharedWith: yup
+      .array()
+      .of(yup.string())
+      .nullable(),
+
     media: yup.array().when('files', {
       is: (files) => !files,
       then: yup
