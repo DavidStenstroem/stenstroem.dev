@@ -10,8 +10,8 @@ export interface NavButton {
 
 export const navbarStart: NavButton[] = [
   {
-    path: '/create',
+    path: '/album/create',
     text: 'Nyt album',
-    to: '/create',
+    to: '/album/create',
   },
 ]
