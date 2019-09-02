@@ -13,6 +13,9 @@ import { faSignOut } from '@fortawesome/pro-light-svg-icons/faSignOut'
 import { faPaperPlane } from '@fortawesome/pro-light-svg-icons/faPaperPlane'
 import { faAt } from '@fortawesome/pro-light-svg-icons/faAt'
 import { faPencil } from '@fortawesome/pro-light-svg-icons/faPencil'
+import { faCheck } from '@fortawesome/pro-light-svg-icons/faCheck'
+import { faCheckSquare } from '@fortawesome/pro-light-svg-icons/faCheckSquare'
+import { faSquare } from '@fortawesome/pro-light-svg-icons/faSquare'
 
 // Solid
 import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon'
@@ -41,4 +44,7 @@ export {
   faPaperPlane,
   faAt,
   faPencil,
+  faCheck,
+  faCheckSquare,
+  faSquare,
 }
