@@ -176,8 +176,13 @@ export type OriginalCreateDate = {
 export type Query = {
   __typename?: 'Query'
   me: Account
+  allAccounts: Array<Account>
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
+}
+
+export type QueryAllAccountsArgs = {
+  withMe?: Maybe<Scalars['Boolean']>
 }
 
 export type QueryGetInviteArgs = {
@@ -241,6 +246,16 @@ export type CreateAlbumMutation = { __typename?: 'Mutation' } & {
         >
       >
     }
+}
+
+export type GetAccountsQueryVariables = {
+  withMe?: Maybe<Scalars['Boolean']>
+}
+
+export type GetAccountsQuery = { __typename?: 'Query' } & {
+  allAccounts: Array<
+    { __typename?: 'Account' } & Pick<Account, 'id' | 'name' | 'email'>
+  >
 }
 
 export type GetInviteQueryVariables = {
@@ -460,6 +475,46 @@ export type CreateAlbumMutationResult = ApolloReactCommon.MutationResult<
 export type CreateAlbumMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateAlbumMutation,
   CreateAlbumMutationVariables
+>
+export const GetAccountsDocument = gql`
+  query GetAccounts($withMe: Boolean) {
+    allAccounts(withMe: $withMe) {
+      id
+      name
+      email
+    }
+  }
+`
+export type GetAccountsComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    GetAccountsQuery,
+    GetAccountsQueryVariables
+  >,
+  'query'
+>
+
+export const GetAccountsComponent = (props: GetAccountsComponentProps) => (
+  <ApolloReactComponents.Query<GetAccountsQuery, GetAccountsQueryVariables>
+    query={GetAccountsDocument}
+    {...props}
+  />
+)
+
+export function useGetAccountsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetAccountsQuery,
+    GetAccountsQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<GetAccountsQuery, GetAccountsQueryVariables>(
+    GetAccountsDocument,
+    baseOptions
+  )
+}
+export type GetAccountsQueryHookResult = ReturnType<typeof useGetAccountsQuery>
+export type GetAccountsQueryResult = ApolloReactCommon.QueryResult<
+  GetAccountsQuery,
+  GetAccountsQueryVariables
 >
 export const GetInviteDocument = gql`
   query GetInvite($id: String!) {

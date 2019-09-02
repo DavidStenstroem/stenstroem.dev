@@ -8,6 +8,10 @@ import {
 } from 'graphql'
 import { Context } from './Context'
 export type Maybe<T> = T | null
+export type RequireFields<T, K extends keyof T> = {
+  [X in Exclude<keyof T, K>]?: T[X]
+} &
+  { [P in K]-?: NonNullable<T[P]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -128,13 +132,17 @@ export type Media = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  createAlbum: CreateAlbumResponse
   changePassword?: Maybe<Array<FormError>>
   changeName?: Maybe<Array<FormError>>
-  createAlbum: CreateAlbumResponse
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
   logout: Scalars['Boolean']
+}
+
+export type MutationCreateAlbumArgs = {
+  input: CreateAlbumInput
 }
 
 export type MutationChangePasswordArgs = {
@@ -143,10 +151,6 @@ export type MutationChangePasswordArgs = {
 
 export type MutationChangeNameArgs = {
   input: ChangeNameInput
-}
-
-export type MutationCreateAlbumArgs = {
-  input: CreateAlbumInput
 }
 
 export type MutationRegisterArgs = {
@@ -177,8 +181,13 @@ export type OriginalCreateDate = {
 export type Query = {
   __typename?: 'Query'
   me: Account
+  allAccounts: Array<Account>
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
+}
+
+export type QueryAllAccountsArgs = {
+  withMe?: Maybe<Scalars['Boolean']>
 }
 
 export type QueryGetInviteArgs = {
@@ -285,15 +294,15 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>
-  Invitation: ResolverTypeWrapper<Invitation>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
+  Invitation: ResolverTypeWrapper<Invitation>
   Mutation: ResolverTypeWrapper<{}>
-  ChangePasswordInput: ChangePasswordInput
-  FormError: ResolverTypeWrapper<FormError>
-  ChangeNameInput: ChangeNameInput
   CreateAlbumInput: CreateAlbumInput
   Upload: ResolverTypeWrapper<Scalars['Upload']>
   CreateAlbumResponse: ResolverTypeWrapper<CreateAlbumResponse>
+  FormError: ResolverTypeWrapper<FormError>
+  ChangePasswordInput: ChangePasswordInput
+  ChangeNameInput: ChangeNameInput
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
@@ -316,15 +325,15 @@ export type ResolversParentTypes = {
   String: Scalars['String']
   EmailAddress: Scalars['EmailAddress']
   DateTime: Scalars['DateTime']
-  Invitation: Invitation
   Boolean: Scalars['Boolean']
+  Invitation: Invitation
   Mutation: {}
-  ChangePasswordInput: ChangePasswordInput
-  FormError: FormError
-  ChangeNameInput: ChangeNameInput
   CreateAlbumInput: CreateAlbumInput
   Upload: Scalars['Upload']
   CreateAlbumResponse: CreateAlbumResponse
+  FormError: FormError
+  ChangePasswordInput: ChangePasswordInput
+  ChangeNameInput: ChangeNameInput
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
@@ -473,6 +482,12 @@ export type MutationResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  createAlbum?: Resolver<
+    ResolversTypes['CreateAlbumResponse'],
+    ParentType,
+    ContextType,
+    MutationCreateAlbumArgs
+  >
   changePassword?: Resolver<
     Maybe<Array<ResolversTypes['FormError']>>,
     ParentType,
@@ -484,12 +499,6 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     MutationChangeNameArgs
-  >
-  createAlbum?: Resolver<
-    ResolversTypes['CreateAlbumResponse'],
-    ParentType,
-    ContextType,
-    MutationCreateAlbumArgs
   >
   register?: Resolver<
     Maybe<Array<ResolversTypes['FormError']>>,
@@ -536,6 +545,12 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
   me?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
+  allAccounts?: Resolver<
+    Array<ResolversTypes['Account']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryAllAccountsArgs, 'withMe'>
+  >
   getInvite?: Resolver<
     Maybe<ResolversTypes['EmailAddress']>,
     ParentType,
