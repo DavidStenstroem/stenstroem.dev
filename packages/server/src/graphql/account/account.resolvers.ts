@@ -5,6 +5,7 @@ import { changeNameSchema, changePasswordSchema } from '@stenstroem-dev/shared'
 import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
 import { pbkdf2Sync, randomBytes } from 'crypto'
+import { UserModel } from '../../models/user.model'
 
 export const resolvers: Resolvers = {
   Query: {
@@ -17,6 +18,27 @@ export const resolvers: Resolvers = {
         name: user.name,
         updatedAt: user.updatedAt,
       }
+    },
+
+    allAccounts: async (
+      parent,
+      { withMe },
+      { req },
+      info
+    ): Promise<Account[]> => {
+      const currUser = await authenticate(req as RequestWithUser)
+      const users = await UserModel.find(
+        withMe
+          ? { isActive: true }
+          : { isActive: true, _id: { $ne: currUser._id } }
+      )
+      return users.map((user) => ({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      }))
     },
   },
 

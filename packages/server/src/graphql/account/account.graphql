@@ -8,6 +8,7 @@ type Account {
 
 type Query {
   me: Account!
+  allAccounts(withMe: Boolean = true): [Account!]!
 }
 
 input ChangePasswordInput {
