@@ -9,7 +9,6 @@ import { CreateAlbumComponent, CreateAlbumInput } from '../generated/graphql'
 import { createAlbumSchema } from '@stenstroem-dev/shared'
 import { faPencil, FontAwesomeIcon, faUpload } from '../icons'
 import { InputField } from '../components/InputField'
-import { uploadEndpoint } from '../config/upload'
 
 export const CreateAlbum: React.FunctionComponent<RouteComponentProps> = (
   props
