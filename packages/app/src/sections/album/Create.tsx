@@ -27,6 +27,8 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
 
   return (
     <CreateAlbumContext.Provider value={{ users, setUsers }}>
+      <CreateAlbumContext.Consumer>
+        {({ users, setUsers }): JSX.Element => (
       <CreateAlbumComponent>
         {(onMutate): JSX.Element => (
           <>
@@ -48,7 +50,11 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
                     validationSchema={createAlbumSchema}
                     onSubmit={(values, actions): void => {}}
                   >
-                    {({ submitForm, isSubmitting, resetForm }): JSX.Element => (
+                        {({
+                          submitForm,
+                          isSubmitting,
+                          resetForm,
+                        }): JSX.Element => (
                       <div>
                         <Field
                           name="title"
@@ -101,7 +107,9 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
                                 <span className="file-icon">
                                   <FontAwesomeIcon icon={faUpload} />
                                 </span>
-                                <span className="file-label">Upload filer</span>
+                                    <span className="file-label">
+                                      Upload filer
+                                    </span>
                               </span>
                               <span className="file-name has-text-centered">
                                 something ...
@@ -118,6 +126,8 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
           </>
         )}
       </CreateAlbumComponent>
+        )}
+      </CreateAlbumContext.Consumer>
     </CreateAlbumContext.Provider>
   )
 }
