@@ -1,5 +1,4 @@
 import * as React from 'react'
-import Avatar from 'react-avatar'
 import { MainContextState, MainContext } from '../context/MainContext'
 import {
   FontAwesomeIcon,
@@ -9,6 +8,7 @@ import {
   faPaperPlane,
 } from '../icons'
 import { navigate } from '@reach/router'
+import { Avatar } from './Avatar'
 
 export const ProfileDropdown: React.FunctionComponent = (): JSX.Element => {
   const { account } = React.useContext<MainContextState>(MainContext)
@@ -17,7 +17,7 @@ export const ProfileDropdown: React.FunctionComponent = (): JSX.Element => {
       <div className="profile dropdown is-right is-hoverable">
         <div className="user button profile-button">
           <figure className="image is-32x32">
-            <Avatar email={account.email} round size="32" />
+            <Avatar email={account.email} round size={64} />
           </figure>
           <span className="name">{account.name}</span>
           <FontAwesomeIcon icon={faAngleDown} />
