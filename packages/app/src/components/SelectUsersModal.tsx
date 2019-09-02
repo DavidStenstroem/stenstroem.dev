@@ -7,7 +7,7 @@ import { useGetAccountsQuery } from '../generated/graphql'
 import { Columns } from './Columns'
 import { Column } from './Column'
 import { Avatar } from './Avatar'
-import { FontAwesomeIcon, faSquare } from '../icons'
+import { FontAwesomeIcon, faSquare, faCheckSquare } from '../icons'
 import { Account } from '../models/account.model'
 
 interface Props {
@@ -24,17 +24,31 @@ export const SelectUsersModal: React.FC<Props> = ({
     variables: { withMe: false },
   })
 
-  const accountClicked = (account: Account): void => {}
+  const accountClicked = (account: Account): void => {
+    if (isSelected(account.id)) {
+      setUsers(users.filter((e) => e.id !== account.id))
+    } else {
+      setUsers([...users, account])
+    }
+  }
+
+  const isSelected = (id: string): boolean => {
+    if (users.some((e) => e.id === id)) {
+      return true
+    }
+    return false
+  }
+
+  const cancel = (): void => {
+    setUsers([])
+    handleClose()
+  }
 
   return (
     <div className="modal-card">
       <header className="modal-card-head">
         <p className="modal-card-title">Vælg hvem der har adgang</p>
-        <button
-          onClick={handleClose}
-          className="delete"
-          aria-label="close"
-        ></button>
+        <button onClick={cancel} className="delete" aria-label="close"></button>
       </header>
       <section className="modal-card-body">
         {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
@@ -49,7 +63,12 @@ export const SelectUsersModal: React.FC<Props> = ({
                   desktopWidth={'half'}
                   key={id}
                 >
-                  <div className="box">
+                  <div
+                    className="box"
+                    onClick={(): void =>
+                      accountClicked(new Account({ id, name, email }))
+                    }
+                  >
                     <article className="media">
                       <figure className="media-left">
                         <p className="image is-64x64">
@@ -65,7 +84,9 @@ export const SelectUsersModal: React.FC<Props> = ({
                         </div>
                       </div>
                       <div className="media-right">
-                        <FontAwesomeIcon icon={faSquare} />
+                        <FontAwesomeIcon
+                          icon={isSelected(id) ? faCheckSquare : faSquare}
+                        />
                       </div>
                     </article>
                   </div>
@@ -76,8 +97,10 @@ export const SelectUsersModal: React.FC<Props> = ({
         )}
       </section>
       <footer className="modal-card-foot">
-        <button className="button is-link">Vælg</button>
-        <button className="button" onClick={handleClose}>
+        <button className="button is-link" onClick={handleClose}>
+          Vælg
+        </button>
+        <button className="button" onClick={cancel}>
           Annuller
         </button>
       </footer>
