@@ -26,6 +26,7 @@ const wsLink = new WebSocketLink({
   uri: wsServer,
   options: {
     reconnect: true,
+    lazy: true,
   },
 })
 
