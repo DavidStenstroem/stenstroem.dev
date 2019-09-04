@@ -19,6 +19,10 @@ type CreateAlbumResponse {
   link: String
 }
 
+type Query {
+  getAlbum(slug: String!): Album
+}
+
 type Mutation {
   createAlbum(input: CreateAlbumInput!): CreateAlbumResponse!
 }
