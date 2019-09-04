@@ -264,6 +264,24 @@ export type GetAccountsQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type GetAlbumQueryVariables = {
+  slug: Scalars['String']
+}
+
+export type GetAlbumQuery = { __typename?: 'Query' } & {
+  getAlbum: Maybe<
+    { __typename?: 'Album' } & Pick<Album, 'title' | 'slug' | 'description'> & {
+        createdBy: { __typename?: 'Account' } & Pick<Account, 'id' | 'name'>
+        media: Array<
+          { __typename?: 'Media' } & Pick<
+            Media,
+            'secureUrl' | 'width' | 'height' | 'resourceType' | 'format'
+          >
+        >
+      }
+  >
+}
+
 export type GetInviteQueryVariables = {
   id: Scalars['String']
 }
@@ -521,6 +539,58 @@ export type GetAccountsQueryHookResult = ReturnType<typeof useGetAccountsQuery>
 export type GetAccountsQueryResult = ApolloReactCommon.QueryResult<
   GetAccountsQuery,
   GetAccountsQueryVariables
+>
+export const GetAlbumDocument = gql`
+  query GetAlbum($slug: String!) {
+    getAlbum(slug: $slug) {
+      title
+      slug
+      description
+      createdBy {
+        id
+        name
+      }
+      media {
+        secureUrl
+        width
+        height
+        resourceType
+        format
+      }
+    }
+  }
+`
+export type GetAlbumComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    GetAlbumQuery,
+    GetAlbumQueryVariables
+  >,
+  'query'
+> &
+  ({ variables: GetAlbumQueryVariables; skip?: boolean } | { skip: boolean })
+
+export const GetAlbumComponent = (props: GetAlbumComponentProps) => (
+  <ApolloReactComponents.Query<GetAlbumQuery, GetAlbumQueryVariables>
+    query={GetAlbumDocument}
+    {...props}
+  />
+)
+
+export function useGetAlbumQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetAlbumQuery,
+    GetAlbumQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<GetAlbumQuery, GetAlbumQueryVariables>(
+    GetAlbumDocument,
+    baseOptions
+  )
+}
+export type GetAlbumQueryHookResult = ReturnType<typeof useGetAlbumQuery>
+export type GetAlbumQueryResult = ApolloReactCommon.QueryResult<
+  GetAlbumQuery,
+  GetAlbumQueryVariables
 >
 export const GetInviteDocument = gql`
   query GetInvite($id: String!) {

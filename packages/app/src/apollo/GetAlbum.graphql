@@ -1,0 +1,18 @@
+query GetAlbum($slug: String!) {
+  getAlbum(slug: $slug) {
+    title
+    slug
+    description
+    createdBy {
+      id
+      name
+    }
+    media {
+      secureUrl
+      width
+      height
+      resourceType
+      format
+    }
+  }
+}
