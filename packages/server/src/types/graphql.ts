@@ -38,7 +38,7 @@ export type Album = {
   title: Scalars['String']
   slug: Scalars['String']
   description?: Maybe<Scalars['String']>
-  createdBy: User
+  createdBy: Account
   media: Array<Media>
 }
 
@@ -103,6 +103,7 @@ export type LoginInput = {
 
 export type Media = {
   __typename?: 'Media'
+  id: Scalars['ID']
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
   publicId: Scalars['String']
@@ -124,7 +125,7 @@ export type Media = {
   frameRate?: Maybe<Scalars['Int']>
   bitRate?: Maybe<Scalars['Int']>
   duration?: Maybe<Scalars['Float']>
-  uploadedBy: User
+  uploadedBy: Account
   faces?: Maybe<Array<Face>>
   loc: Location
   originalCreateDate?: Maybe<OriginalCreateDate>
@@ -301,7 +302,6 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   Album: ResolverTypeWrapper<Album>
-  User: ResolverTypeWrapper<User>
   Media: ResolverTypeWrapper<Media>
   Int: ResolverTypeWrapper<Scalars['Int']>
   ResourceType: ResourceType
@@ -320,6 +320,7 @@ export type ResolversTypes = {
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
+  User: ResolverTypeWrapper<User>
 }
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -332,7 +333,6 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']
   Boolean: Scalars['Boolean']
   Album: Album
-  User: User
   Media: Media
   Int: Scalars['Int']
   ResourceType: ResourceType
@@ -351,6 +351,7 @@ export type ResolversParentTypes = {
   RegisterInput: RegisterInput
   InviteInput: InviteInput
   LoginInput: LoginInput
+  User: User
 }
 
 export type AccountResolvers<
@@ -375,7 +376,7 @@ export type AlbumResolvers<
     ParentType,
     ContextType
   >
-  createdBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  createdBy?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
   media?: Resolver<Array<ResolversTypes['Media']>, ParentType, ContextType>
 }
 
@@ -444,6 +445,7 @@ export type MediaResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Media'] = ResolversParentTypes['Media']
 > = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   publicId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
@@ -469,7 +471,7 @@ export type MediaResolvers<
   frameRate?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   bitRate?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   duration?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>
-  uploadedBy?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  uploadedBy?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
   faces?: Resolver<
     Maybe<Array<ResolversTypes['Face']>>,
     ParentType,

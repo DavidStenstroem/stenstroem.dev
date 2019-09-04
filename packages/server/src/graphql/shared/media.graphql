@@ -4,6 +4,7 @@ enum ResourceType {
 }
 
 type Media {
+  id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   publicId: String!
@@ -25,7 +26,7 @@ type Media {
   frameRate: Int
   bitRate: Int
   duration: Float
-  uploadedBy: User!
+  uploadedBy: Account!
   faces: [Face!]
   loc: Location!
   originalCreateDate: OriginalCreateDate

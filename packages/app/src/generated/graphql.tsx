@@ -33,7 +33,7 @@ export type Album = {
   title: Scalars['String']
   slug: Scalars['String']
   description?: Maybe<Scalars['String']>
-  createdBy: User
+  createdBy: Account
   media: Array<Media>
 }
 
@@ -98,6 +98,7 @@ export type LoginInput = {
 
 export type Media = {
   __typename?: 'Media'
+  id: Scalars['ID']
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
   publicId: Scalars['String']
@@ -119,7 +120,7 @@ export type Media = {
   frameRate?: Maybe<Scalars['Int']>
   bitRate?: Maybe<Scalars['Int']>
   duration?: Maybe<Scalars['Float']>
-  uploadedBy: User
+  uploadedBy: Account
   faces?: Maybe<Array<Face>>
   loc: Location
   originalCreateDate?: Maybe<OriginalCreateDate>
@@ -127,17 +128,13 @@ export type Media = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  createAlbum: CreateAlbumResponse
   changePassword?: Maybe<Array<FormError>>
   changeName?: Maybe<Array<FormError>>
+  createAlbum: CreateAlbumResponse
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
   logout: Scalars['Boolean']
-}
-
-export type MutationCreateAlbumArgs = {
-  input: CreateAlbumInput
 }
 
 export type MutationChangePasswordArgs = {
@@ -146,6 +143,10 @@ export type MutationChangePasswordArgs = {
 
 export type MutationChangeNameArgs = {
   input: ChangeNameInput
+}
+
+export type MutationCreateAlbumArgs = {
+  input: CreateAlbumInput
 }
 
 export type MutationRegisterArgs = {
@@ -175,19 +176,19 @@ export type OriginalCreateDate = {
 
 export type Query = {
   __typename?: 'Query'
-  getAlbum?: Maybe<Album>
   me: Account
   allAccounts: Array<Account>
+  getAlbum?: Maybe<Album>
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
 }
 
-export type QueryGetAlbumArgs = {
-  slug: Scalars['String']
-}
-
 export type QueryAllAccountsArgs = {
   withMe?: Maybe<Scalars['Boolean']>
+}
+
+export type QueryGetAlbumArgs = {
+  slug: Scalars['String']
 }
 
 export type QueryGetInviteArgs = {

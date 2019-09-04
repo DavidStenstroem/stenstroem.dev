@@ -2,7 +2,7 @@ type Album {
   title: String!
   slug: String!
   description: String
-  createdBy: User!
+  createdBy: Account!
   media: [Media!]!
 }
 
