@@ -12,25 +12,23 @@ import { Account } from '../models/account.model'
 
 interface Props {
   handleClose: () => void
+  cancel: () => void
+  users: Account[]
+  setUsers: React.Dispatch<React.SetStateAction<Account[]>>
 }
 
 export const SelectUsersModal: React.FC<Props> = ({
   handleClose,
+  cancel,
+  users,
+  setUsers,
 }): JSX.Element => {
-  const { users, setUsers } = React.useContext<CreateAlbumContextValues>(
-    CreateAlbumContext
-  )
+  // const { users, setUsers } = React.useContext<CreateAlbumContextValues>(
+  //   CreateAlbumContext
+  // )
   const { data, error, loading } = useGetAccountsQuery({
     variables: { withMe: false },
   })
-
-  const accountClicked = (account: Account): void => {
-    if (isSelected(account.id)) {
-      setUsers(users.filter((e) => e.id !== account.id))
-    } else {
-      setUsers([...users, account])
-    }
-  }
 
   const isSelected = (id: string): boolean => {
     if (users.some((e) => e.id === id)) {
@@ -39,9 +37,12 @@ export const SelectUsersModal: React.FC<Props> = ({
     return false
   }
 
-  const cancel = (): void => {
-    setUsers([])
-    handleClose()
+  const accountClicked = (account: Account): void => {
+    if (isSelected(account.id)) {
+      setUsers(users.filter((e) => e.id !== account.id))
+    } else {
+      setUsers([...users, account])
+    }
   }
 
   return (
