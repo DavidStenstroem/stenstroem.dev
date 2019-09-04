@@ -1,4 +1,8 @@
-import { Resolvers, CreateAlbumResponse } from '../../types/graphql'
+import {
+  Resolvers,
+  CreateAlbumResponse,
+  Album as GQLAlbum,
+} from '../../types/graphql'
 import { authenticate } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
 import { createAlbumSchema } from '@stenstroem-dev/shared'
@@ -10,8 +14,32 @@ import { randomBytes } from 'crypto'
 import { processUpload, insertFiles } from '../../utils/uploads'
 import { MediaModel } from '../../models/media.model'
 import { UserModel } from '../../models/user.model'
+import { albumModelToAlbumType } from '../../utils/convert-model-to-gql'
 
 export const resolvers: Resolvers = {
+  Query: {
+    getAlbum: async (parent, { slug }, { req }, info): Promise<GQLAlbum> => {
+      const user = await authenticate(req as RequestWithUser)
+
+      const album = await AlbumModel.findOne({ slug }).populate([
+        { path: 'createdBy', model: 'User' },
+        {
+          path: 'media',
+          model: 'Media',
+          populate: { path: 'uploadedBy', model: 'User' },
+        },
+      ])
+      if (!album) {
+        return null
+      } else if (album.private) {
+        const hasAccess =
+          album.sharedWith && album.sharedWith.includes(user._id)
+        return hasAccess ? albumModelToAlbumType(album) : null
+      } else {
+        return albumModelToAlbumType(album)
+      }
+    },
+  },
   Mutation: {
     createAlbum: async (
       parent,
