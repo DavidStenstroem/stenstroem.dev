@@ -5,8 +5,8 @@ import { GeoLocation } from './location.model'
 import { OriginalCreateDate } from './original-create-date.model'
 
 export enum ResourceType {
-  image = 'image',
-  video = 'video',
+  Image = 'IMAGE',
+  Video = 'VIDEO',
 }
 
 @index({ loc: '2dsphere' })
