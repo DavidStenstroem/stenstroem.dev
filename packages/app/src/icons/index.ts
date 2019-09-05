@@ -16,6 +16,7 @@ import { faPencil } from '@fortawesome/pro-light-svg-icons/faPencil'
 import { faCheck } from '@fortawesome/pro-light-svg-icons/faCheck'
 import { faCheckSquare } from '@fortawesome/pro-light-svg-icons/faCheckSquare'
 import { faSquare } from '@fortawesome/pro-light-svg-icons/faSquare'
+import { faSpinnerThird } from '@fortawesome/pro-light-svg-icons/faSpinnerThird'
 
 // Solid
 import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon'
@@ -47,4 +48,5 @@ export {
   faCheck,
   faCheckSquare,
   faSquare,
+  faSpinnerThird,
 }
