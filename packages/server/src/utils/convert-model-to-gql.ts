@@ -16,6 +16,7 @@ export const albumModelToAlbumType = (album: InstanceType<Album>): GQLAlbum => {
     name: account.name,
     createdAt: account.createdAt,
     updatedAt: account.updatedAt,
+    slug: account.slug,
   })
   return {
     title: album.title,
