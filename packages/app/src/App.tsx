@@ -13,6 +13,7 @@ import './styles/master.scss'
 import { CreateAlbum } from './pages/CreateAlbum'
 import { ToastContainer } from 'react-toastify'
 import { AlbumRouter } from './sections/album'
+import { NotFound } from './pages/NotFound'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
   const [account, setAccount] = React.useState<Account>(
@@ -32,6 +33,7 @@ export const App: React.FunctionComponent = (): JSX.Element => {
                   <AccountPage path="/account" />
                   <Invite path="/invite" />
                   <AlbumRouter path="album/*" />
+                  <NotFound default />
                 </Router>
               )
             }
