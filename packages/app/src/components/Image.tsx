@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { ResourceType } from '../generated/graphql'
+import LazyLoad from 'react-lazyload'
+import { Loading } from './Loading'
 
 interface Props {
   width: number
@@ -86,8 +88,10 @@ export const Image: React.FC<Props> = ({
   const [src, srcset] = makeSources(publicId, resourceType)
 
   return (
-    <figure className={`image ${className(height, width, square)}`}>
-      <img src={src} srcSet={srcset} />
-    </figure>
+    <LazyLoad height={200}>
+      <figure className={`image ${className(height, width, square)}`}>
+        <img src={src} srcSet={srcset} />
+      </figure>
+    </LazyLoad>
   )
 }
