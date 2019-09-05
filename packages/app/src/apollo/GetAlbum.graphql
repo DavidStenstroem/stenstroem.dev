@@ -4,8 +4,8 @@ query GetAlbum($slug: String!) {
     slug
     description
     createdBy {
-      id
       name
+      slug
     }
     media {
       secureUrl
@@ -13,6 +13,7 @@ query GetAlbum($slug: String!) {
       height
       resourceType
       format
+      publicId
     }
   }
 }
