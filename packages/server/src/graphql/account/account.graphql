@@ -2,6 +2,7 @@ type Account {
   id: ID!
   name: String!
   email: EmailAddress!
+  slug: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }

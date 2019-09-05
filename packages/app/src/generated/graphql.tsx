@@ -24,6 +24,7 @@ export type Account = {
   id: Scalars['ID']
   name: Scalars['String']
   email: Scalars['EmailAddress']
+  slug: Scalars['String']
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
 }
@@ -271,11 +272,16 @@ export type GetAlbumQueryVariables = {
 export type GetAlbumQuery = { __typename?: 'Query' } & {
   getAlbum: Maybe<
     { __typename?: 'Album' } & Pick<Album, 'title' | 'slug' | 'description'> & {
-        createdBy: { __typename?: 'Account' } & Pick<Account, 'id' | 'name'>
+        createdBy: { __typename?: 'Account' } & Pick<Account, 'name' | 'slug'>
         media: Array<
           { __typename?: 'Media' } & Pick<
             Media,
-            'secureUrl' | 'width' | 'height' | 'resourceType' | 'format'
+            | 'secureUrl'
+            | 'width'
+            | 'height'
+            | 'resourceType'
+            | 'format'
+            | 'publicId'
           >
         >
       }
@@ -547,8 +553,8 @@ export const GetAlbumDocument = gql`
       slug
       description
       createdBy {
-        id
         name
+        slug
       }
       media {
         secureUrl
@@ -556,6 +562,7 @@ export const GetAlbumDocument = gql`
         height
         resourceType
         format
+        publicId
       }
     }
   }

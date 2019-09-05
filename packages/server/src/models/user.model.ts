@@ -32,6 +32,9 @@ export class User extends Typegoose {
   // avatar
 
   @prop()
+  slug: string
+
+  @prop()
   hash: string
 
   @prop()

@@ -6,6 +6,7 @@ import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
 import { pbkdf2Sync, randomBytes } from 'crypto'
 import { UserModel } from '../../models/user.model'
+import slugify from 'slugify'
 
 export const resolvers: Resolvers = {
   Query: {
@@ -16,6 +17,7 @@ export const resolvers: Resolvers = {
         createdAt: user.createdAt,
         email: user.email,
         name: user.name,
+        slug: user.slug,
         updatedAt: user.updatedAt,
       }
     },
@@ -35,6 +37,7 @@ export const resolvers: Resolvers = {
       return users.map((user) => ({
         id: user._id,
         name: user.name,
+        slug: user.slug,
         email: user.email,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
@@ -56,6 +59,7 @@ export const resolvers: Resolvers = {
         return formatError(err as ValidationError)
       }
 
+      user.slug = `${slugify(newName)}-${randomBytes(6).toString('hex')}`
       user.name = newName
       await user.save()
 

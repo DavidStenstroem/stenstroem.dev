@@ -12,7 +12,7 @@ import {
 } from '@stenstroem-dev/shared'
 import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
-import { userInfo } from 'os'
+import slugify from 'slugify'
 
 export const resolvers: Resolvers = {
   Mutation: {
@@ -39,6 +39,7 @@ export const resolvers: Resolvers = {
         ]
       }
 
+      const slug = `${slugify(name)}-${randomBytes(6).toString('hex')}`
       const salt = randomBytes(32).toString('hex')
       const hash = pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString(
         'hex'
@@ -47,6 +48,7 @@ export const resolvers: Resolvers = {
       user.email = email
       user.salt = salt
       user.hash = hash
+      user.slug = slug
       user.isActive = true
       await user.save()
 

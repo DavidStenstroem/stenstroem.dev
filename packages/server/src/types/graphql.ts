@@ -29,6 +29,7 @@ export type Account = {
   id: Scalars['ID']
   name: Scalars['String']
   email: Scalars['EmailAddress']
+  slug: Scalars['String']
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
 }
@@ -361,6 +362,7 @@ export type AccountResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
 }
