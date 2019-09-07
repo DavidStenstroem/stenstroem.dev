@@ -41,6 +41,8 @@ export type Album = {
   description?: Maybe<Scalars['String']>
   createdBy: Account
   media: Array<Media>
+  createdAt: Scalars['DateTime']
+  updatedAt: Scalars['DateTime']
 }
 
 export type ChangeNameInput = {
@@ -50,6 +52,23 @@ export type ChangeNameInput = {
 export type ChangePasswordInput = {
   currentPassword: Scalars['String']
   newPassword: Scalars['String']
+}
+
+export type Cover = {
+  __typename?: 'Cover'
+  title: Scalars['String']
+  slug: Scalars['String']
+  creator: Account
+  isPrivate: Scalars['Boolean']
+  image: Media
+  createdAt: Scalars['DateTime']
+  updatedAt: Scalars['DateTime']
+}
+
+export type CoverConnection = {
+  __typename?: 'CoverConnection'
+  edges: Array<Cover>
+  pageInfo: PageInfo
 }
 
 export type CreateAlbumInput = {
@@ -180,11 +199,19 @@ export type OriginalCreateDate = {
   rawValue?: Maybe<Scalars['String']>
 }
 
+export type PageInfo = {
+  __typename?: 'PageInfo'
+  totalItems: Scalars['Int']
+  hasNextPage: Scalars['Boolean']
+  endCursor: Scalars['DateTime']
+}
+
 export type Query = {
   __typename?: 'Query'
   me: Account
   allAccounts: Array<Account>
   getAlbum?: Maybe<Album>
+  myAlbums: CoverConnection
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
 }
@@ -195,6 +222,11 @@ export type QueryAllAccountsArgs = {
 
 export type QueryGetAlbumArgs = {
   slug: Scalars['String']
+}
+
+export type QueryMyAlbumsArgs = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
 }
 
 export type QueryGetInviteArgs = {
@@ -310,6 +342,9 @@ export type ResolversTypes = {
   Face: ResolverTypeWrapper<Face>
   Location: ResolverTypeWrapper<Location>
   OriginalCreateDate: ResolverTypeWrapper<OriginalCreateDate>
+  CoverConnection: ResolverTypeWrapper<CoverConnection>
+  Cover: ResolverTypeWrapper<Cover>
+  PageInfo: ResolverTypeWrapper<PageInfo>
   Invitation: ResolverTypeWrapper<Invitation>
   Mutation: ResolverTypeWrapper<{}>
   ChangePasswordInput: ChangePasswordInput
@@ -341,6 +376,9 @@ export type ResolversParentTypes = {
   Face: Face
   Location: Location
   OriginalCreateDate: OriginalCreateDate
+  CoverConnection: CoverConnection
+  Cover: Cover
+  PageInfo: PageInfo
   Invitation: Invitation
   Mutation: {}
   ChangePasswordInput: ChangePasswordInput
@@ -380,6 +418,29 @@ export type AlbumResolvers<
   >
   createdBy?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
   media?: Resolver<Array<ResolversTypes['Media']>, ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+}
+
+export type CoverResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['Cover'] = ResolversParentTypes['Cover']
+> = {
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  creator?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
+  isPrivate?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  image?: Resolver<ResolversTypes['Media'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+}
+
+export type CoverConnectionResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['CoverConnection'] = ResolversParentTypes['CoverConnection']
+> = {
+  edges?: Resolver<Array<ResolversTypes['Cover']>, ParentType, ContextType>
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>
 }
 
 export type CreateAlbumResponseResolvers<
@@ -549,6 +610,15 @@ export type OriginalCreateDateResolvers<
   rawValue?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
 }
 
+export type PageInfoResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']
+> = {
+  totalItems?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  endCursor?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+}
+
 export type QueryResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
@@ -565,6 +635,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryGetAlbumArgs
+  >
+  myAlbums?: Resolver<
+    ResolversTypes['CoverConnection'],
+    ParentType,
+    ContextType,
+    QueryMyAlbumsArgs
   >
   getInvite?: Resolver<
     Maybe<ResolversTypes['EmailAddress']>,
@@ -598,6 +674,8 @@ export type UserResolvers<
 export type Resolvers<ContextType = Context> = {
   Account?: AccountResolvers<ContextType>
   Album?: AlbumResolvers<ContextType>
+  Cover?: CoverResolvers<ContextType>
+  CoverConnection?: CoverConnectionResolvers<ContextType>
   CreateAlbumResponse?: CreateAlbumResponseResolvers<ContextType>
   DateTime?: GraphQLScalarType
   EmailAddress?: GraphQLScalarType
@@ -608,6 +686,7 @@ export type Resolvers<ContextType = Context> = {
   Media?: MediaResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   OriginalCreateDate?: OriginalCreateDateResolvers<ContextType>
+  PageInfo?: PageInfoResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   Upload?: GraphQLScalarType
   User?: UserResolvers<ContextType>

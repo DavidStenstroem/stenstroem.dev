@@ -2,6 +2,7 @@ import {
   Resolvers,
   CreateAlbumResponse,
   Album as GQLAlbum,
+  CoverConnection,
 } from '../../types/graphql'
 import { authenticate } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
@@ -14,10 +15,44 @@ import { randomBytes } from 'crypto'
 import { processUpload, insertFiles } from '../../utils/uploads'
 import { MediaModel } from '../../models/media.model'
 import { UserModel } from '../../models/user.model'
-import { albumModelToAlbumType } from '../../utils/convert-model-to-gql'
+import {
+  albumModelToAlbumType,
+  albumModelToCoverConnection,
+  fromCursorHash,
+} from '../../utils/convert-model-to-gql'
 
 export const resolvers: Resolvers = {
   Query: {
+    myAlbums: async (
+      parent,
+      { cursor, limit = 20 },
+      { req },
+      info
+    ): Promise<CoverConnection> => {
+      const user = await authenticate(req as RequestWithUser)
+      const query = cursor
+        ? { createdBy: user._id, createdAt: { $lt: fromCursorHash(cursor) } }
+        : { createdBy: user._id }
+      const totalItems = await AlbumModel.estimatedDocumentCount(query)
+      const albums = await AlbumModel.find(query)
+        .limit(limit + 1)
+        .sort({ createdAt: -1 })
+        .populate([
+          { path: 'createdBy', model: 'User' },
+          {
+            path: 'media',
+            model: 'Media',
+            options: { limit: 1, sort: { createdAt: -1 } },
+            populate: {
+              path: 'uploadedBy',
+              model: 'User',
+            },
+          },
+        ])
+
+      return albumModelToCoverConnection(albums, limit, totalItems)
+    },
+
     getAlbum: async (parent, { slug }, { req }, info): Promise<GQLAlbum> => {
       const user = await authenticate(req as RequestWithUser)
 

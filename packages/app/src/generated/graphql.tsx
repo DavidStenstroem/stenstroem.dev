@@ -36,6 +36,8 @@ export type Album = {
   description?: Maybe<Scalars['String']>
   createdBy: Account
   media: Array<Media>
+  createdAt: Scalars['DateTime']
+  updatedAt: Scalars['DateTime']
 }
 
 export type ChangeNameInput = {
@@ -45,6 +47,23 @@ export type ChangeNameInput = {
 export type ChangePasswordInput = {
   currentPassword: Scalars['String']
   newPassword: Scalars['String']
+}
+
+export type Cover = {
+  __typename?: 'Cover'
+  title: Scalars['String']
+  slug: Scalars['String']
+  creator: Account
+  isPrivate: Scalars['Boolean']
+  image: Media
+  createdAt: Scalars['DateTime']
+  updatedAt: Scalars['DateTime']
+}
+
+export type CoverConnection = {
+  __typename?: 'CoverConnection'
+  edges: Array<Cover>
+  pageInfo: PageInfo
 }
 
 export type CreateAlbumInput = {
@@ -175,11 +194,19 @@ export type OriginalCreateDate = {
   rawValue?: Maybe<Scalars['String']>
 }
 
+export type PageInfo = {
+  __typename?: 'PageInfo'
+  totalItems: Scalars['Int']
+  hasNextPage: Scalars['Boolean']
+  endCursor: Scalars['DateTime']
+}
+
 export type Query = {
   __typename?: 'Query'
   me: Account
   allAccounts: Array<Account>
   getAlbum?: Maybe<Album>
+  myAlbums: CoverConnection
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
 }
@@ -190,6 +217,11 @@ export type QueryAllAccountsArgs = {
 
 export type QueryGetAlbumArgs = {
   slug: Scalars['String']
+}
+
+export type QueryMyAlbumsArgs = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
 }
 
 export type QueryGetInviteArgs = {
