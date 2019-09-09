@@ -2,7 +2,6 @@ import {
   Resolvers,
   CreateAlbumResponse,
   Album as GQLAlbum,
-  CoverConnection,
   MediaConnection,
   Media as GQLMedia,
 } from '../../types/graphql'
@@ -120,36 +119,6 @@ export const resolvers: Resolvers = {
         },
         edges: media.map((m) => mediaToGQLMedia(m)),
       }
-    },
-
-    myAlbums: async (
-      parent,
-      { cursor, limit = 40 },
-      { req },
-      info
-    ): Promise<CoverConnection> => {
-      const user = await authenticate(req as RequestWithUser)
-      const query = cursor
-        ? { createdBy: user._id, createdAt: { $lt: fromCursorHash(cursor) } }
-        : { createdBy: user._id }
-      const totalItems = await AlbumModel.estimatedDocumentCount(query)
-      const albums = await AlbumModel.find(query)
-        .limit(limit + 1)
-        .sort({ createdAt: -1 })
-        .populate([
-          { path: 'createdBy', model: 'User' },
-          {
-            path: 'media',
-            model: 'Media',
-            options: { limit: 1, sort: { createdAt: -1 } },
-            populate: {
-              path: 'uploadedBy',
-              model: 'User',
-            },
-          },
-        ])
-
-      return albumModelToCoverConnection(albums, limit, totalItems)
     },
 
     getAlbum: async (parent, { slug }, { req }, info): Promise<GQLAlbum> => {

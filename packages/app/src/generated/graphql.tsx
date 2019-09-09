@@ -59,23 +59,6 @@ export type ChangePasswordInput = {
   newPassword: Scalars['String']
 }
 
-export type Cover = {
-  __typename?: 'Cover'
-  title: Scalars['String']
-  slug: Scalars['String']
-  creator: Account
-  isPrivate: Scalars['Boolean']
-  image: Media
-  createdAt: Scalars['DateTime']
-  updatedAt: Scalars['DateTime']
-}
-
-export type CoverConnection = {
-  __typename?: 'CoverConnection'
-  edges: Array<Cover>
-  pageInfo: PageInfo
-}
-
 export type CreateAlbumInput = {
   title: Scalars['String']
   description?: Maybe<Scalars['String']>
@@ -222,7 +205,6 @@ export type Query = {
   me: Account
   allAccounts: Array<Account>
   getAlbum?: Maybe<Album>
-  myAlbums: CoverConnection
   getStreamCover?: Maybe<Media>
   getStream: MediaConnection
   getInvite?: Maybe<Scalars['EmailAddress']>
@@ -235,11 +217,6 @@ export type QueryAllAccountsArgs = {
 
 export type QueryGetAlbumArgs = {
   slug: Scalars['String']
-}
-
-export type QueryMyAlbumsArgs = {
-  cursor?: Maybe<Scalars['String']>
-  limit?: Maybe<Scalars['Int']>
 }
 
 export type QueryGetStreamArgs = {

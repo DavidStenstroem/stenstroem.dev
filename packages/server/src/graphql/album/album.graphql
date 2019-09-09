@@ -18,21 +18,6 @@ type MediaConnection {
   pageInfo: PageInfo!
 }
 
-type Cover {
-  title: String!
-  slug: String!
-  creator: Account!
-  isPrivate: Boolean!
-  image: Media!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type CoverConnection {
-  edges: [Cover!]!
-  pageInfo: PageInfo!
-}
-
 type PageInfo {
   totalItems: Int!
   hasNextPage: Boolean!
@@ -54,7 +39,6 @@ type CreateAlbumResponse {
 
 type Query {
   getAlbum(slug: String!): Album
-  myAlbums(cursor: String, limit: Int): CoverConnection!
   getStreamCover: Media
   getStream(cursor: String, limit: Int): MediaConnection!
 }
