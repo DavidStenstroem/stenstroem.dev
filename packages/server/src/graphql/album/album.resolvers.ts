@@ -151,6 +151,7 @@ export const resolvers: Resolvers = {
           album.sharedWith && album.sharedWith.includes(user._id)
         return hasAccess
           ? {
+              albumId: album.albumId,
               createdAt: album.createdAt,
               createdBy: userToGQLAccount(album.createdBy as InstanceType<
                 User
@@ -166,6 +167,7 @@ export const resolvers: Resolvers = {
           : null
       } else {
         return {
+          albumId: album.albumId,
           createdAt: album.createdAt,
           createdBy: userToGQLAccount(album.createdBy as InstanceType<User>),
           description: album.description,
