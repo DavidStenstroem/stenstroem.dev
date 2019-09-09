@@ -1,15 +1,13 @@
 overwrite: true
 schema: ./packages/server/src/**/*.graphql
-config:
-  scalars:
-    DateTime: Date
-    EmailAddress: string
 generates:
   ./packages/server/src/types/graphql.ts:
     config:
       contextType: ./Context#Context
       scalars:
         Upload: FileUpload
+        DateTime: Date
+        EmailAddress: string
     plugins:
       - add: /* eslint-disable */
       - add: /* This is an automatically generated file. Do not edit directly. */
@@ -23,6 +21,8 @@ generates:
       withHooks: true
       scalars:
         Upload: File
+        DateTime: Date
+        EmailAddress: string
     plugins:
       - add: /* eslint-disable */
       - add: /* This is an automatically generated file. Do not edit directly. */
