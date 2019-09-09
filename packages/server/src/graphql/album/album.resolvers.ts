@@ -71,6 +71,33 @@ export const resolvers: Resolvers = {
 
       return mediaToGQLMedia(latestMedia[0])
     },
+
+    getStream: async (
+      parent,
+      { cursor, limit },
+      { req },
+      info
+    ): Promise<MediaConnection> => {
+      const user = await authenticate(req as RequestWithUser)
+      const query = cursor
+        ? { uploadedBy: user._id, createdAt: { $lt: fromCursorHash(cursor) } }
+        : { uploadedBy: user._id }
+      const totalItems = await MediaModel.estimatedDocumentCount(query)
+      const media = await MediaModel.find(query)
+        .limit(limit + 1)
+        .sort({ createdAt: -1 })
+        .populate({ path: 'uploadedBy', model: 'User' })
+
+      return {
+        pageInfo: {
+          totalItems,
+          hasNextPage: media.length > limit,
+          endCursor: toCursorHash(media[media.length - 1].createdAt.toString()),
+        },
+        edges: media.map((m) => mediaToGQLMedia(m)),
+      }
+    },
+
     myAlbums: async (
       parent,
       { cursor, limit = 20 },

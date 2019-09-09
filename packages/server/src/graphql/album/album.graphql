@@ -52,6 +52,7 @@ type Query {
   getAlbum(slug: String!): Album
   myAlbums(cursor: String, limit: Int): CoverConnection!
   getStreamCover: Media
+  getStream(cursor: String, limit: Int): MediaConnection!
 }
 
 type Mutation {
