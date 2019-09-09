@@ -146,13 +146,17 @@ export type MediaConnection = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  createAlbum: CreateAlbumResponse
   changePassword?: Maybe<Array<FormError>>
   changeName?: Maybe<Array<FormError>>
-  createAlbum: CreateAlbumResponse
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
   logout: Scalars['Boolean']
+}
+
+export type MutationCreateAlbumArgs = {
+  input: CreateAlbumInput
 }
 
 export type MutationChangePasswordArgs = {
@@ -161,10 +165,6 @@ export type MutationChangePasswordArgs = {
 
 export type MutationChangeNameArgs = {
   input: ChangeNameInput
-}
-
-export type MutationCreateAlbumArgs = {
-  input: CreateAlbumInput
 }
 
 export type MutationRegisterArgs = {
@@ -201,17 +201,13 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query'
-  me: Account
-  allAccounts: Array<Account>
   getAlbum?: Maybe<Album>
   getStreamCover?: Maybe<Media>
   getStream: MediaConnection
+  me: Account
+  allAccounts: Array<Account>
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
-}
-
-export type QueryAllAccountsArgs = {
-  withMe?: Maybe<Scalars['Boolean']>
 }
 
 export type QueryGetAlbumArgs = {
@@ -221,6 +217,10 @@ export type QueryGetAlbumArgs = {
 export type QueryGetStreamArgs = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryAllAccountsArgs = {
+  withMe?: Maybe<Scalars['Boolean']>
 }
 
 export type QueryGetInviteArgs = {
