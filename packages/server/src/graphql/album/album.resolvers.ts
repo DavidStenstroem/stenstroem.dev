@@ -4,6 +4,7 @@ import {
   Album as GQLAlbum,
   CoverConnection,
   MediaConnection,
+  Media as GQLMedia,
 } from '../../types/graphql'
 import { authenticate } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
@@ -55,6 +56,21 @@ export const resolvers: Resolvers = {
     },
   },
   Query: {
+    getStreamCover: async (parent, args, { req }, info): Promise<GQLMedia> => {
+      const user = await authenticate(req as RequestWithUser)
+      const latestMedia = await MediaModel.find({ uploadedBy: user._id })
+        .populate({ path: 'uploadedBy', model: 'User' })
+        .sort({ _id: -1 })
+        .limit(1)
+
+      if (!latestMedia) {
+        return null
+      } else if (latestMedia.length <= 0) {
+        return null
+      }
+
+      return mediaToGQLMedia(latestMedia[0])
+    },
     myAlbums: async (
       parent,
       { cursor, limit = 20 },

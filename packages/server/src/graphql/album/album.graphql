@@ -51,6 +51,7 @@ type CreateAlbumResponse {
 type Query {
   getAlbum(slug: String!): Album
   myAlbums(cursor: String, limit: Int): CoverConnection!
+  getStreamCover: Media
 }
 
 type Mutation {
