@@ -4,8 +4,14 @@ type Album {
   description: String
   createdBy: Account!
   media: [Media!]!
+  mediaFeed(cursor: String, limit: Int): MediaConnection
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type MediaConnection {
+  edges: [Media!]!
+  pageInfo: PageInfo!
 }
 
 type Cover {

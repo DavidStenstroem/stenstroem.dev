@@ -36,8 +36,14 @@ export type Album = {
   description?: Maybe<Scalars['String']>
   createdBy: Account
   media: Array<Media>
+  mediaFeed?: Maybe<MediaConnection>
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
+}
+
+export type AlbumMediaFeedArgs = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
 }
 
 export type ChangeNameInput = {
@@ -146,6 +152,12 @@ export type Media = {
   originalCreateDate?: Maybe<OriginalCreateDate>
 }
 
+export type MediaConnection = {
+  __typename?: 'MediaConnection'
+  edges: Array<Media>
+  pageInfo: PageInfo
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   changePassword?: Maybe<Array<FormError>>
@@ -198,7 +210,7 @@ export type PageInfo = {
   __typename?: 'PageInfo'
   totalItems: Scalars['Int']
   hasNextPage: Scalars['Boolean']
-  endCursor: Scalars['DateTime']
+  endCursor: Scalars['String']
 }
 
 export type Query = {

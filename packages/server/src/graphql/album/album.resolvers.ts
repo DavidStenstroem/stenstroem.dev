@@ -3,6 +3,7 @@ import {
   CreateAlbumResponse,
   Album as GQLAlbum,
   CoverConnection,
+  MediaConnection,
 } from '../../types/graphql'
 import { authenticate } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
@@ -13,15 +14,46 @@ import { AlbumModel } from '../../models/album.model'
 import slugify from 'slugify'
 import { randomBytes } from 'crypto'
 import { processUpload, insertFiles } from '../../utils/uploads'
-import { MediaModel } from '../../models/media.model'
-import { UserModel } from '../../models/user.model'
+import { MediaModel, Media } from '../../models/media.model'
+import { UserModel, User } from '../../models/user.model'
 import {
-  albumModelToAlbumType,
   albumModelToCoverConnection,
   fromCursorHash,
-} from '../../utils/convert-model-to-gql'
+  userToGQLAccount,
+  mediaToGQLMedia,
+  toCursorHash,
+} from '../../utils/resolver-helpers'
+import { InstanceType } from 'typegoose'
 
 export const resolvers: Resolvers = {
+  Album: {
+    mediaFeed: async (
+      parent,
+      { cursor, limit = 40 },
+      req,
+      info
+    ): Promise<MediaConnection> => {
+      if (!cursor)
+        cursor = toCursorHash(
+          parent.media[parent.media.length - 1].createdAt.toString()
+        )
+      const newestMediaIndex = parent.media.findIndex(
+        (media) => media.createdAt.toString() === fromCursorHash(cursor)
+      )
+      const newCursor = toCursorHash(
+        parent.media[newestMediaIndex - limit].createdAt.toString()
+      )
+
+      return {
+        edges: parent.media.slice(newestMediaIndex - limit, newestMediaIndex),
+        pageInfo: {
+          endCursor: newCursor,
+          hasNextPage: newestMediaIndex < parent.media.length,
+          totalItems: parent.media.length,
+        },
+      }
+    },
+  },
   Query: {
     myAlbums: async (
       parent,
@@ -69,9 +101,31 @@ export const resolvers: Resolvers = {
       } else if (album.private) {
         const hasAccess =
           album.sharedWith && album.sharedWith.includes(user._id)
-        return hasAccess ? albumModelToAlbumType(album) : null
+        return hasAccess
+          ? {
+              createdAt: album.createdAt,
+              createdBy: userToGQLAccount(album.createdBy as InstanceType<
+                User
+              >),
+              description: album.description,
+              media: (album.media as InstanceType<Media>[]).map(
+                mediaToGQLMedia
+              ),
+              slug: album.slug,
+              title: album.title,
+              updatedAt: album.updatedAt,
+            }
+          : null
       } else {
-        return albumModelToAlbumType(album)
+        return {
+          createdAt: album.createdAt,
+          createdBy: userToGQLAccount(album.createdBy as InstanceType<User>),
+          description: album.description,
+          media: (album.media as InstanceType<Media>[]).map(mediaToGQLMedia),
+          slug: album.slug,
+          title: album.title,
+          updatedAt: album.updatedAt,
+        }
       }
     },
   },
