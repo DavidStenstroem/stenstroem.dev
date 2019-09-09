@@ -36,8 +36,7 @@ export type Album = {
   slug: Scalars['String']
   description?: Maybe<Scalars['String']>
   createdBy: Account
-  media: Array<Media>
-  mediaFeed?: Maybe<MediaConnection>
+  media?: Maybe<MediaConnection>
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
   cover?: Maybe<Media>
@@ -45,7 +44,7 @@ export type Album = {
   isPrivate: Scalars['Boolean']
 }
 
-export type AlbumMediaFeedArgs = {
+export type AlbumMediaArgs = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
 }
@@ -306,7 +305,7 @@ export type GetAlbumQueryVariables = {
 export type GetAlbumQuery = { __typename?: 'Query' } & {
   getAlbum: Maybe<
     { __typename?: 'Album' } & Pick<Album, 'title' | 'slug' | 'description'> & {
-        mediaFeed: Maybe<
+        media: Maybe<
           { __typename?: 'MediaConnection' } & {
             pageInfo: { __typename?: 'PageInfo' } & Pick<
               PageInfo,
@@ -593,7 +592,7 @@ export const GetAlbumDocument = gql`
     getAlbum(slug: $slug) {
       title
       slug
-      mediaFeed(cursor: $cursor, limit: $limit) {
+      media(cursor: $cursor, limit: $limit) {
         pageInfo {
           hasNextPage
           totalItems

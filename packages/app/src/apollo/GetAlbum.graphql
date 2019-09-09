@@ -2,7 +2,7 @@ query GetAlbum($slug: String!, $cursor: String, $limit: Int) {
   getAlbum(slug: $slug) {
     title
     slug
-    mediaFeed(cursor: $cursor, limit: $limit) {
+    media(cursor: $cursor, limit: $limit) {
       pageInfo {
         hasNextPage
         totalItems

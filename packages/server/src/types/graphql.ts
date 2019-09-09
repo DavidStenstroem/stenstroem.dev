@@ -41,8 +41,7 @@ export type Album = {
   slug: Scalars['String']
   description?: Maybe<Scalars['String']>
   createdBy: Account
-  media: Array<Media>
-  mediaFeed?: Maybe<MediaConnection>
+  media?: Maybe<MediaConnection>
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
   cover?: Maybe<Media>
@@ -50,7 +49,7 @@ export type Album = {
   isPrivate: Scalars['Boolean']
 }
 
-export type AlbumMediaFeedArgs = {
+export type AlbumMediaArgs = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
 }
@@ -335,14 +334,14 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   Album: ResolverTypeWrapper<Album>
-  Media: ResolverTypeWrapper<Media>
   Int: ResolverTypeWrapper<Scalars['Int']>
+  MediaConnection: ResolverTypeWrapper<MediaConnection>
+  Media: ResolverTypeWrapper<Media>
   ResourceType: ResourceType
   Float: ResolverTypeWrapper<Scalars['Float']>
   Face: ResolverTypeWrapper<Face>
   Location: ResolverTypeWrapper<Location>
   OriginalCreateDate: ResolverTypeWrapper<OriginalCreateDate>
-  MediaConnection: ResolverTypeWrapper<MediaConnection>
   PageInfo: ResolverTypeWrapper<PageInfo>
   Invitation: ResolverTypeWrapper<Invitation>
   Mutation: ResolverTypeWrapper<{}>
@@ -368,14 +367,14 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']
   Boolean: Scalars['Boolean']
   Album: Album
-  Media: Media
   Int: Scalars['Int']
+  MediaConnection: MediaConnection
+  Media: Media
   ResourceType: ResourceType
   Float: Scalars['Float']
   Face: Face
   Location: Location
   OriginalCreateDate: OriginalCreateDate
-  MediaConnection: MediaConnection
   PageInfo: PageInfo
   Invitation: Invitation
   Mutation: {}
@@ -416,12 +415,11 @@ export type AlbumResolvers<
     ContextType
   >
   createdBy?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
-  media?: Resolver<Array<ResolversTypes['Media']>, ParentType, ContextType>
-  mediaFeed?: Resolver<
+  media?: Resolver<
     Maybe<ResolversTypes['MediaConnection']>,
     ParentType,
     ContextType,
-    AlbumMediaFeedArgs
+    AlbumMediaArgs
   >
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
