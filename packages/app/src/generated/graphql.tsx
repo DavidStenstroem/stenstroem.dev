@@ -40,7 +40,9 @@ export type Album = {
   mediaFeed?: Maybe<MediaConnection>
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
-  cover: Media
+  cover?: Maybe<Media>
+  mediaCount?: Maybe<Scalars['Int']>
+  isPrivate: Scalars['Boolean']
 }
 
 export type AlbumMediaFeedArgs = {
