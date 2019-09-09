@@ -28,12 +28,7 @@ import { v4 } from 'uuid'
 
 export const resolvers: Resolvers = {
   Album: {
-    mediaFeed: async (
-      parent,
-      { cursor, limit = 40 },
-      req,
-      info
-    ): Promise<MediaConnection> => {
+    media: async (parent, { cursor, limit = 40 }): Promise<MediaConnection> => {
       const query = cursor
         ? {
             albumId: { $in: [parent.albumId] },
@@ -82,7 +77,7 @@ export const resolvers: Resolvers = {
         albumId: parent.albumId,
       }).populate({ path: 'createdBy', model: 'User' })
       return userToGQLAccount(albumCreator.createdBy as InstanceType<User>)
-  },
+    },
   },
 
   Query: {
