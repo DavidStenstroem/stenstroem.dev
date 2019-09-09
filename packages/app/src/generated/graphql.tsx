@@ -219,6 +219,8 @@ export type Query = {
   allAccounts: Array<Account>
   getAlbum?: Maybe<Album>
   myAlbums: CoverConnection
+  getStreamCover?: Maybe<Media>
+  getStream: MediaConnection
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
 }
@@ -232,6 +234,11 @@ export type QueryGetAlbumArgs = {
 }
 
 export type QueryMyAlbumsArgs = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryGetStreamArgs = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
 }
