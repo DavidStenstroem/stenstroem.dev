@@ -18,28 +18,6 @@ import { Face } from '../models/face.model'
 
 type ResType = 'image' | 'video'
 
-export const fileFilter = (filePath: string): ResType => {
-  const buffer = readChunk.sync(filePath, 0, fileType.minimumBytes)
-  const { mime, ext } = fileType(buffer)
-
-  if (
-    allowedImageExtensions.includes(ext) ||
-    allowedImageMimetypes.includes(mime)
-  ) {
-    return 'image'
-  }
-
-  if (
-    allowedVideoExtensions.includes(ext) ||
-    allowedVideoMimetypes.includes(mime)
-  ) {
-    return 'video'
-  }
-
-  unlinkSync(filePath)
-  throw new Error('Unsupported file detected!')
-}
-
 export const insertFiles = async (
   fileInfo: UploadResponse[],
   user: InstanceType<User>
@@ -54,8 +32,8 @@ export const insertFiles = async (
       format: data.format,
       resourceType:
         data.resource_type === 'image'
-          ? ResourceType.image
-          : ResourceType.video,
+          ? ResourceType.Image
+          : ResourceType.Video,
       bytes: data.bytes,
       type: data.type,
       etag: data.etag,
@@ -150,25 +128,6 @@ export const storeFS = (
   )
 }
 
-export const processUpload = async (
-  upload: FileUpload
-): Promise<UploadResponse> => {
-  const { createReadStream, filename } = await upload
-  const stream = createReadStream()
-  const path = await storeFS(stream, filename)
-  const resType = fileFilter(path)
-
-  const data = await cloudinaryUpload(path, resType)
-  const tags = await exiftool.read(path)
-
-  unlinkSync(path)
-
-  return {
-    data,
-    tags,
-  }
-}
-
 export const allowedImageExtensions: string[] = [
   'jpg',
   'png',
@@ -209,3 +168,44 @@ export const allowedVideoMimetypes: string[] = [
   'video/mpeg',
   'video/x-m4v',
 ]
+
+export const fileFilter = (filePath: string): ResType => {
+  const buffer = readChunk.sync(filePath, 0, fileType.minimumBytes)
+  const { mime, ext } = fileType(buffer)
+
+  if (
+    allowedImageExtensions.includes(ext) ||
+    allowedImageMimetypes.includes(mime)
+  ) {
+    return 'image'
+  }
+
+  if (
+    allowedVideoExtensions.includes(ext) ||
+    allowedVideoMimetypes.includes(mime)
+  ) {
+    return 'video'
+  }
+
+  unlinkSync(filePath)
+  throw new Error('Unsupported file detected!')
+}
+
+export const processUpload = async (
+  upload: FileUpload
+): Promise<UploadResponse> => {
+  const { createReadStream, filename } = await upload
+  const stream = createReadStream()
+  const path = await storeFS(stream, filename)
+  const resType = fileFilter(path)
+
+  const data = await cloudinaryUpload(path, resType)
+  const tags = await exiftool.read(path)
+
+  unlinkSync(path)
+
+  return {
+    data,
+    tags,
+  }
+}
