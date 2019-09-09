@@ -74,6 +74,9 @@ export const resolvers: Resolvers = {
 
       return mediaToGQLMedia(media[0])
     },
+
+    mediaCount: async (parent, args, context, info): Promise<number> =>
+      await MediaModel.countDocuments({ albumId: { $in: [parent.albumId] } }),
   },
 
   Query: {

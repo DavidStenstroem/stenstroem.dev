@@ -9,6 +9,7 @@ type Album {
   createdAt: DateTime!
   updatedAt: DateTime!
   cover: Media!
+  mediaCount: Int!
 }
 
 type MediaConnection {
