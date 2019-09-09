@@ -20,10 +20,12 @@ type ResType = 'image' | 'video'
 
 export const insertFiles = async (
   fileInfo: UploadResponse[],
+  albumId: string,
   user: InstanceType<User>
 ): Promise<InstanceType<Media>[]> => {
   const allMedia = fileInfo.map(({ data, tags }) => {
     const media = new MediaModel({
+      albumId: [albumId],
       publicId: data.public_id,
       version: data.version,
       signature: data.signature,

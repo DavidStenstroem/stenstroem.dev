@@ -10,6 +10,9 @@ import { Media } from './media.model'
   next()
 })
 export class Album extends Typegoose {
+  @prop()
+  albumId: string
+
   @prop({ default: Date.now })
   createdAt: Date
 

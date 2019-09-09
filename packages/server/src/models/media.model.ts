@@ -18,6 +18,9 @@ export enum ResourceType {
   next()
 })
 export class Media extends Typegoose {
+  @arrayProp({ items: String })
+  albumId: string[]
+
   @prop({ default: Date.now })
   createdAt: Date
 

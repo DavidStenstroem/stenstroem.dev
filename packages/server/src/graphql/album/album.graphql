@@ -1,4 +1,5 @@
 type Album {
+  albumId: ID!
   title: String!
   slug: String!
   description: String
