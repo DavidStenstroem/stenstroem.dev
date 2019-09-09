@@ -86,6 +86,23 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
+    myAlbums: async (parent, args, { req }): Promise<GQLAlbum[]> => {
+      const user = await authenticate(req as RequestWithUser)
+      const albums = await AlbumModel.find({ createdBy: user._id })
+
+      return albums.map(
+        (album): GQLAlbum => ({
+          albumId: album.albumId,
+          createdAt: album.createdAt,
+          updatedAt: album.updatedAt,
+          description: album.description,
+          isPrivate: album.private,
+          slug: album.slug,
+          title: album.title,
+        })
+      )
+    },
+
     getStreamCover: async (parent, args, { req }): Promise<GQLMedia> => {
       const user = await authenticate(req as RequestWithUser)
       const latestMedia = await MediaModel.find({ uploadedBy: user._id })
