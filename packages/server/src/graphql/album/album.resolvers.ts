@@ -41,7 +41,9 @@ export const resolvers: Resolvers = {
             createdAt: { $lt: fromCursorHash(cursor) },
           }
         : { albumId: { $in: [parent.albumId] } }
-      const totalItems = await MediaModel.estimatedDocumentCount(query)
+      const totalItems = await MediaModel.countDocuments({
+        albumId: { $in: [parent.albumId] },
+      })
       const media = await MediaModel.find(query)
         .limit(limit + 1)
         .sort({ createdAt: -1 })
@@ -54,7 +56,9 @@ export const resolvers: Resolvers = {
         pageInfo: {
           totalItems,
           hasNextPage,
-          endCursor: toCursorHash(media[media.length - 1].createdAt.toString()),
+          endCursor: toCursorHash(
+            edges[edges.length - 1].createdAt.getTime().toString()
+          ),
         },
         edges: edges.map((m) => mediaToGQLMedia(m)),
       }
