@@ -31,6 +31,7 @@ export type Account = {
 
 export type Album = {
   __typename?: 'Album'
+  albumId: Scalars['ID']
   title: Scalars['String']
   slug: Scalars['String']
   description?: Maybe<Scalars['String']>
@@ -160,25 +161,13 @@ export type MediaConnection = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  changePassword?: Maybe<Array<FormError>>
+  changeName?: Maybe<Array<FormError>>
+  createAlbum: CreateAlbumResponse
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
   logout: Scalars['Boolean']
-  changePassword?: Maybe<Array<FormError>>
-  changeName?: Maybe<Array<FormError>>
-  createAlbum: CreateAlbumResponse
-}
-
-export type MutationRegisterArgs = {
-  input: RegisterInput
-}
-
-export type MutationInviteArgs = {
-  input: InviteInput
-}
-
-export type MutationLoginArgs = {
-  input: LoginInput
 }
 
 export type MutationChangePasswordArgs = {
@@ -191,6 +180,18 @@ export type MutationChangeNameArgs = {
 
 export type MutationCreateAlbumArgs = {
   input: CreateAlbumInput
+}
+
+export type MutationRegisterArgs = {
+  input: RegisterInput
+}
+
+export type MutationInviteArgs = {
+  input: InviteInput
+}
+
+export type MutationLoginArgs = {
+  input: LoginInput
 }
 
 export type OriginalCreateDate = {
@@ -215,22 +216,14 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query'
-  getInvite?: Maybe<Scalars['EmailAddress']>
-  getInvites?: Maybe<Array<Invitation>>
   me: Account
   allAccounts: Array<Account>
   getAlbum?: Maybe<Album>
   myAlbums: CoverConnection
   getStreamCover?: Maybe<Media>
   getStream: MediaConnection
-}
-
-export type QueryGetInviteArgs = {
-  id: Scalars['String']
-}
-
-export type QueryGetInvitesArgs = {
-  from: Scalars['String']
+  getInvite?: Maybe<Scalars['EmailAddress']>
+  getInvites?: Maybe<Array<Invitation>>
 }
 
 export type QueryAllAccountsArgs = {
@@ -249,6 +242,14 @@ export type QueryMyAlbumsArgs = {
 export type QueryGetStreamArgs = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryGetInviteArgs = {
+  id: Scalars['String']
+}
+
+export type QueryGetInvitesArgs = {
+  from: Scalars['String']
 }
 
 export type RegisterInput = {
