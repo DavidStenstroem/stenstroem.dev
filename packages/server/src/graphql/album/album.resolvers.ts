@@ -25,6 +25,7 @@ import {
   toCursorHash,
 } from '../../utils/resolver-helpers'
 import { InstanceType } from 'typegoose'
+import { v4 } from 'uuid'
 
 export const resolvers: Resolvers = {
   Album: {
@@ -34,24 +35,28 @@ export const resolvers: Resolvers = {
       req,
       info
     ): Promise<MediaConnection> => {
-      if (!cursor)
-        cursor = toCursorHash(
-          parent.media[parent.media.length - 1].createdAt.toString()
-        )
-      const newestMediaIndex = parent.media.findIndex(
-        (media) => media.createdAt.toString() === fromCursorHash(cursor)
-      )
-      const newCursor = toCursorHash(
-        parent.media[newestMediaIndex - limit].createdAt.toString()
-      )
+      const query = cursor
+        ? {
+            albumId: { $in: [parent.albumId] },
+            createdAt: { $lt: fromCursorHash(cursor) },
+          }
+        : { albumId: { $in: [parent.albumId] } }
+      const totalItems = await MediaModel.estimatedDocumentCount(query)
+      const media = await MediaModel.find(query)
+        .limit(limit + 1)
+        .sort({ createdAt: -1 })
+        .populate({ path: 'uploadedBy', model: 'User' })
+
+      const hasNextPage = media.length > limit
+      const edges = hasNextPage ? media.slice(0, -1) : media
 
       return {
-        edges: parent.media.slice(newestMediaIndex - limit, newestMediaIndex),
         pageInfo: {
-          endCursor: newCursor,
-          hasNextPage: newestMediaIndex < parent.media.length,
-          totalItems: parent.media.length,
+          totalItems,
+          hasNextPage,
+          endCursor: toCursorHash(media[media.length - 1].createdAt.toString()),
         },
+        edges: edges.map((m) => mediaToGQLMedia(m)),
       }
     },
   },
@@ -74,7 +79,7 @@ export const resolvers: Resolvers = {
 
     getStream: async (
       parent,
-      { cursor, limit },
+      { cursor, limit = 40 },
       { req },
       info
     ): Promise<MediaConnection> => {
@@ -100,7 +105,7 @@ export const resolvers: Resolvers = {
 
     myAlbums: async (
       parent,
-      { cursor, limit = 20 },
+      { cursor, limit = 40 },
       { req },
       info
     ): Promise<CoverConnection> => {
@@ -195,18 +200,20 @@ export const resolvers: Resolvers = {
       }
 
       const users = await UserModel.find({ _id: { $in: sharedWith } })
-
+      const albumId = v4()
       const existingMedia = await MediaModel.find({ _id: { $in: media } })
+      // TODO - add albumId to existing files
 
       const fileInfo = await Promise.all(
         files.map((file) => processUpload(file))
       )
-      const mediaInfo = await insertFiles(fileInfo, user)
+      const mediaInfo = await insertFiles(fileInfo, albumId, user)
       const slug = `${slugify(title, { lower: true })}-${randomBytes(
         6
       ).toString('hex')}`
 
       const album = new AlbumModel({
+        albumId,
         title,
         slug,
         createdBy: user,
