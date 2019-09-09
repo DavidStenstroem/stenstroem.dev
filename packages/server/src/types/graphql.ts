@@ -45,6 +45,7 @@ export type Album = {
   mediaFeed?: Maybe<MediaConnection>
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
+  cover: Media
 }
 
 export type AlbumMediaFeedArgs = {
@@ -449,6 +450,7 @@ export type AlbumResolvers<
   >
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
+  cover?: Resolver<ResolversTypes['Media'], ParentType, ContextType>
 }
 
 export type CoverResolvers<

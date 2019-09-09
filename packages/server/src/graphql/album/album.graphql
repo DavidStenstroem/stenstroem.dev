@@ -8,6 +8,7 @@ type Album {
   mediaFeed(cursor: String, limit: Int): MediaConnection
   createdAt: DateTime!
   updatedAt: DateTime!
+  cover: Media!
 }
 
 type MediaConnection {

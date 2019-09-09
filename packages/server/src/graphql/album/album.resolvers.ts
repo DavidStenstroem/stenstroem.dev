@@ -63,7 +63,19 @@ export const resolvers: Resolvers = {
         edges: edges.map((m) => mediaToGQLMedia(m)),
       }
     },
+
+    cover: async (parent, args, context, info): Promise<GQLMedia> => {
+      const media = await MediaModel.find({
+        albumId: { $in: [parent.albumId] },
+      })
+        .sort({ _id: -1 })
+        .limit(1)
+        .populate({ path: 'uploadedBy', mode: 'User' })
+
+      return mediaToGQLMedia(media[0])
+    },
   },
+
   Query: {
     getStreamCover: async (parent, args, { req }, info): Promise<GQLMedia> => {
       const user = await authenticate(req as RequestWithUser)
