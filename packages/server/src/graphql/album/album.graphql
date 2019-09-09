@@ -3,7 +3,7 @@ type Album {
   title: String!
   slug: String!
   description: String
-  createdBy: Account!
+  createdBy: Account
   media(cursor: String, limit: Int): MediaConnection
   createdAt: DateTime!
   updatedAt: DateTime!

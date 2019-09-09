@@ -4,6 +4,7 @@ import {
   Album as GQLAlbum,
   MediaConnection,
   Media as GQLMedia,
+  Account,
 } from '../../types/graphql'
 import { authenticate } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
@@ -75,6 +76,13 @@ export const resolvers: Resolvers = {
 
     mediaCount: async (parent): Promise<number> =>
       await MediaModel.countDocuments({ albumId: { $in: [parent.albumId] } }),
+
+    createdBy: async (parent): Promise<Account> => {
+      const albumCreator = await AlbumModel.findOne({
+        albumId: parent.albumId,
+      }).populate({ path: 'createdBy', model: 'User' })
+      return userToGQLAccount(albumCreator.createdBy as InstanceType<User>)
+  },
   },
 
   Query: {
