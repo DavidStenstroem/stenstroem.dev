@@ -40,7 +40,7 @@ export type Album = {
   title: Scalars['String']
   slug: Scalars['String']
   description?: Maybe<Scalars['String']>
-  createdBy: Account
+  createdBy?: Maybe<Account>
   media?: Maybe<MediaConnection>
   createdAt: Scalars['DateTime']
   updatedAt: Scalars['DateTime']
@@ -211,6 +211,7 @@ export type Query = {
   getAlbum?: Maybe<Album>
   getStreamCover?: Maybe<Media>
   getStream: MediaConnection
+  myAlbums: Array<Maybe<Album>>
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
 }
@@ -414,7 +415,11 @@ export type AlbumResolvers<
     ParentType,
     ContextType
   >
-  createdBy?: Resolver<ResolversTypes['Account'], ParentType, ContextType>
+  createdBy?: Resolver<
+    Maybe<ResolversTypes['Account']>,
+    ParentType,
+    ContextType
+  >
   media?: Resolver<
     Maybe<ResolversTypes['MediaConnection']>,
     ParentType,
@@ -639,6 +644,11 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryGetStreamArgs
+  >
+  myAlbums?: Resolver<
+    Array<Maybe<ResolversTypes['Album']>>,
+    ParentType,
+    ContextType
   >
   getInvite?: Resolver<
     Maybe<ResolversTypes['EmailAddress']>,
