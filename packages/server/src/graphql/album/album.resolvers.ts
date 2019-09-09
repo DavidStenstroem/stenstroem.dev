@@ -14,10 +14,9 @@ import { AlbumModel } from '../../models/album.model'
 import slugify from 'slugify'
 import { randomBytes } from 'crypto'
 import { processUpload, insertFiles } from '../../utils/uploads'
-import { MediaModel, Media } from '../../models/media.model'
+import { MediaModel } from '../../models/media.model'
 import { UserModel, User } from '../../models/user.model'
 import {
-  albumModelToCoverConnection,
   fromCursorHash,
   userToGQLAccount,
   mediaToGQLMedia,
@@ -63,7 +62,7 @@ export const resolvers: Resolvers = {
       }
     },
 
-    cover: async (parent, args, context, info): Promise<GQLMedia> => {
+    cover: async (parent): Promise<GQLMedia> => {
       const media = await MediaModel.find({
         albumId: { $in: [parent.albumId] },
       })
@@ -74,12 +73,12 @@ export const resolvers: Resolvers = {
       return mediaToGQLMedia(media[0])
     },
 
-    mediaCount: async (parent, args, context, info): Promise<number> =>
+    mediaCount: async (parent): Promise<number> =>
       await MediaModel.countDocuments({ albumId: { $in: [parent.albumId] } }),
   },
 
   Query: {
-    getStreamCover: async (parent, args, { req }, info): Promise<GQLMedia> => {
+    getStreamCover: async (parent, args, { req }): Promise<GQLMedia> => {
       const user = await authenticate(req as RequestWithUser)
       const latestMedia = await MediaModel.find({ uploadedBy: user._id })
         .populate({ path: 'uploadedBy', model: 'User' })
@@ -98,8 +97,7 @@ export const resolvers: Resolvers = {
     getStream: async (
       parent,
       { cursor, limit = 40 },
-      { req },
-      info
+      { req }
     ): Promise<MediaConnection> => {
       const user = await authenticate(req as RequestWithUser)
       const query = cursor
@@ -121,7 +119,7 @@ export const resolvers: Resolvers = {
       }
     },
 
-    getAlbum: async (parent, { slug }, { req }, info): Promise<GQLAlbum> => {
+    getAlbum: async (parent, { slug }, { req }): Promise<GQLAlbum> => {
       const user = await authenticate(req as RequestWithUser)
 
       const album = await AlbumModel.findOne({ slug }).populate([
@@ -146,9 +144,6 @@ export const resolvers: Resolvers = {
                 User
               >),
               description: album.description,
-              media: (album.media as InstanceType<Media>[]).map(
-                mediaToGQLMedia
-              ),
               slug: album.slug,
               title: album.title,
               updatedAt: album.updatedAt,
@@ -161,7 +156,6 @@ export const resolvers: Resolvers = {
           createdAt: album.createdAt,
           createdBy: userToGQLAccount(album.createdBy as InstanceType<User>),
           description: album.description,
-          media: (album.media as InstanceType<Media>[]).map(mediaToGQLMedia),
           slug: album.slug,
           title: album.title,
           updatedAt: album.updatedAt,
@@ -175,8 +169,7 @@ export const resolvers: Resolvers = {
       {
         input: { title, media = [], description, files = [], sharedWith = [] },
       },
-      { req },
-      info
+      { req }
     ): Promise<CreateAlbumResponse> => {
       const user = await authenticate(req as RequestWithUser)
 
