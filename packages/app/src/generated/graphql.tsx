@@ -319,23 +319,33 @@ export type GetAccountsQuery = { __typename?: 'Query' } & {
 
 export type GetAlbumQueryVariables = {
   slug: Scalars['String']
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
 }
 
 export type GetAlbumQuery = { __typename?: 'Query' } & {
   getAlbum: Maybe<
     { __typename?: 'Album' } & Pick<Album, 'title' | 'slug' | 'description'> & {
-        createdBy: { __typename?: 'Account' } & Pick<Account, 'name' | 'slug'>
-        media: Array<
-          { __typename?: 'Media' } & Pick<
-            Media,
-            | 'secureUrl'
-            | 'width'
-            | 'height'
-            | 'resourceType'
-            | 'format'
-            | 'publicId'
-          >
+        mediaFeed: Maybe<
+          { __typename?: 'MediaConnection' } & {
+            pageInfo: { __typename?: 'PageInfo' } & Pick<
+              PageInfo,
+              'hasNextPage' | 'totalItems' | 'endCursor'
+            >
+            edges: Array<
+              { __typename?: 'Media' } & Pick<
+                Media,
+                | 'secureUrl'
+                | 'width'
+                | 'height'
+                | 'resourceType'
+                | 'format'
+                | 'publicId'
+              >
+            >
+          }
         >
+        createdBy: { __typename?: 'Account' } & Pick<Account, 'name' | 'slug'>
       }
   >
 }
@@ -599,22 +609,29 @@ export type GetAccountsQueryResult = ApolloReactCommon.QueryResult<
   GetAccountsQueryVariables
 >
 export const GetAlbumDocument = gql`
-  query GetAlbum($slug: String!) {
+  query GetAlbum($slug: String!, $cursor: String, $limit: Int) {
     getAlbum(slug: $slug) {
       title
       slug
+      mediaFeed(cursor: $cursor, limit: $limit) {
+        pageInfo {
+          hasNextPage
+          totalItems
+          endCursor
+        }
+        edges {
+          secureUrl
+          width
+          height
+          resourceType
+          format
+          publicId
+        }
+      }
       description
       createdBy {
         name
         slug
-      }
-      media {
-        secureUrl
-        width
-        height
-        resourceType
-        format
-        publicId
       }
     }
   }
