@@ -54,6 +54,12 @@ export type AlbumMediaArgs = {
   limit?: Maybe<Scalars['Int']>
 }
 
+export type AlbumConnection = {
+  __typename?: 'AlbumConnection'
+  edges: Array<Album>
+  pageInfo: PageInfo
+}
+
 export type ChangeNameInput = {
   newName: Scalars['String']
 }
@@ -211,7 +217,8 @@ export type Query = {
   getAlbum?: Maybe<Album>
   getStreamCover?: Maybe<Media>
   getStream: MediaConnection
-  myAlbums: Array<Maybe<Album>>
+  myAlbums: AlbumConnection
+  sharedAlbums: AlbumConnection
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
 }
@@ -225,6 +232,16 @@ export type QueryGetAlbumArgs = {
 }
 
 export type QueryGetStreamArgs = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryMyAlbumsArgs = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
+}
+
+export type QuerySharedAlbumsArgs = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
 }
@@ -344,6 +361,7 @@ export type ResolversTypes = {
   Location: ResolverTypeWrapper<Location>
   OriginalCreateDate: ResolverTypeWrapper<OriginalCreateDate>
   PageInfo: ResolverTypeWrapper<PageInfo>
+  AlbumConnection: ResolverTypeWrapper<AlbumConnection>
   Invitation: ResolverTypeWrapper<Invitation>
   Mutation: ResolverTypeWrapper<{}>
   ChangePasswordInput: ChangePasswordInput
@@ -377,6 +395,7 @@ export type ResolversParentTypes = {
   Location: Location
   OriginalCreateDate: OriginalCreateDate
   PageInfo: PageInfo
+  AlbumConnection: AlbumConnection
   Invitation: Invitation
   Mutation: {}
   ChangePasswordInput: ChangePasswordInput
@@ -431,6 +450,14 @@ export type AlbumResolvers<
   cover?: Resolver<Maybe<ResolversTypes['Media']>, ParentType, ContextType>
   mediaCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   isPrivate?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+}
+
+export type AlbumConnectionResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['AlbumConnection'] = ResolversParentTypes['AlbumConnection']
+> = {
+  edges?: Resolver<Array<ResolversTypes['Album']>, ParentType, ContextType>
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>
 }
 
 export type CreateAlbumResponseResolvers<
@@ -646,9 +673,16 @@ export type QueryResolvers<
     QueryGetStreamArgs
   >
   myAlbums?: Resolver<
-    Array<Maybe<ResolversTypes['Album']>>,
+    ResolversTypes['AlbumConnection'],
     ParentType,
-    ContextType
+    ContextType,
+    QueryMyAlbumsArgs
+  >
+  sharedAlbums?: Resolver<
+    ResolversTypes['AlbumConnection'],
+    ParentType,
+    ContextType,
+    QuerySharedAlbumsArgs
   >
   getInvite?: Resolver<
     Maybe<ResolversTypes['EmailAddress']>,
@@ -682,6 +716,7 @@ export type UserResolvers<
 export type Resolvers<ContextType = Context> = {
   Account?: AccountResolvers<ContextType>
   Album?: AlbumResolvers<ContextType>
+  AlbumConnection?: AlbumConnectionResolvers<ContextType>
   CreateAlbumResponse?: CreateAlbumResponseResolvers<ContextType>
   DateTime?: GraphQLScalarType
   EmailAddress?: GraphQLScalarType

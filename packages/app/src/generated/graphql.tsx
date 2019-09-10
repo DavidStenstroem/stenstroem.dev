@@ -49,6 +49,12 @@ export type AlbumMediaArgs = {
   limit?: Maybe<Scalars['Int']>
 }
 
+export type AlbumConnection = {
+  __typename?: 'AlbumConnection'
+  edges: Array<Album>
+  pageInfo: PageInfo
+}
+
 export type ChangeNameInput = {
   newName: Scalars['String']
 }
@@ -206,7 +212,8 @@ export type Query = {
   getAlbum?: Maybe<Album>
   getStreamCover?: Maybe<Media>
   getStream: MediaConnection
-  myAlbums: Array<Maybe<Album>>
+  myAlbums: AlbumConnection
+  sharedAlbums: AlbumConnection
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
 }
@@ -220,6 +227,16 @@ export type QueryGetAlbumArgs = {
 }
 
 export type QueryGetStreamArgs = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryMyAlbumsArgs = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
+}
+
+export type QuerySharedAlbumsArgs = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
 }
