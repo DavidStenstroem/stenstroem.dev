@@ -1,0 +1,22 @@
+query SharedAlbums($cursor: String, $limit: Int) {
+  sharedAlbums(cursor: $cursor, limit: $limit) {
+    edges {
+      title
+      slug
+      isPrivate
+      mediaCount
+      cover {
+        width
+        height
+        resourceType
+        format
+        publicId
+      }
+    }
+    pageInfo {
+      totalItems
+      endCursor
+      hasNextPage
+    }
+  }
+}
