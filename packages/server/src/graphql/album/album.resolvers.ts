@@ -5,6 +5,7 @@ import {
   MediaConnection,
   Media as GQLMedia,
   Account,
+  AlbumConnection,
 } from '../../types/graphql'
 import { authenticate } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
@@ -133,7 +134,9 @@ export const resolvers: Resolvers = {
         pageInfo: {
           totalItems,
           hasNextPage: media.length > limit,
-          endCursor: toCursorHash(media[media.length - 1].createdAt.toString()),
+          endCursor: toCursorHash(
+            media[media.length - 1].createdAt.getTime().toString()
+          ),
         },
         edges: media.map((m) => mediaToGQLMedia(m)),
       }
@@ -180,6 +183,57 @@ export const resolvers: Resolvers = {
           title: album.title,
           updatedAt: album.updatedAt,
         }
+      }
+    },
+
+    sharedAlbums: async (
+      parent,
+      { cursor, limit = 20 },
+      { req }
+    ): Promise<AlbumConnection> => {
+      const user = await authenticate(req as RequestWithUser)
+      const query = cursor ? { createdAt: { $lt: fromCursorHash(cursor) } } : {}
+      const totalItems = await AlbumModel.estimatedDocumentCount({
+        $and: [{ private: true }, { sharedWith: { $in: [user._id] } }],
+        ...query,
+      })
+      const albums = await AlbumModel.find({
+        $and: [{ private: true }, { sharedWith: { $in: [user._id] } }],
+        ...query,
+      })
+        .sort({ createdAt: -1 })
+        .limit(limit + 1)
+
+      const hasNextPage = albums.length > limit
+      const edges = hasNextPage ? albums.slice(0, -1) : albums
+
+      return {
+        pageInfo: {
+          totalItems,
+          endCursor: toCursorHash(
+            albums[albums.length - 1].createdAt.getTime().toString()
+          ),
+          hasNextPage,
+        },
+        edges: edges.map(
+          ({
+            albumId,
+            updatedAt,
+            title,
+            slug,
+            description,
+            createdAt,
+            private: isPrivate,
+          }): GQLAlbum => ({
+            albumId,
+            createdAt,
+            description,
+            isPrivate,
+            slug,
+            title,
+            updatedAt,
+          })
+        ),
       }
     },
   },

@@ -17,6 +17,11 @@ type MediaConnection {
   pageInfo: PageInfo!
 }
 
+type AlbumConnection {
+  edges: [Album!]!
+  pageInfo: PageInfo!
+}
+
 type PageInfo {
   totalItems: Int!
   hasNextPage: Boolean!
@@ -40,7 +45,8 @@ type Query {
   getAlbum(slug: String!): Album
   getStreamCover: Media
   getStream(cursor: String, limit: Int): MediaConnection!
-  myAlbums: [Album]!
+  myAlbums: [Album]
+  sharedAlbums(cursor: String, limit: Int): AlbumConnection!
 }
 
 type Mutation {
