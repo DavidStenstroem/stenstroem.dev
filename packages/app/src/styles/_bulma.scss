@@ -13,3 +13,6 @@ $navbar-breakpoint: 900px; //$tablet;
 @import '~bulma/sass/form/_all.sass';
 @import '~bulma/sass/grid/_all.sass';
 @import '~bulma/sass/layout/_all.sass';
+
+// extensions
+@import '~bulma-tooltip';
