@@ -152,13 +152,17 @@ export type MediaConnection = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  createAlbum: CreateAlbumResponse
   changePassword?: Maybe<Array<FormError>>
   changeName?: Maybe<Array<FormError>>
-  createAlbum: CreateAlbumResponse
   register?: Maybe<Array<FormError>>
   invite?: Maybe<Array<FormError>>
   login?: Maybe<Array<FormError>>
   logout: Scalars['Boolean']
+}
+
+export type MutationCreateAlbumArgs = {
+  input: CreateAlbumInput
 }
 
 export type MutationChangePasswordArgs = {
@@ -167,10 +171,6 @@ export type MutationChangePasswordArgs = {
 
 export type MutationChangeNameArgs = {
   input: ChangeNameInput
-}
-
-export type MutationCreateAlbumArgs = {
-  input: CreateAlbumInput
 }
 
 export type MutationRegisterArgs = {
@@ -207,19 +207,15 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query'
-  me: Account
-  allAccounts: Array<Account>
   getAlbum?: Maybe<Album>
   getStreamCover?: Maybe<Media>
   getStream: MediaConnection
   myAlbums: AlbumConnection
   sharedAlbums: AlbumConnection
+  me: Account
+  allAccounts: Array<Account>
   getInvite?: Maybe<Scalars['EmailAddress']>
   getInvites?: Maybe<Array<Invitation>>
-}
-
-export type QueryAllAccountsArgs = {
-  withMe?: Maybe<Scalars['Boolean']>
 }
 
 export type QueryGetAlbumArgs = {
@@ -239,6 +235,10 @@ export type QueryMyAlbumsArgs = {
 export type QuerySharedAlbumsArgs = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryAllAccountsArgs = {
+  withMe?: Maybe<Scalars['Boolean']>
 }
 
 export type QueryGetInviteArgs = {
@@ -399,6 +399,38 @@ export type LoginMutation = { __typename?: 'Mutation' } & {
   >
 }
 
+export type MyAlbumsQueryVariables = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
+}
+
+export type MyAlbumsQuery = { __typename?: 'Query' } & {
+  myAlbums: { __typename?: 'AlbumConnection' } & {
+    edges: Array<
+      { __typename?: 'Album' } & Pick<
+        Album,
+        'title' | 'slug' | 'isPrivate' | 'mediaCount'
+      > & {
+          cover: Maybe<
+            { __typename?: 'Media' } & Pick<
+              Media,
+              | 'secureUrl'
+              | 'width'
+              | 'height'
+              | 'resourceType'
+              | 'format'
+              | 'publicId'
+            >
+          >
+        }
+    >
+    pageInfo: { __typename?: 'PageInfo' } & Pick<
+      PageInfo,
+      'totalItems' | 'endCursor' | 'hasNextPage'
+    >
+  }
+}
+
 export type RegisterMutationVariables = {
   input: RegisterInput
 }
@@ -406,6 +438,44 @@ export type RegisterMutationVariables = {
 export type RegisterMutation = { __typename?: 'Mutation' } & {
   register: Maybe<
     Array<{ __typename?: 'FormError' } & Pick<FormError, 'path' | 'message'>>
+  >
+}
+
+export type SharedAlbumsQueryVariables = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
+}
+
+export type SharedAlbumsQuery = { __typename?: 'Query' } & {
+  sharedAlbums: { __typename?: 'AlbumConnection' } & {
+    edges: Array<
+      { __typename?: 'Album' } & Pick<
+        Album,
+        'title' | 'slug' | 'isPrivate' | 'mediaCount'
+      > & {
+          cover: Maybe<
+            { __typename?: 'Media' } & Pick<
+              Media,
+              'width' | 'height' | 'resourceType' | 'format' | 'publicId'
+            >
+          >
+        }
+    >
+    pageInfo: { __typename?: 'PageInfo' } & Pick<
+      PageInfo,
+      'totalItems' | 'endCursor' | 'hasNextPage'
+    >
+  }
+}
+
+export type StreamCoverQueryVariables = {}
+
+export type StreamCoverQuery = { __typename?: 'Query' } & {
+  getStreamCover: Maybe<
+    { __typename?: 'Media' } & Pick<
+      Media,
+      'secureUrl' | 'width' | 'height' | 'resourceType' | 'format' | 'publicId'
+    >
   >
 }
 
@@ -878,6 +948,62 @@ export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<
   LoginMutation,
   LoginMutationVariables
 >
+export const MyAlbumsDocument = gql`
+  query MyAlbums($cursor: String, $limit: Int) {
+    myAlbums(cursor: $cursor, limit: $limit) {
+      edges {
+        title
+        slug
+        isPrivate
+        mediaCount
+        cover {
+          secureUrl
+          width
+          height
+          resourceType
+          format
+          publicId
+        }
+      }
+      pageInfo {
+        totalItems
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+`
+export type MyAlbumsComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    MyAlbumsQuery,
+    MyAlbumsQueryVariables
+  >,
+  'query'
+>
+
+export const MyAlbumsComponent = (props: MyAlbumsComponentProps) => (
+  <ApolloReactComponents.Query<MyAlbumsQuery, MyAlbumsQueryVariables>
+    query={MyAlbumsDocument}
+    {...props}
+  />
+)
+
+export function useMyAlbumsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    MyAlbumsQuery,
+    MyAlbumsQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<MyAlbumsQuery, MyAlbumsQueryVariables>(
+    MyAlbumsDocument,
+    baseOptions
+  )
+}
+export type MyAlbumsQueryHookResult = ReturnType<typeof useMyAlbumsQuery>
+export type MyAlbumsQueryResult = ApolloReactCommon.QueryResult<
+  MyAlbumsQuery,
+  MyAlbumsQueryVariables
+>
 export const RegisterDocument = gql`
   mutation Register($input: RegisterInput!) {
     register(input: $input) {
@@ -923,4 +1049,104 @@ export type RegisterMutationResult = ApolloReactCommon.MutationResult<
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
+>
+export const SharedAlbumsDocument = gql`
+  query SharedAlbums($cursor: String, $limit: Int) {
+    sharedAlbums(cursor: $cursor, limit: $limit) {
+      edges {
+        title
+        slug
+        isPrivate
+        mediaCount
+        cover {
+          width
+          height
+          resourceType
+          format
+          publicId
+        }
+      }
+      pageInfo {
+        totalItems
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+`
+export type SharedAlbumsComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    SharedAlbumsQuery,
+    SharedAlbumsQueryVariables
+  >,
+  'query'
+>
+
+export const SharedAlbumsComponent = (props: SharedAlbumsComponentProps) => (
+  <ApolloReactComponents.Query<SharedAlbumsQuery, SharedAlbumsQueryVariables>
+    query={SharedAlbumsDocument}
+    {...props}
+  />
+)
+
+export function useSharedAlbumsQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    SharedAlbumsQuery,
+    SharedAlbumsQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<
+    SharedAlbumsQuery,
+    SharedAlbumsQueryVariables
+  >(SharedAlbumsDocument, baseOptions)
+}
+export type SharedAlbumsQueryHookResult = ReturnType<
+  typeof useSharedAlbumsQuery
+>
+export type SharedAlbumsQueryResult = ApolloReactCommon.QueryResult<
+  SharedAlbumsQuery,
+  SharedAlbumsQueryVariables
+>
+export const StreamCoverDocument = gql`
+  query StreamCover {
+    getStreamCover {
+      secureUrl
+      width
+      height
+      resourceType
+      format
+      publicId
+    }
+  }
+`
+export type StreamCoverComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    StreamCoverQuery,
+    StreamCoverQueryVariables
+  >,
+  'query'
+>
+
+export const StreamCoverComponent = (props: StreamCoverComponentProps) => (
+  <ApolloReactComponents.Query<StreamCoverQuery, StreamCoverQueryVariables>
+    query={StreamCoverDocument}
+    {...props}
+  />
+)
+
+export function useStreamCoverQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    StreamCoverQuery,
+    StreamCoverQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<StreamCoverQuery, StreamCoverQueryVariables>(
+    StreamCoverDocument,
+    baseOptions
+  )
+}
+export type StreamCoverQueryHookResult = ReturnType<typeof useStreamCoverQuery>
+export type StreamCoverQueryResult = ApolloReactCommon.QueryResult<
+  StreamCoverQuery,
+  StreamCoverQueryVariables
 >
