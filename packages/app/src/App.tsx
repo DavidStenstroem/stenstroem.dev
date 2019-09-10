@@ -12,7 +12,7 @@ import { Account as AccountPage } from './pages/Account'
 import './styles/master.scss'
 import { CreateAlbum } from './pages/CreateAlbum'
 import { ToastContainer } from 'react-toastify'
-import { AlbumRouter } from './sections/album'
+import { AlbumRouter } from './views/album'
 import { NotFound } from './pages/NotFound'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
