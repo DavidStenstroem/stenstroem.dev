@@ -90,7 +90,11 @@ export const Image: React.FC<Props> = ({
   return (
     <LazyLoad height={200}>
       <figure className={`image ${className(height, width, square)}`}>
-        <img src={src} srcSet={srcset} />
+        <img
+          src={src}
+          srcSet={srcset}
+          style={square ? { objectFit: 'cover', objectPosition: 'center' } : {}}
+        />
       </figure>
     </LazyLoad>
   )
