@@ -45,7 +45,7 @@ type Query {
   getAlbum(slug: String!): Album
   getStreamCover: Media
   getStream(cursor: String, limit: Int): MediaConnection!
-  myAlbums: [Album]
+  myAlbums(cursor: String, limit: Int): AlbumConnection!
   sharedAlbums(cursor: String, limit: Int): AlbumConnection!
 }
 

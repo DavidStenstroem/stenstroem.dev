@@ -82,23 +82,6 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
-    myAlbums: async (parent, args, { req }): Promise<GQLAlbum[]> => {
-      const user = await authenticate(req as RequestWithUser)
-      const albums = await AlbumModel.find({ createdBy: user._id })
-
-      return albums.map(
-        (album): GQLAlbum => ({
-          albumId: album.albumId,
-          createdAt: album.createdAt,
-          updatedAt: album.updatedAt,
-          description: album.description,
-          isPrivate: album.private,
-          slug: album.slug,
-          title: album.title,
-        })
-      )
-    },
-
     getStreamCover: async (parent, args, { req }): Promise<GQLMedia> => {
       const user = await authenticate(req as RequestWithUser)
       const latestMedia = await MediaModel.find({ uploadedBy: user._id })
@@ -183,6 +166,53 @@ export const resolvers: Resolvers = {
           title: album.title,
           updatedAt: album.updatedAt,
         }
+      }
+    },
+
+    myAlbums: async (
+      parent,
+      { cursor, limit = 20 },
+      { req }
+    ): Promise<AlbumConnection> => {
+      const user = await authenticate(req as RequestWithUser)
+      const query = cursor ? { createdAt: { $lt: fromCursorHash(cursor) } } : {}
+      const totalItems = await AlbumModel.estimatedDocumentCount({
+        createdBy: user._id,
+      })
+      const albums = await AlbumModel.find({ createdBy: user._id, ...query })
+        .sort({ createdAt: -1 })
+        .limit(limit + 1)
+
+      const hasNextPage = albums.length > limit
+      const edges = hasNextPage ? albums.slice(0, -1) : albums
+
+      return {
+        pageInfo: {
+          totalItems,
+          hasNextPage,
+          endCursor: toCursorHash(
+            albums[albums.length - 1].createdAt.getTime().toString()
+          ),
+        },
+        edges: edges.map(
+          ({
+            albumId,
+            updatedAt,
+            title,
+            slug,
+            description,
+            createdAt,
+            private: isPrivate,
+          }): GQLAlbum => ({
+            albumId,
+            createdAt,
+            isPrivate,
+            slug,
+            title,
+            updatedAt,
+            description,
+          })
+        ),
       }
     },
 
