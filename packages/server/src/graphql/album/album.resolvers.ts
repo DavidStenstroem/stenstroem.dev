@@ -222,15 +222,19 @@ export const resolvers: Resolvers = {
       { req }
     ): Promise<AlbumConnection> => {
       const user = await authenticate(req as RequestWithUser)
-      const query = cursor ? { createdAt: { $lt: fromCursorHash(cursor) } } : {}
-      const totalItems = await AlbumModel.estimatedDocumentCount({
-        $and: [{ private: true }, { sharedWith: { $in: [user._id] } }],
-        ...query,
-      })
-      const albums = await AlbumModel.find({
-        $and: [{ private: true }, { sharedWith: { $in: [user._id] } }],
-        ...query,
-      })
+      const cursorOptions = cursor
+        ? { createdAt: { $lt: fromCursorHash(cursor) } }
+        : {}
+      const query = {
+        createdBy: { $ne: user._id },
+        $or: [
+          { private: false },
+          { $and: [{ private: true }, { sharedWith: { $in: [user._id] } }] },
+        ],
+        ...cursorOptions,
+      }
+      const totalItems = await AlbumModel.estimatedDocumentCount(query)
+      const albums = await AlbumModel.find(query)
         .sort({ createdAt: -1 })
         .limit(limit + 1)
 
