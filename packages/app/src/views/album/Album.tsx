@@ -21,53 +21,56 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
   const { width } = useRect(containerRef)
 
   return (
-    <>
-      <section className="section">
-        <div className="container has-text-centered" ref={containerRef}>
-          {loading && <Loading />}
-          {error && (
-            <div className="content">
-              <pre>{JSON.stringify(error, null, 2)}</pre>
-            </div>
-          )}
-          {data && data.getAlbum && (
-            <>
-              <h1 className="title">{data.getAlbum.title}</h1>
-              <p className="subtitle">
-                Oprettet af{' '}
-                <Link to={`/user/${data.getAlbum.createdBy.slug}`}>
-                  {data.getAlbum.createdBy.name}
-                </Link>
-              </p>
-            </>
-          )}
-        </div>
-      </section>
-      {data && data.getAlbum && (
-        <>
-          {data.getAlbum.description && (
-            <Section>
-              <div className="content">{parse(data.getAlbum.description)}</div>
-            </Section>
-          )}
-          <Section>
-            <ImageLayout width={width}>
-              {data.getAlbum.media.map(
-                ({ height, publicId, resourceType, width }) => (
-                  <Image
-                    height={height}
-                    key={publicId}
-                    publicId={publicId}
-                    resourceType={resourceType}
-                    width={width}
-                  />
-                )
-              )}
-            </ImageLayout>
-          </Section>
-        </>
-      )}
-    </>
+    <Section>
+      <p className="title">Album</p>
+    </Section>
+    // <>
+    //   <section className="section">
+    //     <div className="container has-text-centered" ref={containerRef}>
+    //       {loading && <Loading />}
+    //       {error && (
+    //         <div className="content">
+    //           <pre>{JSON.stringify(error, null, 2)}</pre>
+    //         </div>
+    //       )}
+    //       {data && data.getAlbum && (
+    //         <>
+    //           <h1 className="title">{data.getAlbum.title}</h1>
+    //           <p className="subtitle">
+    //             Oprettet af{' '}
+    //             <Link to={`/user/${data.getAlbum.createdBy.slug}`}>
+    //               {data.getAlbum.createdBy.name}
+    //             </Link>
+    //           </p>
+    //         </>
+    //       )}
+    //     </div>
+    //   </section>
+    //   {data && data.getAlbum && (
+    //     <>
+    //       {data.getAlbum.description && (
+    //         <Section>
+    //           <div className="content">{parse(data.getAlbum.description)}</div>
+    //         </Section>
+    //       )}
+    //       <Section>
+    //         <ImageLayout width={width}>
+    //           {data.getAlbum.media.map(
+    //             ({ height, publicId, resourceType, width }) => (
+    //               <Image
+    //                 height={height}
+    //                 key={publicId}
+    //                 publicId={publicId}
+    //                 resourceType={resourceType}
+    //                 width={width}
+    //               />
+    //             )
+    //           )}
+    //         </ImageLayout>
+    //       </Section>
+    //     </>
+    //   )}
+    // </>
   )
 
   // if (loading) return <p>Loading ...</p>
