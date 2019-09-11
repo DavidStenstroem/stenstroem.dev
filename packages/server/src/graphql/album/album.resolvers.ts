@@ -193,7 +193,7 @@ export const resolvers: Resolvers = {
     ): Promise<AlbumConnection> => {
       const user = await authenticate(req as RequestWithUser)
       const query = cursor ? { createdAt: { $lt: fromCursorHash(cursor) } } : {}
-      const totalItems = await AlbumModel.estimatedDocumentCount({
+      const totalItems = await AlbumModel.countDocuments({
         createdBy: user._id,
       })
       const albums = await AlbumModel.find({ createdBy: user._id, ...query })
