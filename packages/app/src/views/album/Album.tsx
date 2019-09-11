@@ -15,62 +15,98 @@ interface Props extends RouteComponentProps {
 }
 
 export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
-  const { data, error, loading } = useGetAlbumQuery({
+  const { data, error, loading, fetchMore } = useGetAlbumQuery({
     variables: { slug: slug || '' },
   })
   const { width } = useRect(containerRef)
 
   return (
-    <Section>
-      <p className="title">Album</p>
-    </Section>
-    // <>
-    //   <section className="section">
-    //     <div className="container has-text-centered" ref={containerRef}>
-    //       {loading && <Loading />}
-    //       {error && (
-    //         <div className="content">
-    //           <pre>{JSON.stringify(error, null, 2)}</pre>
-    //         </div>
-    //       )}
-    //       {data && data.getAlbum && (
-    //         <>
-    //           <h1 className="title">{data.getAlbum.title}</h1>
-    //           <p className="subtitle">
-    //             Oprettet af{' '}
-    //             <Link to={`/user/${data.getAlbum.createdBy.slug}`}>
-    //               {data.getAlbum.createdBy.name}
-    //             </Link>
-    //           </p>
-    //         </>
-    //       )}
-    //     </div>
-    //   </section>
-    //   {data && data.getAlbum && (
-    //     <>
-    //       {data.getAlbum.description && (
-    //         <Section>
-    //           <div className="content">{parse(data.getAlbum.description)}</div>
-    //         </Section>
-    //       )}
-    //       <Section>
-    //         <ImageLayout width={width}>
-    //           {data.getAlbum.media.map(
-    //             ({ height, publicId, resourceType, width }) => (
-    //               <Image
-    //                 height={height}
-    //                 key={publicId}
-    //                 publicId={publicId}
-    //                 resourceType={resourceType}
-    //                 width={width}
-    //               />
-    //             )
-    //           )}
-    //         </ImageLayout>
-    //       </Section>
-    //     </>
-    //   )}
-    // </>
+    <>
+      <section className="section">
+        <div className="container has-text-centered" ref={containerRef}>
+          {loading && <Loading />}
+          {error && (
+            <div className="content">
+              <pre>{JSON.stringify(error, null, 2)}</pre>
+            </div>
+          )}
+          {data && data.getAlbum && (
+            <>
+              <h1 className="title">{data.getAlbum.title}</h1>
+              <p className="subtitle">
+                Oprettet af{' '}
+                <Link to={`/user/${data.getAlbum.createdBy.slug}`}>
+                  {data.getAlbum.createdBy.name}
+                </Link>
+              </p>
+            </>
+          )}
+        </div>
+      </section>
+      {data && data.getAlbum && (
+        <>
+          {data.getAlbum.description && (
+            <Section>
+              <div className="content">{parse(data.getAlbum.description)}</div>
+            </Section>
+          )}
+          <Section>
+            <ImageLayout width={width}>
+              {data.getAlbum.media.edges.map(
+                ({ height, publicId, resourceType, width }) => (
+                  <Image
+                    height={height}
+                    key={publicId}
+                    publicId={publicId}
+                    resourceType={resourceType}
+                    width={width}
+                  />
+                )
+              )}
+            </ImageLayout>
+            {data.getAlbum.media.pageInfo.hasNextPage && (
+              <nav className="level is-mobile">
+                <div className="level-item has-text-centered">
+                  <button
+                    className="button"
+                    type="button"
+                    onClick={() =>
+                      fetchMore({
+                        variables: {
+                          cursor: data.getAlbum.media.pageInfo.endCursor,
+                        },
+                        updateQuery: (previousResult, { fetchMoreResult }) => {
+                          if (!fetchMoreResult) {
+                            return previousResult
+                          }
+                          return {
+                            ...previousResult,
+                            getAlbum: {
+                              ...previousResult.getAlbum,
+                              ...fetchMoreResult.getAlbum,
+                              media: {
+                                edges: [
+                                  ...previousResult.getAlbum.media.edges,
+                                  ...fetchMoreResult.getAlbum.media.edges,
+                                ],
+                                pageInfo:
+                                  fetchMoreResult.getAlbum.media.pageInfo,
+                              },
+                            },
+                          }
+                        },
+                      })
+                    }
+                  >
+                    Indlæs flere billeder
+                  </button>
+                </div>
+              </nav>
+            )}
+          </Section>
+        </>
+      )}
+    </>
   )
 
   // if (loading) return <p>Loading ...</p>
