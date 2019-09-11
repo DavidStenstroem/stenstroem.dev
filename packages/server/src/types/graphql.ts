@@ -47,6 +47,7 @@ export type Album = {
   cover?: Maybe<Media>
   mediaCount?: Maybe<Scalars['Int']>
   isPrivate: Scalars['Boolean']
+  sharedWith?: Maybe<Array<Account>>
 }
 
 export type AlbumMediaArgs = {
@@ -450,6 +451,11 @@ export type AlbumResolvers<
   cover?: Resolver<Maybe<ResolversTypes['Media']>, ParentType, ContextType>
   mediaCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   isPrivate?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  sharedWith?: Resolver<
+    Maybe<Array<ResolversTypes['Account']>>,
+    ParentType,
+    ContextType
+  >
 }
 
 export type AlbumConnectionResolvers<
