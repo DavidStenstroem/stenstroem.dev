@@ -80,20 +80,18 @@ export const MyAlbumsOverview: React.FC = (): JSX.Element => {
                 )
               )}
             </Columns>
-            {data.myAlbums &&
-              data.myAlbums.pageInfo.totalItems >
-                data.myAlbums.edges.length && (
-                <nav className="level is-mobile">
-                  <div className="level-left"></div>
-                  <div className="level-right">
-                    <div className="level-item">
-                      <Link to={`/album`}>
-                        <p>Se alle</p>
-                      </Link>
-                    </div>
-                  </div>
-                </nav>
-              )}
+
+            <nav className="level is-mobile">
+              <div className="level-left"></div>
+              <div className="level-right">
+                <div className="level-item">
+                  <Link to={`/album`}>
+                    <p>Se alle</p>
+                  </Link>
+                </div>
+              </div>
+            </nav>
+
             <hr />
           </>
         )}

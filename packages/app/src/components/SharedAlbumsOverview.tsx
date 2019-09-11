@@ -90,9 +90,7 @@ export const SharedAlbumsOverview: React.FC = (): JSX.Element => {
                 )
               )}
             </Columns>
-            {data.sharedAlbums &&
-              data.sharedAlbums.pageInfo.totalItems >
-                data.sharedAlbums.edges.length && (
+
                 <nav className="level is-mobile">
                   <div className="level-left"></div>
                   <div className="level-right">
@@ -103,7 +101,7 @@ export const SharedAlbumsOverview: React.FC = (): JSX.Element => {
                     </div>
                   </div>
                 </nav>
-              )}
+
             <hr />
           </>
         )}
