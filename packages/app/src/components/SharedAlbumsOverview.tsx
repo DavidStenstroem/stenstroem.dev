@@ -13,6 +13,14 @@ export const SharedAlbumsOverview: React.FC = (): JSX.Element => {
     variables: { limit: 4 },
   })
 
+  if (data) {
+    console.log(data)
+  }
+
+  if (error) {
+    console.log(error)
+  }
+
   return (
     <>
       <Section>
