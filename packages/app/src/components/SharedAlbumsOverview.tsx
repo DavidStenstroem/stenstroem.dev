@@ -91,16 +91,16 @@ export const SharedAlbumsOverview: React.FC = (): JSX.Element => {
               )}
             </Columns>
 
-                <nav className="level is-mobile">
-                  <div className="level-left"></div>
-                  <div className="level-right">
-                    <div className="level-item">
-                      <Link to={`/album`}>
-                        <p>Se alle</p>
-                      </Link>
-                    </div>
-                  </div>
-                </nav>
+            <nav className="level is-mobile">
+              <div className="level-left"></div>
+              <div className="level-right">
+                <div className="level-item">
+                  <Link to={`/album/shared`}>
+                    <p>Se alle</p>
+                  </Link>
+                </div>
+              </div>
+            </nav>
 
             <hr />
           </>
