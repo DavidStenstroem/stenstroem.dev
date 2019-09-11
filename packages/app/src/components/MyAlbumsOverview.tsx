@@ -18,6 +18,9 @@ export const MyAlbumsOverview: React.FC = (): JSX.Element => {
         {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
         {data && data.myAlbums && (
           <>
+            <div className="content">
+              <h4 className="title is-4">Mine album</h4>
+            </div>
             <Columns isMobile isMultiline>
               {data.myAlbums.edges.map(
                 ({ cover, isPrivate, mediaCount, slug, title }) => (
@@ -91,6 +94,7 @@ export const MyAlbumsOverview: React.FC = (): JSX.Element => {
                   </div>
                 </nav>
               )}
+            <hr />
           </>
         )}
       </Section>

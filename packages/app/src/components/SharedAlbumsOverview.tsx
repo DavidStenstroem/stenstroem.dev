@@ -28,6 +28,9 @@ export const SharedAlbumsOverview: React.FC = (): JSX.Element => {
         {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
         {data && data.sharedAlbums && (
           <>
+            <div className="content">
+              <h4 className="is-4 title">Delte album</h4>
+            </div>
             <Columns isMobile isMultiline>
               {data.sharedAlbums.edges.map(
                 ({ cover, isPrivate, mediaCount, slug, title }) => (
@@ -101,6 +104,7 @@ export const SharedAlbumsOverview: React.FC = (): JSX.Element => {
                   </div>
                 </nav>
               )}
+            <hr />
           </>
         )}
       </Section>
