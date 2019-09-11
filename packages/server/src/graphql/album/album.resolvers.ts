@@ -26,6 +26,7 @@ import {
 } from '../../utils/resolver-helpers'
 import { InstanceType } from 'typegoose'
 import { v4 } from 'uuid'
+import { ObjectId } from 'bson'
 
 export const resolvers: Resolvers = {
   Album: {
@@ -78,6 +79,22 @@ export const resolvers: Resolvers = {
         albumId: parent.albumId,
       }).populate({ path: 'createdBy', model: 'User' })
       return userToGQLAccount(albumCreator.createdBy as InstanceType<User>)
+    },
+
+    sharedWith: async (parent): Promise<Account[]> => {
+      const accounts = await AlbumModel.findOne({
+        albumId: parent.albumId,
+      }).populate({ path: 'sharedWith', model: 'User' })
+      return (accounts.sharedWith as InstanceType<User>[]).map(
+        ({ _id, name, email, slug, createdAt, updatedAt }): Account => ({
+          id: _id,
+          name,
+          email,
+          slug,
+          createdAt,
+          updatedAt,
+        })
+      )
     },
   },
 
@@ -226,10 +243,15 @@ export const resolvers: Resolvers = {
         ? { createdAt: { $lt: fromCursorHash(cursor) } }
         : {}
       const query = {
-        createdBy: { $ne: user._id },
+        createdBy: { $ne: new ObjectId(user._id) },
         $or: [
           { private: false },
-          { $and: [{ private: true }, { sharedWith: { $in: [user._id] } }] },
+          {
+            $and: [
+              { private: true },
+              { sharedWith: { $in: [new ObjectId(user._id)] } },
+            ],
+          },
         ],
         ...cursorOptions,
       }

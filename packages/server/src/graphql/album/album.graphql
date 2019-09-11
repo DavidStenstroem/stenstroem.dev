@@ -10,6 +10,7 @@ type Album {
   cover: Media
   mediaCount: Int
   isPrivate: Boolean!
+  sharedWith: [Account!]
 }
 
 type MediaConnection {
