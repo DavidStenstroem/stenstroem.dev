@@ -13,11 +13,18 @@ export class Account {
   id: string
   name: string
   email: string
+  slug?: string
 
-  constructor(userInput: { id: string; name: string; email: string }) {
+  constructor(userInput: {
+    id: string
+    name: string
+    email: string
+    slug?: string
+  }) {
     this.id = userInput.id
     this.name = userInput.name
     this.email = userInput.email
+    this.slug = userInput.slug
   }
 
   static accountFromCookie(): Account {
