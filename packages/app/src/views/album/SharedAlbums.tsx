@@ -11,13 +11,7 @@ import { FontAwesomeIcon, faImages, faLockAlt } from '../../icons'
 export const SharedAlbums: React.FC<RouteComponentProps> = (
   props
 ): JSX.Element => {
-  const {
-    loading,
-    error,
-    data,
-    updateQuery,
-    fetchMore,
-  } = useSharedAlbumsQuery()
+  const { loading, error, data, fetchMore } = useSharedAlbumsQuery()
 
   return (
     <>
