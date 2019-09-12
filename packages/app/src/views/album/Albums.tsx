@@ -87,7 +87,7 @@ export const Albums: React.FC<RouteComponentProps> = ({
                   <button
                     className="button"
                     type="button"
-                    onClick={() => {
+                    onClick={(): void => {
                       fetchMore({
                         variables: {
                           cursor: data.myAlbums.pageInfo.endCursor,
