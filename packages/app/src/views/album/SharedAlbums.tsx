@@ -1,7 +1,10 @@
 import * as React from 'react'
 import { RouteComponentProps, Link } from '@reach/router'
 import { Section } from '../../components/Section'
-import { useSharedAlbumsQuery } from '../../generated/graphql'
+import {
+  useSharedAlbumsQuery,
+  SharedAlbumsQuery,
+} from '../../generated/graphql'
 import { Loading } from '../../components/Loading'
 import { Columns } from '../../components/Columns'
 import { Column } from '../../components/Column'
@@ -83,13 +86,15 @@ export const SharedAlbums: React.FC<RouteComponentProps> = (
                   <button
                     className="button"
                     type="button"
-                    onClick={() => {
+                    onClick={(): void => {
                       fetchMore({
                         variables: {
                           cursor: data.sharedAlbums.pageInfo.endCursor,
                         },
-                        updateQuery: (previousResult, { fetchMoreResult }) => {
-                          console.log(fetchMoreResult)
+                        updateQuery: (
+                          previousResult,
+                          { fetchMoreResult }
+                        ): SharedAlbumsQuery => {
                           if (!fetchMoreResult) {
                             return previousResult
                           }
