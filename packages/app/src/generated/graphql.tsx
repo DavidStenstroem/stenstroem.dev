@@ -305,6 +305,15 @@ export type CreateAlbumMutation = { __typename?: 'Mutation' } & {
     }
 }
 
+export type GetAccountQueryVariables = {}
+
+export type GetAccountQuery = { __typename?: 'Query' } & {
+  me: { __typename?: 'Account' } & Pick<
+    Account,
+    'id' | 'name' | 'email' | 'slug'
+  >
+}
+
 export type GetAccountsQueryVariables = {
   withMe?: Maybe<Scalars['Boolean']>
 }
@@ -637,6 +646,47 @@ export type CreateAlbumMutationResult = ApolloReactCommon.MutationResult<
 export type CreateAlbumMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateAlbumMutation,
   CreateAlbumMutationVariables
+>
+export const GetAccountDocument = gql`
+  query GetAccount {
+    me {
+      id
+      name
+      email
+      slug
+    }
+  }
+`
+export type GetAccountComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    GetAccountQuery,
+    GetAccountQueryVariables
+  >,
+  'query'
+>
+
+export const GetAccountComponent = (props: GetAccountComponentProps) => (
+  <ApolloReactComponents.Query<GetAccountQuery, GetAccountQueryVariables>
+    query={GetAccountDocument}
+    {...props}
+  />
+)
+
+export function useGetAccountQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetAccountQuery,
+    GetAccountQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<GetAccountQuery, GetAccountQueryVariables>(
+    GetAccountDocument,
+    baseOptions
+  )
+}
+export type GetAccountQueryHookResult = ReturnType<typeof useGetAccountQuery>
+export type GetAccountQueryResult = ApolloReactCommon.QueryResult<
+  GetAccountQuery,
+  GetAccountQueryVariables
 >
 export const GetAccountsDocument = gql`
   query GetAccounts($withMe: Boolean) {
