@@ -4,6 +4,7 @@ import { Create } from './Create'
 import { Albums } from './Albums'
 import { Album } from './Album'
 import { SharedAlbums } from './SharedAlbums'
+import { Stream } from './Stream'
 
 export const AlbumRouter: React.FC<RouteComponentProps> = (
   props
@@ -13,5 +14,6 @@ export const AlbumRouter: React.FC<RouteComponentProps> = (
     <Albums path="/" default />
     <Album path=":slug" />
     <SharedAlbums path="shared" />
+    <Stream path="stream" />
   </Router>
 )
