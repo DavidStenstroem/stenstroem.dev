@@ -478,6 +478,26 @@ export type SharedAlbumsQuery = { __typename?: 'Query' } & {
   }
 }
 
+export type StreamQueryVariables = {
+  cursor?: Maybe<Scalars['String']>
+  limit?: Maybe<Scalars['Int']>
+}
+
+export type StreamQuery = { __typename?: 'Query' } & {
+  getStream: { __typename?: 'MediaConnection' } & {
+    edges: Array<
+      { __typename?: 'Media' } & Pick<
+        Media,
+        'publicId' | 'width' | 'height' | 'resourceType' | 'format'
+      >
+    >
+    pageInfo: { __typename?: 'PageInfo' } & Pick<
+      PageInfo,
+      'totalItems' | 'hasNextPage' | 'endCursor'
+    >
+  }
+}
+
 export type StreamCoverQueryVariables = {}
 
 export type StreamCoverQuery = { __typename?: 'Query' } & {
@@ -1157,6 +1177,55 @@ export type SharedAlbumsQueryHookResult = ReturnType<
 export type SharedAlbumsQueryResult = ApolloReactCommon.QueryResult<
   SharedAlbumsQuery,
   SharedAlbumsQueryVariables
+>
+export const StreamDocument = gql`
+  query Stream($cursor: String, $limit: Int) {
+    getStream(cursor: $cursor, limit: $limit) {
+      edges {
+        publicId
+        width
+        height
+        resourceType
+        format
+      }
+      pageInfo {
+        totalItems
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`
+export type StreamComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    StreamQuery,
+    StreamQueryVariables
+  >,
+  'query'
+>
+
+export const StreamComponent = (props: StreamComponentProps) => (
+  <ApolloReactComponents.Query<StreamQuery, StreamQueryVariables>
+    query={StreamDocument}
+    {...props}
+  />
+)
+
+export function useStreamQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    StreamQuery,
+    StreamQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<StreamQuery, StreamQueryVariables>(
+    StreamDocument,
+    baseOptions
+  )
+}
+export type StreamQueryHookResult = ReturnType<typeof useStreamQuery>
+export type StreamQueryResult = ApolloReactCommon.QueryResult<
+  StreamQuery,
+  StreamQueryVariables
 >
 export const StreamCoverDocument = gql`
   query StreamCover {
