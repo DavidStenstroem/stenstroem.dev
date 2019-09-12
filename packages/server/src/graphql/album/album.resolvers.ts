@@ -130,15 +130,18 @@ export const resolvers: Resolvers = {
         .sort({ createdAt: -1 })
         .populate({ path: 'uploadedBy', model: 'User' })
 
+      const hasNextPage = media.length > limit
+      const edges = hasNextPage ? media.slice(0, -1) : media
+
       return {
         pageInfo: {
           totalItems,
-          hasNextPage: media.length > limit,
+          hasNextPage,
           endCursor: toCursorHash(
             media[media.length - 1].createdAt.getTime().toString()
           ),
         },
-        edges: media.map((m) => mediaToGQLMedia(m)),
+        edges: edges.map((m) => mediaToGQLMedia(m)),
       }
     },
 
