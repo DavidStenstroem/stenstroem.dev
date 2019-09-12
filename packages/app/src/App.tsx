@@ -14,11 +14,28 @@ import { CreateAlbum } from './pages/CreateAlbum'
 import { ToastContainer } from 'react-toastify'
 import { AlbumRouter } from './views/album'
 import { NotFound } from './pages/NotFound'
+import { client } from './apollo/client'
+import { GetAccountQuery, GetAccountDocument } from './generated/graphql'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
-  const [account, setAccount] = React.useState<Account>(
-    Account.accountFromCookie()
-  )
+  const [account, setAccount] = React.useState<Account>(undefined)
+  React.useEffect(() => {
+    const fetchAccount = async () => {
+      try {
+        const response = await client.query<GetAccountQuery, {}>({
+          query: GetAccountDocument,
+          fetchPolicy: 'no-cache',
+        })
+        if (response && response.data && response.data.me) {
+          setAccount({ ...response.data.me })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchAccount()
+  }, [])
+
   return (
     <div className="app">
       <MainContext.Provider value={{ account, setAccount }}>
