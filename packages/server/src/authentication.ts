@@ -1,4 +1,4 @@
-import { RequestWithUser } from 'src/types/RequestWithUser'
+import { RequestWithUser } from './types/RequestWithUser'
 import { InstanceType } from 'typegoose'
 import { User, UserModel } from './models/user.model'
 import { AuthenticationError } from 'apollo-server-errors'

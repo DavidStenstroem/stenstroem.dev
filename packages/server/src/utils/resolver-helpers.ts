@@ -4,7 +4,6 @@ import {
   Account,
   Media as GQLMedia,
   ResourceType,
-  CoverConnection,
 } from '../types/graphql'
 import { Album } from '../models/album.model'
 import { User } from '../models/user.model'
@@ -79,59 +78,3 @@ export const toCursorHash = (string: string): string =>
   Buffer.from(string).toString('base64')
 export const fromCursorHash = (string: string): string =>
   Buffer.from(string, 'base64').toString('utf8')
-
-export const albumModelToCoverConnection = (
-  albums: InstanceType<Album>[],
-  limit: number,
-  totalItems: number
-): CoverConnection => {
-  const hasNextPage = albums.length > limit
-  const edges = hasNextPage ? albums.slice(0, -1) : albums
-  return {
-    edges: edges.map((album) => ({
-      title: album.title,
-      slug: album.slug,
-      creator: userToGQLAccount(album.createdBy as InstanceType<User>),
-      isPrivate: album.private,
-      createdAt: album.createdAt,
-      updatedAt: album.updatedAt,
-      image: {
-        id: (album.media[0] as InstanceType<Media>)._id,
-        uploadedBy: userToGQLAccount((album.media[0] as InstanceType<Media>)
-          .uploadedBy as InstanceType<User>),
-        accessMode: (album.media[0] as InstanceType<Media>).accessMode,
-        bitRate: (album.media[0] as InstanceType<Media>).bitRate,
-        bytes: (album.media[0] as InstanceType<Media>).bytes,
-        duration: Number((album.media[0] as InstanceType<Media>).duration),
-        etag: (album.media[0] as InstanceType<Media>).etag,
-        faces: (album.media[0] as InstanceType<Media>).faces,
-        format: (album.media[0] as InstanceType<Media>).format,
-        createdAt: (album.media[0] as InstanceType<Media>).createdAt,
-        frameRate: (album.media[0] as InstanceType<Media>).frameRate,
-        height: (album.media[0] as InstanceType<Media>).height,
-        isAudio: (album.media[0] as InstanceType<Media>).isAudio,
-        loc: (album.media[0] as InstanceType<Media>).loc,
-        originalCreateDate: (album.media[0] as InstanceType<Media>)
-          .originalCreateDate,
-        originalFilename: (album.media[0] as InstanceType<Media>)
-          .originalFilename,
-        placeholder: (album.media[0] as InstanceType<Media>).placeholder,
-        publicId: (album.media[0] as InstanceType<Media>).publicId,
-        resourceType: (album.media[0] as InstanceType<Media>)
-          .resourceType as ResourceType,
-        secureUrl: (album.media[0] as InstanceType<Media>).secureUrl,
-        signature: (album.media[0] as InstanceType<Media>).signature,
-        type: (album.media[0] as InstanceType<Media>).type,
-        updatedAt: (album.media[0] as InstanceType<Media>).updatedAt,
-        url: (album.media[0] as InstanceType<Media>).url,
-        version: String((album.media[0] as InstanceType<Media>).version),
-        width: (album.media[0] as InstanceType<Media>).width,
-      },
-    })),
-    pageInfo: {
-      hasNextPage,
-      endCursor: toCursorHash(albums[albums.length - 1].createdAt.toString()),
-      totalItems,
-    },
-  }
-}
