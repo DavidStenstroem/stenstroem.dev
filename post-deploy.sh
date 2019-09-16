@@ -3,7 +3,7 @@
 PATH=$PATH:/home/david/.npm-global/bin
 PATH=$PATH:/usr/bin
 
-$HOME/.npm-global/bin/lerna bootstrap --hoist -- --production
+# $HOME/.npm-global/bin/lerna bootstrap --hoist -- --production
 lerna bootstrap --hoist
 lerna run build -- --production
 
