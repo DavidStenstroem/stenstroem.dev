@@ -4,8 +4,8 @@ PATH=$PATH:/home/david/.npm-global/bin
 PATH=$PATH:/usr/bin
 
 $HOME/.npm-global/bin/lerna bootstrap --hoist -- --production
-lerna bootstrap --hoist -- --production
-lerna run build
+lerna bootstrap --hoist
+lerna run build -- --production
 
 pm2 startOrRestart ecosystem.config.js --env production
 
