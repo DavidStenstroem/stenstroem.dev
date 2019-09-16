@@ -1,0 +1,26 @@
+query GetAlbum($slug: String!, $cursor: String, $limit: Int) {
+  getAlbum(slug: $slug) {
+    title
+    slug
+    media(cursor: $cursor, limit: $limit) {
+      pageInfo {
+        hasNextPage
+        totalItems
+        endCursor
+      }
+      edges {
+        secureUrl
+        width
+        height
+        resourceType
+        format
+        publicId
+      }
+    }
+    description
+    createdBy {
+      name
+      slug
+    }
+  }
+}

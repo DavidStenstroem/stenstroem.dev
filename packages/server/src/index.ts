@@ -9,8 +9,9 @@ import cookieParser from 'cookie-parser'
 import { refreshTokens } from './authentication'
 import { createServer } from 'http'
 import express from 'express'
+import { uploadApi } from './upload'
 
-const { dbConnectionString, dbName } = config
+const { dbConnectionString, dbName, engineApiKey } = config
 
 const start = async (): Promise<void> => {
   await mongoose.connect(dbConnectionString, {
@@ -19,7 +20,7 @@ const start = async (): Promise<void> => {
     useNewUrlParser: true,
   })
 
-  const whiteList: string[] = ['http://localhost:8080']
+  const whiteList: string[] = ['http://localhost:8000']
 
   const schema = genSchema()
 
@@ -27,6 +28,26 @@ const start = async (): Promise<void> => {
     schema,
     playground: true,
     introspection: true,
+    engine: {
+      apiKey: engineApiKey,
+      generateClientInfo: ({ request }) => {
+        const headers = request.http.headers
+        const clientName = headers.get('apollo-client-name')
+        const clientVersion = headers.get('apollo-client-version')
+        if (clientName && clientVersion) {
+          return {
+            clientName,
+            clientVersion,
+          }
+        } else {
+          return {
+            clientName: 'Unknown Client',
+            clientVersion: 'Unversioned',
+          }
+        }
+      },
+    },
+    uploads: { maxFileSize: 25000000, maxFiles: 4 },
     context: ({ req, res }): Context => ({
       req,
       res,
@@ -45,6 +66,8 @@ const start = async (): Promise<void> => {
   app.use(morgan('dev'))
   app.use(cookieParser())
   app.use(refreshTokens)
+
+  app.use('/upload', uploadApi)
 
   server.applyMiddleware({
     app,

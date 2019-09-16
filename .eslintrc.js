@@ -5,6 +5,7 @@ module.exports = {
   env: {
     node: true,
   },
+  plugins: ['@typescript-eslint'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 6,

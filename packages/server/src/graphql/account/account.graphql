@@ -2,12 +2,14 @@ type Account {
   id: ID!
   name: String!
   email: EmailAddress!
+  slug: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
 type Query {
   me: Account!
+  allAccounts(withMe: Boolean = true): [Account!]!
 }
 
 input ChangePasswordInput {
@@ -15,7 +17,11 @@ input ChangePasswordInput {
   newPassword: String!
 }
 
+input ChangeNameInput {
+  newName: String!
+}
+
 type Mutation {
-  changePassword(input: ChangePasswordInput): [FormError!]
-  changeName(newName: String!): [FormError!]
+  changePassword(input: ChangePasswordInput!): [FormError!]
+  changeName(input: ChangeNameInput!): [FormError!]
 }

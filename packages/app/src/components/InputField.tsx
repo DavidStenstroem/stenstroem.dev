@@ -12,8 +12,14 @@ export const InputField: React.FunctionComponent<
     icon?: IconDefinition
     iconColor?: string
     infoIcon?: IconDefinition
+    readOnly?: boolean
   }
-> = ({ field, form: { touched, errors }, ...props }): JSX.Element => {
+> = ({
+  field,
+  form: { touched, errors },
+  readOnly = false,
+  ...props
+}): JSX.Element => {
   const errorMsg = touched[field.name] && errors[field.name]
   return (
     <div className="field">
@@ -28,9 +34,10 @@ export const InputField: React.FunctionComponent<
       >
         <input
           {...field}
-          className="input"
+          className={classnames('input', readOnly && 'is-static')}
           type={props.type}
           placeholder={props.placeholder ? props.placeholder : undefined}
+          readOnly={readOnly}
         />
         {props.infoIcon ? (
           <span className="is-small is-right has-text-warning icon">

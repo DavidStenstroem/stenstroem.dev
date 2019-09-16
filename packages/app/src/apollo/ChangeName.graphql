@@ -1,0 +1,6 @@
+mutation ChangeName($input: ChangeNameInput!) {
+  changeName(input: $input) {
+    path
+    message
+  }
+}

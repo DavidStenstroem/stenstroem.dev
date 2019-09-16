@@ -1,0 +1,55 @@
+type Album {
+  albumId: ID!
+  title: String!
+  slug: String!
+  description: String
+  createdBy: Account
+  media(cursor: String, limit: Int): MediaConnection
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  cover: Media
+  mediaCount: Int
+  isPrivate: Boolean!
+  sharedWith: [Account!]
+}
+
+type MediaConnection {
+  edges: [Media!]!
+  pageInfo: PageInfo!
+}
+
+type AlbumConnection {
+  edges: [Album!]!
+  pageInfo: PageInfo!
+}
+
+type PageInfo {
+  totalItems: Int!
+  hasNextPage: Boolean!
+  endCursor: String!
+}
+
+input CreateAlbumInput {
+  title: String!
+  description: String
+  media: [String!]
+  files: [Upload!]
+  sharedWith: [String!]
+}
+
+type CreateAlbumResponse {
+  errors: [FormError!]
+  link: String
+}
+
+type Query {
+  getAlbum(slug: String!): Album
+  getStreamCover: Media
+  getStream(cursor: String, limit: Int): MediaConnection!
+  myAlbums(cursor: String, limit: Int): AlbumConnection!
+  sharedAlbums(cursor: String, limit: Int): AlbumConnection!
+}
+
+type Mutation {
+  createAlbum(input: CreateAlbumInput!): CreateAlbumResponse!
+}

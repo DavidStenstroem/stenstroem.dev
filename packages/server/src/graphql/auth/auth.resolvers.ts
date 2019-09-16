@@ -1,13 +1,18 @@
-import { Resolvers, FormError } from 'src/types/graphql'
+import { Resolvers, FormError, Invitation } from '../../types/graphql'
 import { authenticate, tokens } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
 import { UserModel, User } from '../../models/user.model'
 import { InviteModel } from '../../models/invite.model'
 import { ApolloError } from 'apollo-server-errors'
 import { randomBytes, pbkdf2Sync } from 'crypto'
-import { loginSchema } from '@stenstroem-dev/shared'
+import {
+  loginSchema,
+  registerSchema,
+  inviteSchema,
+} from '@stenstroem-dev/shared'
 import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
+import slugify from 'slugify'
 
 export const resolvers: Resolvers = {
   Mutation: {
@@ -17,18 +22,34 @@ export const resolvers: Resolvers = {
       { res },
       info
     ): Promise<FormError[]> => {
-      const existingUser = await UserModel.findOne({ email })
-      if (existingUser) {
+      try {
+        await registerSchema.validate(
+          { name, email, password },
+          { abortEarly: false }
+        )
+      } catch (err) {
+        return formatError(err as ValidationError)
+      }
+      const user = await UserModel.findOne({ email, isActive: false })
+      if (!user) {
+        return [{ path: 'email', message: 'Ingen gyldig invitation' }]
+      } else if (user && user.isActive) {
         return [
           { path: 'email', message: 'Denne mailadresse er allerede i brug' },
         ]
       }
 
+      const slug = `${slugify(name)}-${randomBytes(6).toString('hex')}`
       const salt = randomBytes(32).toString('hex')
       const hash = pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString(
         'hex'
       )
-      const user = new UserModel({ name, email, salt, hash })
+      user.name = name
+      user.email = email
+      user.salt = salt
+      user.hash = hash
+      user.slug = slug
+      user.isActive = true
       await user.save()
 
       const [accessToken, refreshToken] = tokens({
@@ -54,7 +75,13 @@ export const resolvers: Resolvers = {
       { req },
       info
     ): Promise<FormError[]> => {
-      // const currentUser = await authenticate(req as RequestWithUser)
+      const currentUser = await authenticate(req as RequestWithUser)
+
+      try {
+        await inviteSchema.validate({ email }, { abortEarly: false })
+      } catch (err) {
+        return formatError(err as ValidationError)
+      }
 
       const existingUser = await UserModel.findOne({ email })
       if (existingUser) {
@@ -66,17 +93,11 @@ export const resolvers: Resolvers = {
         ]
       }
 
-      const existingInvite = await InviteModel.findOne({ email, isValid: true })
-      if (existingInvite) {
-        return [
-          {
-            path: 'email',
-            message: 'En invitation er allerede sendt til denne mailadresse',
-          },
-        ]
-      }
-
-      const invite = new InviteModel({ email })
+      const invite = new UserModel({
+        email,
+        invitedBy: currentUser._id,
+        name: '',
+      })
       await invite.save()
 
       // send email
@@ -127,9 +148,11 @@ export const resolvers: Resolvers = {
 
       res.cookie('access-token', accessToken, {
         expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+        maxAge: 2 * 60 * 60 * 1000,
       })
       res.cookie('refresh-token', refreshToken, {
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        maxAge: 30 * 24 * 60 * 60 * 1000,
       })
 
       return null
@@ -137,12 +160,24 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
+    getInvites: async (parent, args, { req }, info): Promise<Invitation[]> => {
+      const currentUser = await authenticate(req as RequestWithUser)
+      const invites = await UserModel.find({ invitedBy: currentUser._id })
+      return invites.map(
+        (user): Invitation => ({
+          __typename: 'Invitation',
+          accepted: user.isActive,
+          createdAt: user.createdAt,
+          email: user.email,
+          id: user._id,
+          name: user.name === '' ? undefined : user.name,
+        })
+      )
+    },
+
     getInvite: async (parent, { id }, context, info): Promise<string> => {
-      const invite = await InviteModel.findOne({ id, isValid: true })
-      if (!invite) {
-        throw new ApolloError('Invitation findes ikke')
-      }
-      return invite.email
+      const invite = await UserModel.findOne({ _id: id, isActive: false })
+      return invite ? invite.email : null
     },
   },
 }

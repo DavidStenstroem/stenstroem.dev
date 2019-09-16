@@ -3,10 +3,13 @@
   "private": true,
   "scripts": {
     "prenetlify": "lerna bootstrap --hoist",
-    "netlify": "lerna run build --scope=@stenstroem-dev/{app,shared}",
+    "netlify": "lerna run build --scope=@stenstroem-dev/{shared,app}",
     "bootstrap": "lerna run bootstrap",
     "start": "lerna run start --stream",
-    "codegen": "graphql-codegen"
+    "codegen": "graphql-codegen",
+    "build:server": "lerna run build --scope=@stenstroem-dev/{shared/server}",
+    "build:app": "lerna run build --scope=@stenstroem-dev/{shared/app}",
+    "post-deploy": "./post-deploy.sh"
   },
   "lint-staged": {
     "packages/{app,server,shared}/src/**/*.{ts,tsx}": [

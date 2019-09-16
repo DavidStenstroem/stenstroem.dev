@@ -1,0 +1,7 @@
+query GetAccounts($withMe: Boolean) {
+  allAccounts(withMe: $withMe) {
+    id
+    name
+    email
+  }
+}

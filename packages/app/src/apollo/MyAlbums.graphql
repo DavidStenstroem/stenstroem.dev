@@ -1,0 +1,23 @@
+query MyAlbums($cursor: String, $limit: Int) {
+  myAlbums(cursor: $cursor, limit: $limit) {
+    edges {
+      title
+      slug
+      isPrivate
+      mediaCount
+      cover {
+        secureUrl
+        width
+        height
+        resourceType
+        format
+        publicId
+      }
+    }
+    pageInfo {
+      totalItems
+      endCursor
+      hasNextPage
+    }
+  }
+}

@@ -1,0 +1,10 @@
+query StreamCover {
+  getStreamCover {
+    secureUrl
+    width
+    height
+    resourceType
+    format
+    publicId
+  }
+}

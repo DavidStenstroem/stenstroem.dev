@@ -1,0 +1,8 @@
+query GetAccount {
+  me {
+    id
+    name
+    email
+    slug
+  }
+}

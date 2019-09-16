@@ -1,0 +1,3 @@
+query GetInvite($id: String!) {
+  getInvite(id: $id)
+}

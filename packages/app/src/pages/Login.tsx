@@ -54,6 +54,7 @@ export const Login: React.FunctionComponent<RouteComponentProps> = (
                       }
                     })
                     .catch((err): void => {
+                      // todo - add error notification
                       actions.resetForm({ password: '', email: values.email })
                     })
                     .finally((): void => actions.setSubmitting(false))
@@ -68,7 +69,7 @@ export const Login: React.FunctionComponent<RouteComponentProps> = (
                       label="Email"
                       placeholder="din@email.com"
                       component={InputField}
-                    />{' '}
+                    />
                     <Field
                       type="password"
                       name="password"

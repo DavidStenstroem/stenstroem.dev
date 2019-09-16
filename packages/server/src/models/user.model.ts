@@ -1,4 +1,4 @@
-import { prop, Typegoose, pre } from 'typegoose'
+import { prop, Typegoose, pre, Ref } from 'typegoose'
 
 enum UserRole {
   USER = 'user',
@@ -19,7 +19,7 @@ export class User extends Typegoose {
   @prop({ default: Date.now })
   updatedAt: Date
 
-  @prop({ required: true })
+  @prop({ default: '' })
   name: string
 
   @prop({ required: true, unique: true, lowercase: true, index: true })
@@ -30,6 +30,9 @@ export class User extends Typegoose {
 
   // TODO:
   // avatar
+
+  @prop()
+  slug: string
 
   @prop()
   hash: string
@@ -51,6 +54,12 @@ export class User extends Typegoose {
 
   @prop()
   resetTokenExpires: Date
+
+  @prop({ default: false })
+  isActive: boolean
+
+  @prop({ ref: User })
+  invitedBy?: Ref<User>
 }
 
 export const UserModel = new User().getModelForClass(User)
