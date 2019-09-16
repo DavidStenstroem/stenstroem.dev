@@ -9,4 +9,5 @@ lerna run build -- --production
 
 pm2 startOrRestart ecosystem.config.js --env production
 
-# mv /home/apps/stenstroem-dev/packages/app/dist/* /var/www/stenstroem.dev/html
+cp /home/david/apps/source/packages/app/dist/* /var/www/stenstroem.dev/html
+echo "All done!"
