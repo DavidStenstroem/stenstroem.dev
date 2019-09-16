@@ -2,7 +2,7 @@
 
 echo "Running script" >> $HOME/log.txt
 
-lerna bootstrap --hoist -- --production
+$HOME/.npm-global/bin/lerna bootstrap --hoist -- --production
 npm run build:server
 
 npm run build:app
