@@ -26,8 +26,8 @@ uploadApi.post('/', uploadMiddleware, (req, res, next): void => {
           format: data.format,
           resourceType:
             data.resource_type === 'image'
-              ? ResourceType.image
-              : ResourceType.video,
+              ? ResourceType.Image
+              : ResourceType.Video,
           bytes: data.bytes,
           type: data.type,
           etag: data.etag,
