@@ -1,5 +1,5 @@
 {
-  "name": "@stenstroem/server",
+  "name": "@stenstroem-dev/server",
   "version": "0.0.1",
   "description": "graphql server node.js mongodb",
   "author": "David Hvejsel Stenstrøm <david@stenstroem.dk>",
