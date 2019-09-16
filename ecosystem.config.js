@@ -27,7 +27,7 @@ module.exports = {
       host: '142.93.231.151',
       key: '~/.ssh/stenstroem-dev-droplet_rsa',
       ref: 'origin/master',
-      repo: 'git@github.com:DavidStenstroem/stenstroem-dev.git',
+      repo: 'https://github.com/DavidStenstroem/stenstroem-dev.git',
       path: '/home/david/apps',
       'post-deploy':
         'npm run post-deploy && pm2 startOrGracefulReload ecosystem.config.js --env production',

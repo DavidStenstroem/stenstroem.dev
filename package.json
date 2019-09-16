@@ -9,7 +9,9 @@
     "codegen": "graphql-codegen",
     "build:server": "lerna run build --scope=@stenstroem-dev/{shared/server}",
     "build:app": "lerna run build --scope=@stenstroem-dev/{shared/app}",
-    "post-deploy": "./post-deploy.sh"
+    "post-deploy": "./post-deploy.sh",
+    "deploy-production": "pm2 deploy ecosystem.config.js production -- force",
+    "deploy-setup": "pm2 deploy ecosystem.config.js production setup"
   },
   "lint-staged": {
     "packages/{app,server,shared}/src/**/*.{ts,tsx}": [
