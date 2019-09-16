@@ -1,9 +1,12 @@
 #!/bin/bash
 
-echo "Running script" >> $HOME/log.txt
+PATH=$PATH:/home/david/.npm-global/bin
+PATH=$PATH:/usr/bin
 
 $HOME/.npm-global/bin/lerna bootstrap --hoist -- --production
-npm run build:server
+lerna bootstrap --hoist -- --production
+lerna run build
 
-npm run build:app
-mv /home/apps/stenstroem-dev/packages/app/dist/* /var/www/stenstroem.dev/html
+pm2 startOrRestart ecosystem.config.js --env production
+
+# mv /home/apps/stenstroem-dev/packages/app/dist/* /var/www/stenstroem.dev/html
