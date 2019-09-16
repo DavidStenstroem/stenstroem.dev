@@ -29,8 +29,9 @@ module.exports = {
       ref: 'origin/master',
       repo: 'https://github.com/DavidStenstroem/stenstroem-dev.git',
       path: '/home/david/apps',
-      /*'post-deploy':
-        'lerna bootstrap --hoist -- --production && lerna run build && pm2 startOrRestart ecosystem.config.js --env production',*/
+      'post-deploy':
+        'echo "Done!"'
+        /*'lerna bootstrap --hoist -- --production && lerna run build && pm2 startOrRestart ecosystem.config.js --env production',*/
     },
   },
 }
