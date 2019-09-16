@@ -30,7 +30,7 @@ module.exports = {
       repo: 'https://github.com/DavidStenstroem/stenstroem-dev.git',
       path: '/home/david/apps',
       'post-deploy':
-        '/home/david/.nvm/versions/node/v12.5.0/bin/npm run post-deploy && /home/david/.nvm/versions/node/v12.5.0/bin/pm2 startOrGracefulReload ecosystem.config.js --env production',
+        'npm run post-deploy && pm2 startOrGracefulReload ecosystem.config.js --env production',
     },
   },
 }
