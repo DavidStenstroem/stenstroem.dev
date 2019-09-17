@@ -10,10 +10,10 @@ import { ApolloClient } from 'apollo-client'
 const cache = new InMemoryCache()
 const isProduction = (process.env.NODE_ENV as string) === 'production'
 const httpServer = isProduction
-  ? 'https://dev.stenstroem.dk'
+  ? 'https://graphql.stenstroem.dev'
   : 'http://localhost:4000/graphql'
 const wsServer = isProduction
-  ? 'wss://dev.stenstroem.dk'
+  ? 'wss://graphql.stenstroem.dev'
   : 'ws://localhost:4000/graphql'
 
 const httpLink = createUploadLink({
