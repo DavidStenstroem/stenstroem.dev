@@ -10,6 +10,7 @@ import { refreshTokens } from './authentication'
 import { createServer } from 'http'
 import express from 'express'
 import { uploadApi } from './upload'
+import { ClientInfo } from 'apollo-engine-reporting/dist/agent'
 
 const { dbConnectionString, dbName, engineApiKey } = config
 
@@ -30,7 +31,7 @@ const start = async (): Promise<void> => {
     introspection: true,
     engine: {
       apiKey: engineApiKey,
-      generateClientInfo: ({ request }) => {
+      generateClientInfo: ({ request }): ClientInfo => {
         const headers = request.http.headers
         const clientName = headers.get('apollo-client-name')
         const clientVersion = headers.get('apollo-client-version')
