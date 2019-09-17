@@ -76,7 +76,7 @@ const start = async (): Promise<void> => {
   app.use(cookieParser())
   app.use(refreshTokens)
 
-  app.use('/upload', uploadApi)
+  // app.use('/upload', uploadApi)
 
   server.applyMiddleware({
     app,
