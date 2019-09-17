@@ -13,6 +13,7 @@ import { uploadApi } from './upload'
 import { ClientInfo } from 'apollo-engine-reporting/dist/agent'
 
 const { dbConnectionString, dbName, engineApiKey } = config
+const isProduction = (process.env.NODE_ENV as string) === 'production'
 
 const start = async (): Promise<void> => {
   await mongoose.connect(dbConnectionString, {
@@ -21,7 +22,14 @@ const start = async (): Promise<void> => {
     useNewUrlParser: true,
   })
 
-  const whiteList: string[] = ['http://localhost:8000']
+  const whiteList: string[] = [
+    'https://stenstroem.dev',
+    'https://app.stenstroem.dev',
+  ]
+
+  if (!isProduction) {
+    whiteList.push('http://localhost:8000')
+  }
 
   const schema = genSchema()
 
@@ -73,6 +81,7 @@ const start = async (): Promise<void> => {
   server.applyMiddleware({
     app,
     cors: { credentials: true, origin: whiteList },
+    path: isProduction ? '/' : '/graphql',
   })
 
   const httpServer = createServer(app)
