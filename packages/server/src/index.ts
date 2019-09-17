@@ -35,8 +35,8 @@ const start = async (): Promise<void> => {
 
   const server = new ApolloServer({
     schema,
-    playground: true,
-    introspection: true,
+    playground: !isProduction,
+    introspection: !isProduction,
     engine: {
       apiKey: engineApiKey,
       generateClientInfo: ({ request }): ClientInfo => {
