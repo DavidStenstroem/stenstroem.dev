@@ -1,4 +1,9 @@
-import { Resolvers, FormError, Invitation } from '../../types/graphql'
+import {
+  Resolvers,
+  FormError,
+  Invitation,
+  AuthPayload,
+} from '../../types/graphql'
 import { authenticate, tokens } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
 import { UserModel, User } from '../../models/user.model'
@@ -19,24 +24,29 @@ export const resolvers: Resolvers = {
     register: async (
       parent,
       { input: { password, email, name } },
-      { res },
-      info
-    ): Promise<FormError[]> => {
+      { res }
+    ): Promise<AuthPayload> => {
       try {
         await registerSchema.validate(
           { name, email, password },
           { abortEarly: false }
         )
       } catch (err) {
-        return formatError(err as ValidationError)
+        return {
+          errors: formatError(err as ValidationError),
+        }
       }
       const user = await UserModel.findOne({ email, isActive: false })
       if (!user) {
-        return [{ path: 'email', message: 'Ingen gyldig invitation' }]
+        return {
+          errors: [{ path: 'email', message: 'Ingen gyldig invitation' }],
+        }
       } else if (user && user.isActive) {
-        return [
-          { path: 'email', message: 'Denne mailadresse er allerede i brug' },
-        ]
+        return {
+          errors: [
+            { path: 'email', message: 'Denne mailadresse er allerede i brug' },
+          ],
+        }
       }
 
       const slug = `${slugify(name)}-${randomBytes(6).toString('hex')}`
@@ -66,7 +76,16 @@ export const resolvers: Resolvers = {
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       })
 
-      return null
+      return {
+        account: {
+          id: user._id,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+          email: user.email,
+          name: user.name,
+          slug: user.slug,
+        },
+      }
     },
 
     invite: async (
