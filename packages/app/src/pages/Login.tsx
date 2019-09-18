@@ -45,12 +45,14 @@ export const Login: React.FunctionComponent<RouteComponentProps> = (
                   onMutate({ variables: { input: values } })
                     .then((response): void => {
                       console.log(response)
-                      if (response && response.data.login) {
-                        response.data.login.forEach((err): void =>
+                      if (response && response.data.login.errors) {
+                        response.data.login.errors.forEach((err): void =>
                           actions.setFieldError(err.path, err.message)
                         )
-                      } else {
-                        setAccount(Account.accountFromCookie())
+                      } else if (response && response.data.login.account) {
+                        setAccount(
+                          new Account({ ...response.data.login.account })
+                        )
                       }
                     })
                     .catch((err): void => {
