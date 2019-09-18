@@ -16,6 +16,7 @@ import { AlbumRouter } from './views/album'
 import { NotFound } from './pages/NotFound'
 import { client } from './apollo/client'
 import { GetAccountQuery, GetAccountDocument } from './generated/graphql'
+import { CookieConsent } from './components/CookieConsent'
 
 export const App: React.FunctionComponent = (): JSX.Element => {
   const [account, setAccount] = React.useState<Account>(undefined)
@@ -40,6 +41,7 @@ export const App: React.FunctionComponent = (): JSX.Element => {
     <div className="app">
       <MainContext.Provider value={{ account, setAccount }}>
         <ToastContainer />
+        <CookieConsent />
         <Nav />
         <MainContext.Consumer>
           {({ account }): JSX.Element => {
