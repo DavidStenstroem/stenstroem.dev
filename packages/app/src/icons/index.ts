@@ -19,6 +19,7 @@ import { faSquare } from '@fortawesome/pro-light-svg-icons/faSquare'
 import { faSpinnerThird } from '@fortawesome/pro-light-svg-icons/faSpinnerThird'
 import { faLockAlt } from '@fortawesome/pro-light-svg-icons/faLockAlt'
 import { faImages } from '@fortawesome/pro-light-svg-icons/faImages'
+import { faCookieBite } from '@fortawesome/pro-light-svg-icons/faCookieBite'
 
 // Solid
 import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon'
@@ -53,4 +54,5 @@ export {
   faSpinnerThird,
   faLockAlt,
   faImages,
+  faCookieBite,
 }
