@@ -127,21 +127,22 @@ export const resolvers: Resolvers = {
     login: async (
       parent,
       { input: { email, password } },
-      { res },
-      info
-    ): Promise<FormError[]> => {
+      { res }
+    ): Promise<AuthPayload> => {
       try {
         await loginSchema.validate({ email, password }, { abortEarly: false })
       } catch (err) {
-        return formatError(err as ValidationError)
+        return { errors: formatError(err as ValidationError) }
       }
 
       const user = await UserModel.findOne({ email })
       if (!user) {
-        return [
-          { message: 'Forkert mail eller kode', path: 'email' },
-          { message: 'Forkert mail eller kode', path: 'password' },
-        ]
+        return {
+          errors: [
+            { message: 'Forkert mail eller kode', path: 'email' },
+            { message: 'Forkert mail eller kode', path: 'password' },
+          ],
+        }
       }
 
       const hash = pbkdf2Sync(
@@ -152,10 +153,12 @@ export const resolvers: Resolvers = {
         'sha512'
       ).toString('hex')
       if (hash !== user.hash) {
-        return [
-          { message: 'Forkert mail eller kode', path: 'email' },
-          { message: 'Forkert mail eller kode', path: 'password' },
-        ]
+        return {
+          errors: [
+            { message: 'Forkert mail eller kode', path: 'email' },
+            { message: 'Forkert mail eller kode', path: 'password' },
+          ],
+        }
       }
 
       const [accessToken, refreshToken] = tokens({
@@ -174,7 +177,16 @@ export const resolvers: Resolvers = {
         maxAge: 30 * 24 * 60 * 60 * 1000,
       })
 
-      return null
+      return {
+        account: {
+          createdAt: user.createdAt,
+          email: user.email,
+          id: user._id,
+          name: user.name,
+          slug: user.slug,
+          updatedAt: user.updatedAt,
+        },
+      }
     },
   },
 

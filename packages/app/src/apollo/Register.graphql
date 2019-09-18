@@ -1,6 +1,14 @@
 mutation Register($input: RegisterInput!) {
   register(input: $input) {
-    path
-    message
+    errors {
+      path
+      message
+    }
+    account {
+      id
+      name
+      email
+      slug
+    }
   }
 }

@@ -56,6 +56,12 @@ export type AlbumConnection = {
   pageInfo: PageInfo
 }
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload'
+  errors?: Maybe<Array<FormError>>
+  account?: Maybe<Account>
+}
+
 export type ChangeNameInput = {
   newName: Scalars['String']
 }
@@ -156,9 +162,9 @@ export type Mutation = {
   changePassword?: Maybe<Array<FormError>>
   changeName?: Maybe<Array<FormError>>
   createAlbum: CreateAlbumResponse
-  register?: Maybe<Array<FormError>>
+  register: AuthPayload
   invite?: Maybe<Array<FormError>>
-  login?: Maybe<Array<FormError>>
+  login: AuthPayload
   logout: Scalars['Boolean']
 }
 
@@ -404,9 +410,17 @@ export type LoginMutationVariables = {
 }
 
 export type LoginMutation = { __typename?: 'Mutation' } & {
-  login: Maybe<
-    Array<{ __typename?: 'FormError' } & Pick<FormError, 'path' | 'message'>>
-  >
+  login: { __typename?: 'AuthPayload' } & {
+    errors: Maybe<
+      Array<{ __typename?: 'FormError' } & Pick<FormError, 'path' | 'message'>>
+    >
+    account: Maybe<
+      { __typename?: 'Account' } & Pick<
+        Account,
+        'id' | 'name' | 'email' | 'slug'
+      >
+    >
+  }
 }
 
 export type MyAlbumsQueryVariables = {
@@ -446,9 +460,17 @@ export type RegisterMutationVariables = {
 }
 
 export type RegisterMutation = { __typename?: 'Mutation' } & {
-  register: Maybe<
-    Array<{ __typename?: 'FormError' } & Pick<FormError, 'path' | 'message'>>
-  >
+  register: { __typename?: 'AuthPayload' } & {
+    errors: Maybe<
+      Array<{ __typename?: 'FormError' } & Pick<FormError, 'path' | 'message'>>
+    >
+    account: Maybe<
+      { __typename?: 'Account' } & Pick<
+        Account,
+        'id' | 'name' | 'email' | 'slug'
+      >
+    >
+  }
 }
 
 export type SharedAlbumsQueryVariables = {
@@ -976,8 +998,16 @@ export type InviteMutationOptions = ApolloReactCommon.BaseMutationOptions<
 export const LoginDocument = gql`
   mutation Login($input: LoginInput!) {
     login(input: $input) {
-      path
-      message
+      errors {
+        path
+        message
+      }
+      account {
+        id
+        name
+        email
+        slug
+      }
     }
   }
 `
@@ -1078,8 +1108,16 @@ export type MyAlbumsQueryResult = ApolloReactCommon.QueryResult<
 export const RegisterDocument = gql`
   mutation Register($input: RegisterInput!) {
     register(input: $input) {
-      path
-      message
+      errors {
+        path
+        message
+      }
+      account {
+        id
+        name
+        email
+        slug
+      }
     }
   }
 `

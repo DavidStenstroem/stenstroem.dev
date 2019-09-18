@@ -61,6 +61,12 @@ export type AlbumConnection = {
   pageInfo: PageInfo
 }
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload'
+  errors?: Maybe<Array<FormError>>
+  account?: Maybe<Account>
+}
+
 export type ChangeNameInput = {
   newName: Scalars['String']
 }
@@ -161,9 +167,9 @@ export type Mutation = {
   changePassword?: Maybe<Array<FormError>>
   changeName?: Maybe<Array<FormError>>
   createAlbum: CreateAlbumResponse
-  register?: Maybe<Array<FormError>>
+  register: AuthPayload
   invite?: Maybe<Array<FormError>>
-  login?: Maybe<Array<FormError>>
+  login: AuthPayload
   logout: Scalars['Boolean']
 }
 
@@ -372,6 +378,7 @@ export type ResolversTypes = {
   Upload: ResolverTypeWrapper<Scalars['Upload']>
   CreateAlbumResponse: ResolverTypeWrapper<CreateAlbumResponse>
   RegisterInput: RegisterInput
+  AuthPayload: ResolverTypeWrapper<AuthPayload>
   InviteInput: InviteInput
   LoginInput: LoginInput
   User: ResolverTypeWrapper<User>
@@ -406,6 +413,7 @@ export type ResolversParentTypes = {
   Upload: Scalars['Upload']
   CreateAlbumResponse: CreateAlbumResponse
   RegisterInput: RegisterInput
+  AuthPayload: AuthPayload
   InviteInput: InviteInput
   LoginInput: LoginInput
   User: User
@@ -464,6 +472,18 @@ export type AlbumConnectionResolvers<
 > = {
   edges?: Resolver<Array<ResolversTypes['Album']>, ParentType, ContextType>
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>
+}
+
+export type AuthPayloadResolvers<
+  ContextType = Context,
+  ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']
+> = {
+  errors?: Resolver<
+    Maybe<Array<ResolversTypes['FormError']>>,
+    ParentType,
+    ContextType
+  >
+  account?: Resolver<Maybe<ResolversTypes['Account']>, ParentType, ContextType>
 }
 
 export type CreateAlbumResponseResolvers<
@@ -602,7 +622,7 @@ export type MutationResolvers<
     MutationCreateAlbumArgs
   >
   register?: Resolver<
-    Maybe<Array<ResolversTypes['FormError']>>,
+    ResolversTypes['AuthPayload'],
     ParentType,
     ContextType,
     MutationRegisterArgs
@@ -614,7 +634,7 @@ export type MutationResolvers<
     MutationInviteArgs
   >
   login?: Resolver<
-    Maybe<Array<ResolversTypes['FormError']>>,
+    ResolversTypes['AuthPayload'],
     ParentType,
     ContextType,
     MutationLoginArgs
@@ -723,6 +743,7 @@ export type Resolvers<ContextType = Context> = {
   Account?: AccountResolvers<ContextType>
   Album?: AlbumResolvers<ContextType>
   AlbumConnection?: AlbumConnectionResolvers<ContextType>
+  AuthPayload?: AuthPayloadResolvers<ContextType>
   CreateAlbumResponse?: CreateAlbumResponseResolvers<ContextType>
   DateTime?: GraphQLScalarType
   EmailAddress?: GraphQLScalarType
