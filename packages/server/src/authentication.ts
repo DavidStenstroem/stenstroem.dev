@@ -4,9 +4,10 @@ import { User, UserModel } from './models/user.model'
 import { AuthenticationError } from 'apollo-server-errors'
 import { sign, verify } from 'jsonwebtoken'
 import { config } from './config'
-import { NextFunction, Response } from 'express'
+import { NextFunction, Response, CookieOptions } from 'express'
 
 const { accessTokenSecret, refreshTokenSecret } = config
+const isProduction = (process.env.NODE_ENV as string) === 'production'
 
 export const authenticate = async (
   req: RequestWithUser
@@ -97,13 +98,19 @@ export const refreshTokens = async (
     name: user.name,
   })
 
+  const cookieSettings: CookieOptions = isProduction
+    ? { domain: 'stenstroem.dev', secure: true, httpOnly: true }
+    : {}
+
   res.cookie('refresh-token', refreshToken, {
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     maxAge: 30 * 24 * 60 * 60 * 1000,
+    ...cookieSettings,
   })
   res.cookie('access-token', accessToken, {
     maxAge: 2 * 60 * 60 * 1000,
     expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+    ...cookieSettings,
   })
   req.userId = user.id
 
