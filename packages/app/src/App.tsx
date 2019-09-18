@@ -20,7 +20,7 @@ import { GetAccountQuery, GetAccountDocument } from './generated/graphql'
 export const App: React.FunctionComponent = (): JSX.Element => {
   const [account, setAccount] = React.useState<Account>(undefined)
   React.useEffect(() => {
-    const fetchAccount = async () => {
+    const fetchAccount = async (): Promise<void> => {
       try {
         const response = await client.query<GetAccountQuery, {}>({
           query: GetAccountDocument,
