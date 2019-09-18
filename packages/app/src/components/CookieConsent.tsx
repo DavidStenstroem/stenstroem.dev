@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon, faCookieBite } from '../icons'
 
-interface Props {
-  expires?: number
-  debug?: boolean
-}
-
-export const CookieConsent: React.FC<Props> = ({ expires = 365, debug }) => {
+export const CookieConsent: React.FC = () => {
   const [visible, setVisible] = useState<boolean>(false)
 
   useEffect((): void => {
