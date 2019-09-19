@@ -6,9 +6,7 @@ import {
 } from '../../types/graphql'
 import { authenticate, tokens } from '../../authentication'
 import { RequestWithUser } from '../../types/RequestWithUser'
-import { UserModel, User } from '../../models/user.model'
-import { InviteModel } from '../../models/invite.model'
-import { ApolloError } from 'apollo-server-errors'
+import { UserModel } from '../../models/user.model'
 import { randomBytes, pbkdf2Sync } from 'crypto'
 import {
   loginSchema,
@@ -18,6 +16,12 @@ import {
 import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
 import slugify from 'slugify'
+import { CookieOptions } from 'express'
+import sgMail from '@sendgrid/mail'
+import { config } from '../../config'
+
+sgMail.setApiKey(config.sgApiKey)
+const isProduction = (process.env.NODE_ENV as string) === 'production'
 
 export const resolvers: Resolvers = {
   Mutation: {
@@ -69,11 +73,19 @@ export const resolvers: Resolvers = {
         name: user.name,
       })
 
+      const cookieSettings: CookieOptions = isProduction
+        ? { domain: 'stenstroem.dev', secure: true, httpOnly: true }
+        : {}
+
       res.cookie('access-token', accessToken, {
         expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+        maxAge: 2 * 60 * 60 * 1000,
+        ...cookieSettings,
       })
       res.cookie('refresh-token', refreshToken, {
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        ...cookieSettings,
       })
 
       return {
@@ -91,8 +103,7 @@ export const resolvers: Resolvers = {
     invite: async (
       parent,
       { input: { email } },
-      { req },
-      info
+      { req }
     ): Promise<FormError[]> => {
       const currentUser = await authenticate(req as RequestWithUser)
 
@@ -119,7 +130,13 @@ export const resolvers: Resolvers = {
       })
       await invite.save()
 
-      // send email
+      await sgMail.send({
+        to: email,
+        from: 'app@stenstroem.dk',
+        subject: 'Invitation',
+        text: '',
+        html: '',
+      })
 
       return null
     },
@@ -168,13 +185,19 @@ export const resolvers: Resolvers = {
         count: user.count,
       })
 
+      const cookieSettings: CookieOptions = isProduction
+        ? { domain: 'stenstroem.dev', secure: true, httpOnly: true }
+        : {}
+
       res.cookie('access-token', accessToken, {
         expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
         maxAge: 2 * 60 * 60 * 1000,
+        ...cookieSettings,
       })
       res.cookie('refresh-token', refreshToken, {
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         maxAge: 30 * 24 * 60 * 60 * 1000,
+        ...cookieSettings,
       })
 
       return {
@@ -191,7 +214,7 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
-    getInvites: async (parent, args, { req }, info): Promise<Invitation[]> => {
+    getInvites: async (parent, args, { req }): Promise<Invitation[]> => {
       const currentUser = await authenticate(req as RequestWithUser)
       const invites = await UserModel.find({ invitedBy: currentUser._id })
       return invites.map(
