@@ -8,8 +8,8 @@ const options: DotenvConfigOptions =
 dotenvConfig()
 
 interface Config {
-  dbConnectionString: string
   dbName: string
+  dbConnectionString: string
   accessTokenSecret: string
   refreshTokenSecret: string
   cloudinary: CloudinaryConfig
