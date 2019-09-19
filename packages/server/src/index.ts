@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser'
 import { refreshTokens } from './authentication'
 import { createServer } from 'http'
 import express from 'express'
-import { uploadApi } from './upload'
+// import { uploadApi } from './upload'
 import { ClientInfo } from 'apollo-engine-reporting/dist/agent'
 
 const { dbConnectionString, dbName, engineApiKey } = config

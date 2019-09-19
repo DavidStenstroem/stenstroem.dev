@@ -64,12 +64,16 @@ export const Register: React.FunctionComponent<Props> = ({
                   actions.setSubmitting(true)
                   onMutate({ variables: { input: values } })
                     .then((response): void => {
-                      if (response && response.data.register) {
-                        response.data.register.forEach((err) =>
+                      if (response && response.data.register.errors) {
+                        response.data.register.errors.forEach((err) =>
                           actions.setFieldError(err.path, err.message)
                         )
-                      } else {
-                        setAccount(Account.accountFromCookie())
+                      } else if (response && response.data.register.account) {
+                        setAccount(
+                          new Account({
+                            ...response.data.register.account,
+                          }) /*Account.accountFromCookie()*/
+                        )
                         navigate('/', { state: { new: true } })
                       }
                     })

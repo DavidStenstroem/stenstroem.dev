@@ -1,6 +1,14 @@
 mutation Login($input: LoginInput!) {
   login(input: $input) {
-    path
-    message
+    errors {
+      path
+      message
+    }
+    account {
+      id
+      name
+      email
+      slug
+    }
   }
 }

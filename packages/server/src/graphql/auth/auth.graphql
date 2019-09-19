@@ -21,10 +21,15 @@ type Invitation {
   name: String
 }
 
+type AuthPayload {
+  errors: [FormError!]
+  account: Account
+}
+
 type Mutation {
-  register(input: RegisterInput!): [FormError!]
+  register(input: RegisterInput!): AuthPayload!
   invite(input: InviteInput!): [FormError!]
-  login(input: LoginInput!): [FormError!]
+  login(input: LoginInput!): AuthPayload!
   logout: Boolean!
 }
 
