@@ -24,7 +24,7 @@
     "start": "ts-node-dev --files --transpileOnly --ignore-watch node_modules src/index.ts",
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "rimraf ./dist && tsc && npm run copyfiles",
-    "copyfiles": "copyfiles -u 1 ./src/**/*.graphql ./dist/server/src"
+    "copyfiles": "copyfiles -u 1 ./src/**/*.{graphql,pug,css} ./dist/server/src"
   },
   "bugs": {
     "url": "https://github.com/DavidStenstroem/stenstroem-dev/issues"
