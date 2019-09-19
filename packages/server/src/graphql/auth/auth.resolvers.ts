@@ -17,10 +17,7 @@ import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
 import slugify from 'slugify'
 import { CookieOptions } from 'express'
-import sgMail from '@sendgrid/mail'
-import { config } from '../../config'
 
-sgMail.setApiKey(config.sgApiKey)
 const isProduction = (process.env.NODE_ENV as string) === 'production'
 
 export const resolvers: Resolvers = {
@@ -130,13 +127,7 @@ export const resolvers: Resolvers = {
       })
       await invite.save()
 
-      await sgMail.send({
-        to: email,
-        from: 'app@stenstroem.dk',
-        subject: 'Invitation',
-        text: '',
-        html: '',
-      })
+      // send email
 
       return null
     },
