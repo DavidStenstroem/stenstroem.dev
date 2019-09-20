@@ -17,6 +17,8 @@ import { formatError } from '../../utils/formatError'
 import { ValidationError } from 'yup'
 import slugify from 'slugify'
 import { CookieOptions } from 'express'
+import { email as Email } from '../../emails'
+import { join } from 'path'
 
 const isProduction = (process.env.NODE_ENV as string) === 'production'
 
@@ -128,6 +130,17 @@ export const resolvers: Resolvers = {
       await invite.save()
 
       // send email
+      await Email.send({
+        template: join(__dirname, './emails/invite'),
+        message: { to: email },
+        locals: {
+          link: `${
+            isProduction ? 'https://stenstroem.dev' : 'http://localhost:8000'
+          }/register/${invite._id}`,
+          inviterName: currentUser.name,
+          inviterEmail: currentUser.email,
+        },
+      })
 
       return null
     },
