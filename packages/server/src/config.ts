@@ -2,7 +2,7 @@ import { config as dotenvConfig, DotenvConfigOptions } from 'dotenv'
 
 const options: DotenvConfigOptions =
   (process.env.NODE_ENV as string) === 'production'
-    ? { path: '~/.env.stenstroem-dev-server' }
+    ? { path: `${process.env.HOME as string}/.env.stenstroem-dev-server` }
     : {}
 
 dotenvConfig(options)
@@ -10,6 +10,7 @@ dotenvConfig(options)
 console.log('=================== PROCESS.ENV ===================')
 console.log(process.env)
 console.log('=================== /PROCESS.ENV ===================')
+console.log(dotenvConfig(options).error)
 
 interface Config {
   dbName: string
