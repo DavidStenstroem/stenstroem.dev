@@ -5,7 +5,7 @@ const options: DotenvConfigOptions =
     ? { path: '~/.env.stenstroem-dev-server' }
     : {}
 
-dotenvConfig()
+dotenvConfig(options)
 
 interface Config {
   dbName: string
