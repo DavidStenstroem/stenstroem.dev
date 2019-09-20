@@ -7,6 +7,8 @@ const options: DotenvConfigOptions =
 
 dotenvConfig(options)
 
+console.log(process.env)
+
 interface Config {
   dbName: string
   dbConnectionString: string
