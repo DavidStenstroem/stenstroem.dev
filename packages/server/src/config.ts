@@ -7,11 +7,6 @@ const options: DotenvConfigOptions =
 
 dotenvConfig(options)
 
-console.log('=================== PROCESS.ENV ===================')
-console.log(process.env)
-console.log('=================== /PROCESS.ENV ===================')
-console.log(dotenvConfig(options).error)
-
 interface Config {
   dbName: string
   dbConnectionString: string
