@@ -14,6 +14,14 @@ interface Config {
   refreshTokenSecret: string
   cloudinary: CloudinaryConfig
   engineApiKey: string
+  emailConfig: EmailConfig
+}
+
+interface EmailConfig {
+  host: string
+  port: number
+  user: string
+  pass: string
 }
 
 interface CloudinaryConfig {
@@ -36,5 +44,11 @@ export const config: Config = {
     baseEndpoint: 'https://api.cloudinary.com/v1_1',
     uploadPreset: 'stenstroem-dev-upload-preset',
     cloudName: 'stnstrm',
+  },
+  emailConfig: {
+    host: process.env.MAIL_HOST as string,
+    port: Number(process.env.MAIL_PORT as string),
+    user: process.env.MAIL_USER as string,
+    pass: process.env.MAIL_PASS as string,
   },
 }

@@ -11,6 +11,8 @@ import { createServer } from 'http'
 import express from 'express'
 // import { uploadApi } from './upload'
 import { ClientInfo } from 'apollo-engine-reporting/dist/agent'
+import { email } from './emails'
+import { join } from 'path'
 
 const { dbConnectionString, dbName, engineApiKey } = config
 const isProduction = (process.env.NODE_ENV as string) === 'production'
@@ -86,6 +88,16 @@ const start = async (): Promise<void> => {
 
   const httpServer = createServer(app)
   server.installSubscriptionHandlers(httpServer)
+
+  // try {
+  //   await email.send({
+  //     template: join(__dirname, './emails/invite'),
+  //     message: { to: 'david@stenstroem.dk' },
+  //     locals: { name: 'David' },
+  //   })
+  // } catch (err) {
+  //   console.log('Err!\n', err)
+  // }
 
   await httpServer.listen({ port: 4000 }, (): void => {
     console.log(`Server running at http://localhost:4000${server.graphqlPath}`)
