@@ -44,7 +44,6 @@ export const Login: React.FunctionComponent<RouteComponentProps> = (
                   actions.setSubmitting(true)
                   onMutate({ variables: { input: values } })
                     .then((response): void => {
-                      console.log(response)
                       if (response && response.data.login.errors) {
                         response.data.login.errors.forEach((err): void =>
                           actions.setFieldError(err.path, err.message)
