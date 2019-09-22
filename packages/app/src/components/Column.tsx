@@ -44,7 +44,7 @@ export const Column: React.FunctionComponent<ColumnProps> = ({
   defaultWidth,
   children,
 }: ColumnProps): JSX.Element => {
-  let classes: string[] = []
+  const classes: string[] = []
   if (mobileWidth) {
     classes.push(`is-${mobileWidth}-mobile`)
   }
