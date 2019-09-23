@@ -1,6 +1,7 @@
 query Stream($cursor: String, $limit: Int) {
   getStream(cursor: $cursor, limit: $limit) {
     edges {
+      id
       publicId
       width
       height
