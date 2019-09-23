@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { RouteComponentProps } from '@reach/router'
 import {
   CreateAlbumComponent,
@@ -10,9 +10,13 @@ import { faPencil, FontAwesomeIcon, faUpload } from '../../../icons'
 import { InputField } from '../../../components/InputField'
 import { Columns } from '../../../components/Columns'
 import { Column } from '../../../components/Column'
+import { Modal } from '../../../components/Modal'
+import { ShareWithModal } from '../../../components/ShareWithModal'
 
 export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
-  const [files, setFiles] = React.useState<File[]>([])
+  const [files, setFiles] = useState<File[]>([])
+  const [showUserModal, toggleUserModal] = useState<boolean>(false)
+  const [userIds, setUserIds] = useState<string[]>([])
   return (
     <CreateAlbumComponent>
       {(onMutate): JSX.Element => (
@@ -24,8 +28,7 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
                   title: '',
                   description: undefined,
                   files: undefined,
-                  media: undefined,
-                  sharedWith: undefined,
+                  sharedWith: [],
                 }}
                 onSubmit={(values, actions): void => {
                   actions.setSubmitting(true)
@@ -57,6 +60,38 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
                       </div>
                     </div>
                     <p>&nbsp;</p>
+
+                    <Columns isCentered isMobile>
+                      <Column
+                        mobileWidth={4}
+                        tabletWidth={4}
+                        desktopWidth={4}
+                        fullHDWidth={4}
+                      >
+                        <button
+                          className="button is-link is-fullwidth"
+                          type="button"
+                          onClick={(): void => toggleUserModal(true)}
+                        >
+                          Begræns adgang
+                        </button>
+                      </Column>
+                    </Columns>
+
+                    {/* shared with --> */}
+                    <Modal
+                      key="shareWithModal"
+                      isShowing={showUserModal}
+                      hide={toggleUserModal}
+                    >
+                      <ShareWithModal
+                        toggleModal={toggleUserModal}
+                        selected={userIds}
+                        setUsers={setUserIds}
+                        setValue={setFieldValue}
+                      />
+                    </Modal>
+                    {/* <-- shared with */}
                     <div className="field">
                       <div className="file has-name is-boxed is-centered">
                         <label className="file-label">
