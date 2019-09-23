@@ -12,11 +12,15 @@ import { Columns } from '../../../components/Columns'
 import { Column } from '../../../components/Column'
 import { Modal } from '../../../components/Modal'
 import { ShareWithModal } from '../../../components/ShareWithModal'
+import { AddMediaModal } from '../../../components/AddMediaModal'
 
 export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
   const [files, setFiles] = useState<File[]>([])
   const [showUserModal, toggleUserModal] = useState<boolean>(false)
+  const [showMediaModal, toggleMediaModal] = useState<boolean>(false)
   const [userIds, setUserIds] = useState<string[]>([])
+  const [mediaIds, setMediaIds] = useState<string[]>([])
+
   return (
     <CreateAlbumComponent>
       {(onMutate): JSX.Element => (
@@ -28,6 +32,7 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
                   title: '',
                   description: undefined,
                   files: undefined,
+                  media: [],
                   sharedWith: [],
                 }}
                 onSubmit={(values, actions): void => {
@@ -76,6 +81,20 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
                           Begræns adgang
                         </button>
                       </Column>
+                      <Column
+                        mobileWidth={4}
+                        tabletWidth={4}
+                        desktopWidth={4}
+                        fullHDWidth={4}
+                      >
+                        <button
+                          className="button is-link is-fullwidth"
+                          type="button"
+                          onClick={(): void => toggleMediaModal(true)}
+                        >
+                          Tilføj medier
+                        </button>
+                      </Column>
                     </Columns>
 
                     {/* shared with --> */}
@@ -92,6 +111,23 @@ export const Create: React.FC<RouteComponentProps> = (props): JSX.Element => {
                       />
                     </Modal>
                     {/* <-- shared with */}
+
+                    {/* add existing media --> */}
+                    <Modal
+                      key="mediaFiles"
+                      isShowing={showMediaModal}
+                      hide={toggleMediaModal}
+                    >
+                      <AddMediaModal
+                        media={mediaIds}
+                        setMedia={setMediaIds}
+                        setValue={setFieldValue}
+                        toggleModal={toggleMediaModal}
+                      />
+                    </Modal>
+                    {/* <-- add existing media */}
+
+                    <p>&nbsp;</p>
                     <div className="field">
                       <div className="file has-name is-boxed is-centered">
                         <label className="file-label">

@@ -517,7 +517,7 @@ export type StreamQuery = { __typename?: 'Query' } & {
     edges: Array<
       { __typename?: 'Media' } & Pick<
         Media,
-        'publicId' | 'width' | 'height' | 'resourceType' | 'format'
+        'id' | 'publicId' | 'width' | 'height' | 'resourceType' | 'format'
       >
     >
     pageInfo: { __typename?: 'PageInfo' } & Pick<
@@ -1270,6 +1270,7 @@ export const StreamDocument = gql`
   query Stream($cursor: String, $limit: Int) {
     getStream(cursor: $cursor, limit: $limit) {
       edges {
+        id
         publicId
         width
         height
