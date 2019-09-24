@@ -9,9 +9,14 @@ import {
 } from '../icons'
 import { navigate } from '@reach/router'
 import { Avatar } from './Avatar'
+import { useLogoutMutation } from '../generated/graphql'
 
 export const ProfileDropdown: React.FunctionComponent = (): JSX.Element => {
-  const { account } = React.useContext<MainContextState>(MainContext)
+  const { account, setAccount } = React.useContext<MainContextState>(
+    MainContext
+  )
+  const [logout] = useLogoutMutation()
+
   return (
     <div>
       <div className="profile dropdown is-right is-hoverable">
@@ -52,7 +57,23 @@ export const ProfileDropdown: React.FunctionComponent = (): JSX.Element => {
             <hr className="dropdown-divider" />
 
             {/* Log out */}
-            <div className="dropdown-item profile-item">
+            <div
+              className="dropdown-item profile-item"
+              onClick={(): void => {
+                logout()
+                  .then((response): void => {
+                    console.log(response)
+                    if (response.data && response.data.logout) {
+                      setAccount(undefined)
+                      navigate('/login')
+                    }
+                  })
+                  .catch((err): void => {
+                    console.log(err)
+                    // todo
+                  })
+              }}
+            >
               <span className="profile-icon">
                 <FontAwesomeIcon icon={faSignOut} />
               </span>

@@ -423,6 +423,13 @@ export type LoginMutation = { __typename?: 'Mutation' } & {
   }
 }
 
+export type LogoutMutationVariables = {}
+
+export type LogoutMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'logout'
+>
+
 export type MyAlbumsQueryVariables = {
   cursor?: Maybe<Scalars['String']>
   limit?: Maybe<Scalars['Int']>
@@ -510,7 +517,7 @@ export type StreamQuery = { __typename?: 'Query' } & {
     edges: Array<
       { __typename?: 'Media' } & Pick<
         Media,
-        'publicId' | 'width' | 'height' | 'resourceType' | 'format'
+        'id' | 'publicId' | 'width' | 'height' | 'resourceType' | 'format'
       >
     >
     pageInfo: { __typename?: 'PageInfo' } & Pick<
@@ -1049,6 +1056,49 @@ export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<
   LoginMutation,
   LoginMutationVariables
 >
+export const LogoutDocument = gql`
+  mutation Logout {
+    logout
+  }
+`
+export type LogoutMutationFn = ApolloReactCommon.MutationFunction<
+  LogoutMutation,
+  LogoutMutationVariables
+>
+export type LogoutComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    LogoutMutation,
+    LogoutMutationVariables
+  >,
+  'mutation'
+>
+
+export const LogoutComponent = (props: LogoutComponentProps) => (
+  <ApolloReactComponents.Mutation<LogoutMutation, LogoutMutationVariables>
+    mutation={LogoutDocument}
+    {...props}
+  />
+)
+
+export function useLogoutMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    LogoutMutation,
+    LogoutMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(
+    LogoutDocument,
+    baseOptions
+  )
+}
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>
+export type LogoutMutationResult = ApolloReactCommon.MutationResult<
+  LogoutMutation
+>
+export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  LogoutMutation,
+  LogoutMutationVariables
+>
 export const MyAlbumsDocument = gql`
   query MyAlbums($cursor: String, $limit: Int) {
     myAlbums(cursor: $cursor, limit: $limit) {
@@ -1220,6 +1270,7 @@ export const StreamDocument = gql`
   query Stream($cursor: String, $limit: Int) {
     getStream(cursor: $cursor, limit: $limit) {
       edges {
+        id
         publicId
         width
         height

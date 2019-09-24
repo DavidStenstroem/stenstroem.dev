@@ -24,6 +24,12 @@ const isProduction = (process.env.NODE_ENV as string) === 'production'
 
 export const resolvers: Resolvers = {
   Mutation: {
+    logout: async (parent, args, { req, res }): Promise<boolean> => {
+      res.clearCookie('access-token')
+      res.clearCookie('refresh-token')
+      return true
+    },
+
     register: async (
       parent,
       { input: { password, email, name } },
