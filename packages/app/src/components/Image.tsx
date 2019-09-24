@@ -2,6 +2,7 @@ import * as React from 'react'
 import { ResourceType } from '../generated/graphql'
 import LazyLoad from 'react-lazyload'
 import { Loading } from './Loading'
+import { FontAwesomeIcon, faPlayCircle } from '../icons'
 
 interface Props {
   width: number
@@ -95,6 +96,11 @@ export const Image: React.FC<Props> = ({
           srcSet={srcset}
           style={square ? { objectFit: 'cover', objectPosition: 'center' } : {}}
         />
+        {resourceType === ResourceType.Video && (
+          <span className="icon play-symbol">
+            <FontAwesomeIcon color="white" size="3x" icon={faPlayCircle} />
+          </span>
+        )}
       </figure>
     </LazyLoad>
   )
