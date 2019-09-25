@@ -1,12 +1,14 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { RouteComponentProps, Link } from '@reach/router'
-import { useGetAlbumQuery } from '../../generated/graphql'
+import { useGetAlbumQuery, ResourceType } from '../../generated/graphql'
 import { Section } from '../../components/Section'
 import { Image } from '../../components/Image'
 import { ImageLayout } from '../../components/ImageLayout'
 import { useRect } from '../../hooks/useRect'
 import { Loading } from '../../components/Loading'
 import parse from 'html-react-parser'
+import { Modal } from '../../components/Modal'
+import { ImageModal } from '../../components/ImageModal'
 
 const containerRef = React.createRef<HTMLDivElement>()
 
@@ -19,6 +21,14 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
     variables: { slug: slug || '' },
   })
   const { width } = useRect(containerRef)
+  const [showImageModal, toggleImageModal] = useState<boolean>(false)
+  const [source, setSource] = useState<{
+    height: number
+    publicId: string
+    resourceType: ResourceType
+    width: number
+  }>()
+  const [imgIndex, setIndex] = useState<number>()
 
   return (
     <>
@@ -45,6 +55,13 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
       </section>
       {data && data.getAlbum && (
         <>
+          <Modal
+            hasCloseButton
+            hide={toggleImageModal}
+            isShowing={showImageModal}
+          >
+            <ImageModal source={source} />
+          </Modal>
           {data.getAlbum.description && (
             <Section>
               <div className="content">{parse(data.getAlbum.description)}</div>
@@ -53,14 +70,22 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
           <Section>
             <ImageLayout width={width}>
               {data.getAlbum.media.edges.map(
-                ({ height, publicId, resourceType, width }) => (
-                  <Image
-                    height={height}
-                    key={publicId}
-                    publicId={publicId}
-                    resourceType={resourceType}
-                    width={width}
-                  />
+                ({ height, publicId, resourceType, width }, index) => (
+                  <div
+                    onClick={(): void => {
+                      setSource({ height, publicId, resourceType, width })
+                      toggleImageModal(true)
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <Image
+                      height={height}
+                      key={publicId}
+                      publicId={publicId}
+                      resourceType={resourceType}
+                      width={width}
+                    />
+                  </div>
                 )
               )}
             </ImageLayout>
