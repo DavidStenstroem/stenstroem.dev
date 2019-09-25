@@ -1,0 +1,18 @@
+.image-modal-prev,
+.image-modal-next {
+  position: fixed;
+  top: 50%;
+  padding: 2rem;
+  border-radius: 50%;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.image-modal-prev {
+  left: 20px;
+}
+
+.image-modal-next {
+  right: 20px;
+}

@@ -21,6 +21,8 @@ import { faLockAlt } from '@fortawesome/pro-light-svg-icons/faLockAlt'
 import { faImages } from '@fortawesome/pro-light-svg-icons/faImages'
 import { faCookieBite } from '@fortawesome/pro-light-svg-icons/faCookieBite'
 import { faPlayCircle } from '@fortawesome/pro-light-svg-icons/faPlayCircle'
+import { faChevronLeft } from '@fortawesome/pro-light-svg-icons/faChevronLeft'
+import { faChevronRight } from '@fortawesome/pro-light-svg-icons/faChevronRight'
 
 // Solid
 import { faHexagon } from '@fortawesome/pro-solid-svg-icons/faHexagon'
@@ -57,4 +59,6 @@ export {
   faImages,
   faCookieBite,
   faPlayCircle,
+  faChevronLeft,
+  faChevronRight,
 }

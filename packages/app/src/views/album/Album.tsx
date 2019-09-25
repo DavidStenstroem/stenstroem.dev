@@ -28,7 +28,7 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
     resourceType: ResourceType
     width: number
   }>()
-  const [imgIndex, setIndex] = useState<number>()
+  const [imgIndex, setIndex] = useState<number>(0)
 
   return (
     <>
@@ -73,14 +73,15 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
                 ({ height, publicId, resourceType, width }, index) => (
                   <div
                     onClick={(): void => {
+                      setIndex(index)
                       setSource({ height, publicId, resourceType, width })
                       toggleImageModal(true)
                     }}
                     style={{ cursor: 'pointer' }}
+                    key={publicId}
                   >
                     <Image
                       height={height}
-                      key={publicId}
                       publicId={publicId}
                       resourceType={resourceType}
                       width={width}
