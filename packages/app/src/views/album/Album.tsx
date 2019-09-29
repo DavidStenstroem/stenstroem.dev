@@ -27,12 +27,14 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
   })
   const { width } = useRect(containerRef)
   const [showImageModal, toggleImageModal] = useState<boolean>(false)
-  const [source, setSource] = useState<{
-    height: number
-    publicId: string
-    resourceType: ResourceType
-    width: number
-  }>()
+  const [imgList, setImgList] = useState<
+    {
+      height: number
+      publicId: string
+      resourceType: ResourceType
+      width: number
+    }[]
+  >([])
   const [imgIndex, setIndex] = useState<number>(0)
 
   return (
@@ -65,7 +67,7 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
             hide={toggleImageModal}
             isShowing={showImageModal}
           >
-            <ImageModal source={source} />
+            <ImageModal images={imgList} index={imgIndex} />
           </Modal>
           {data.getAlbum.description && (
             <Section>
@@ -79,7 +81,7 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
                   <div
                     onClick={(): void => {
                       setIndex(index)
-                      setSource({ height, publicId, resourceType, width })
+                      setImgList(data.getAlbum.media.edges)
                       toggleImageModal(true)
                     }}
                     style={{ cursor: 'pointer' }}
