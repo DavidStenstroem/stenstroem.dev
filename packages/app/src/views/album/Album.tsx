@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { RouteComponentProps, Link } from '@reach/router'
-import { useGetAlbumQuery, ResourceType } from '../../generated/graphql'
+import {
+  useGetAlbumQuery,
+  ResourceType,
+  GetAlbumQuery,
+} from '../../generated/graphql'
 import { Section } from '../../components/Section'
 import { Image } from '../../components/Image'
 import { ImageLayout } from '../../components/ImageLayout'
@@ -9,6 +13,7 @@ import { Loading } from '../../components/Loading'
 import parse from 'html-react-parser'
 import { Modal } from '../../components/Modal'
 import { ImageModal } from '../../components/ImageModal'
+import { ApolloQueryResult } from 'apollo-client'
 
 const containerRef = React.createRef<HTMLDivElement>()
 
@@ -96,12 +101,15 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
                   <button
                     className="button"
                     type="button"
-                    onClick={() =>
+                    onClick={(): Promise<ApolloQueryResult<GetAlbumQuery>> =>
                       fetchMore({
                         variables: {
                           cursor: data.getAlbum.media.pageInfo.endCursor,
                         },
-                        updateQuery: (previousResult, { fetchMoreResult }) => {
+                        updateQuery: (
+                          previousResult,
+                          { fetchMoreResult }
+                        ): GetAlbumQuery => {
                           if (!fetchMoreResult) {
                             return previousResult
                           }
