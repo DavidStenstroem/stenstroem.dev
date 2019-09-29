@@ -1,12 +1,19 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { RouteComponentProps, Link } from '@reach/router'
-import { useGetAlbumQuery } from '../../generated/graphql'
+import {
+  useGetAlbumQuery,
+  ResourceType,
+  GetAlbumQuery,
+} from '../../generated/graphql'
 import { Section } from '../../components/Section'
 import { Image } from '../../components/Image'
 import { ImageLayout } from '../../components/ImageLayout'
 import { useRect } from '../../hooks/useRect'
 import { Loading } from '../../components/Loading'
 import parse from 'html-react-parser'
+import { Modal } from '../../components/Modal'
+import { ImageModal } from '../../components/ImageModal'
+import { ApolloQueryResult } from 'apollo-client'
 
 const containerRef = React.createRef<HTMLDivElement>()
 
@@ -19,6 +26,16 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
     variables: { slug: slug || '' },
   })
   const { width } = useRect(containerRef)
+  const [showImageModal, toggleImageModal] = useState<boolean>(false)
+  const [imgList, setImgList] = useState<
+    {
+      height: number
+      publicId: string
+      resourceType: ResourceType
+      width: number
+    }[]
+  >([])
+  const [imgIndex, setIndex] = useState<number>(0)
 
   return (
     <>
@@ -45,6 +62,13 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
       </section>
       {data && data.getAlbum && (
         <>
+          <Modal
+            hasCloseButton
+            hide={toggleImageModal}
+            isShowing={showImageModal}
+          >
+            <ImageModal images={imgList} index={imgIndex} />
+          </Modal>
           {data.getAlbum.description && (
             <Section>
               <div className="content">{parse(data.getAlbum.description)}</div>
@@ -53,14 +77,23 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
           <Section>
             <ImageLayout width={width}>
               {data.getAlbum.media.edges.map(
-                ({ height, publicId, resourceType, width }) => (
-                  <Image
-                    height={height}
+                ({ height, publicId, resourceType, width }, index) => (
+                  <div
+                    onClick={(): void => {
+                      setIndex(index)
+                      setImgList(data.getAlbum.media.edges)
+                      toggleImageModal(true)
+                    }}
+                    style={{ cursor: 'pointer' }}
                     key={publicId}
-                    publicId={publicId}
-                    resourceType={resourceType}
-                    width={width}
-                  />
+                  >
+                    <Image
+                      height={height}
+                      publicId={publicId}
+                      resourceType={resourceType}
+                      width={width}
+                    />
+                  </div>
                 )
               )}
             </ImageLayout>
@@ -70,12 +103,15 @@ export const Album: React.FC<Props> = ({ slug }): JSX.Element => {
                   <button
                     className="button"
                     type="button"
-                    onClick={() =>
+                    onClick={(): Promise<ApolloQueryResult<GetAlbumQuery>> =>
                       fetchMore({
                         variables: {
                           cursor: data.getAlbum.media.pageInfo.endCursor,
                         },
-                        updateQuery: (previousResult, { fetchMoreResult }) => {
+                        updateQuery: (
+                          previousResult,
+                          { fetchMoreResult }
+                        ): GetAlbumQuery => {
                           if (!fetchMoreResult) {
                             return previousResult
                           }
